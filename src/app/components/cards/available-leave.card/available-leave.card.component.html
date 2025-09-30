@@ -1,0 +1,149 @@
+<!-- Card 1: Available Leaves (Employee only) -->
+<div
+  *ngIf="!['1'].includes(userRole)"
+  class="card shadow-sm h-100 rounded-4 overflow-hidden"
+>
+  <div class="card-body p-3" *ngIf="!['3', '4'].includes(modelType)">
+    <h5 class="fw-bold text-center mb-3">
+      Available Leaves for {{ currentYear }}
+    </h5>
+
+    <ng-container *ngIf="!['1', '2'].includes(userRole); else noDataBlock">
+      <div *ngIf="data.length === 0" class="text-center py-4">
+        <p class="text-muted mb-0">Loading leave data...</p>
+      </div>
+
+      <div *ngIf="data.length > 0" class="table-responsive">
+        <table
+          class="table mb-0"
+          style="table-layout: fixed; width: 100%; font-size: 14px"
+        >
+          <thead>
+            <tr
+              style="background-color: #009688; color: white; font-weight: 600"
+            >
+              <th class="text-center">Leave Type</th>
+              <th class="text-center">Taken</th>
+              <th class="text-center" style="font-size: 11px">Available</th>
+              <th class="text-center">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let employee of data; let i = index">
+              <td
+                class="text-center"
+                [ngStyle]="{
+                  'background-color': i % 2 === 1 ? '#ffffff' : '#E5F4F3'
+                }"
+              >
+                {{ employee.leaveType }}
+              </td>
+              <td
+                class="text-center"
+                [ngStyle]="{
+                  'background-color': i % 2 === 1 ? '#ffffff' : '#E5F4F3'
+                }"
+              >
+                {{ employee.Taken }}
+              </td>
+              <td
+                class="text-center"
+                [ngStyle]="{
+                  'background-color': i % 2 === 1 ? '#ffffff' : '#E5F4F3'
+                }"
+              >
+                {{ employee.Available }}
+              </td>
+              <td
+                class="text-center fw-bold"
+                [ngStyle]="{
+                  'background-color': i % 2 === 1 ? '#ffffff' : '#E5F4F3'
+                }"
+              >
+                {{ employee.Total }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+
+    <ng-template #noDataBlock>
+      <div class="text-center py-4">
+        <p class="text-muted mb-0">No leave data available</p>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Card 2: Team Leaves Taken (1,2,3) -->
+<div
+  *ngIf="['3'].includes(modelType)"
+  class="card shadow-sm h-100 rounded-4 overflow-hidden"
+>
+  <div class="card-body p-3">
+    <h5 class="fw-bold text-center mb-3">Team Leaves Taken this Year</h5>
+
+    <div *ngIf="teamLeaves.length === 0" class="text-center py-4">
+      <p class="text-muted mb-0">Loading team leave data...</p>
+    </div>
+
+    <div *ngIf="teamLeaves.length > 0" class="table-responsive">
+      <table
+        class="table table-borderless table-striped align-middle text-center"
+        style="font-size: 14px"
+      >
+        <thead>
+          <tr style="background-color: #009688; color: white; font-weight: 600">
+            <th>Member Name</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let member of teamLeaves; let i = index">
+            <td>{{ member.full_name }}</td>
+            <td>{{ member.total_used_leaves }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Card 3: Current / Upcoming Leaves (Superadmin only) -->
+<div
+  *ngIf="['4'].includes(modelType)"
+  class="card shadow-sm h-100 rounded-4 overflow-hidden"
+>
+  <div class="card-body p-3">
+    <h5 class="fw-bold text-center mb-3">Current / Upcoming Leaves</h5>
+
+    <div *ngIf="teamCurrentLeaves.length === 0" class="text-center py-4">
+      <p class="text-muted mb-0">No current or upcoming leaves</p>
+    </div>
+
+    <div *ngIf="teamCurrentLeaves.length > 0" class="table-responsive">
+      <table
+        class="table table-borderless table-striped align-middle text-center"
+        style="font-size: 14px"
+      >
+        <thead>
+          <tr style="background-color: #009688; color: white; font-weight: 600">
+            <th>Member Name</th>
+            <th>Leave Type</th>
+            <th>Start</th>
+            <th>End</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leave of teamCurrentLeaves; let i = index">
+            <td>{{ leave.full_name }}</td>
+            <td>{{ leave.leave_type }}</td>
+            <td>{{ leave.start_date | date : "dd MMM" }}</td>
+            <td>{{ leave.end_date | date : "dd MMM" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

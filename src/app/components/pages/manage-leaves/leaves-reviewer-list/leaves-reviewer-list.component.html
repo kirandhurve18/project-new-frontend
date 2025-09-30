@@ -1,115 +1,141 @@
-<div class="d-flex flex-column p-2">
-  <!-- Search + Filter -->
-  <div class="d-flex align-items-center flex-wrap mb-3 w-100" style="gap: 20px">
-    <input
-      type="text"
-      class="form-control grow-xs-only"
-      style="height: 42px"
-      placeholder="Search Team member"
-      [(ngModel)]="searchTerm"
-      (ngModelChange)="fetchReviewerLeaves(1)"
-    />
-    <select
-      class="form-select grow-xs-only"
-      style="height: 42px"
-      [(ngModel)]="statusFilter"
-      (change)="fetchReviewerLeaves(1)"
-    >
-      <option value="">Select Status</option>
-      <option value="Pending">Pending</option>
-      <option value="Approved">Approved</option>
-      <option value="Rejected">Rejected</option>
-    </select>
-  </div>
+<!-- Main Layout -->
+<div class="row">
+  <!-- Left Section (Child Routes) -->
+  <div class="col-12 col-lg-9 mb-4">
+    <div class="card shadow-sm p-3">
+      <!-- start here replace code -->
+      <div class="d-flex flex-column p-2">
+        <!-- Search + Filter -->
+        <div
+          class="d-flex align-items-center flex-wrap mb-3 w-100"
+          style="gap: 20px"
+        >
+          <input
+            type="text"
+            class="form-control grow-xs-only"
+            style="height: 42px"
+            placeholder="Search Team member"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="fetchReviewerLeaves(1)"
+          />
+          <select
+            class="form-select grow-xs-only"
+            style="height: 42px"
+            [(ngModel)]="statusFilter"
+            (change)="fetchReviewerLeaves(1)"
+          >
+            <option value="">Select Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Reviewer_Pending">Reviewer Pending</option>
+            <!-- <option value="Approved">Approved</option> -->
+            <option value="Reviewer_Approved">Reviewer Approved</option>
+            <option value="Reviewer_Rejected">Reviewer_Rejected</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
 
-  <!-- Table -->
-  <div class="table-responsive">
-    <table class="table">
-      <thead class="table-header">
-        <tr>
-          <th>#</th>
-          <th>Employee</th>
-          <th>Leave Type</th>
-          <th>Mode</th>
-          <th>Reason</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let leave of myTeamLeaveData; let i = index">
-          <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-          <td>{{ leave.full_name }}</td>
-          <td>{{ leave.leave_type }}</td>
-          <td>{{ leave.leave_mode }}</td>
-          <td>{{ leave.reason }}</td>
-          <td>
-            <button
-              class="status-button"
-              [ngStyle]="{
-                backgroundColor: getStatusBgColor(leave.status),
-                color: leave.status === 'Pending Reviewer' ? '#000' : '#fff'
-              }"
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="table-header">
+              <tr>
+                <th>#</th>
+                <th>Employee</th>
+                <th>Leave Type</th>
+                <th>Mode</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let leave of myTeamLeaveData; let i = index">
+                <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+                <td>{{ leave.full_name }}</td>
+                <td>{{ leave.leave_type }}</td>
+                <td>{{ leave.leave_mode }}</td>
+                <td>{{ leave.reason }}</td>
+                <td>
+                  <button
+                    class="status-button"
+                    [ngStyle]="{
+                      backgroundColor: getStatusBgColor(leave.status),
+                      color:
+                        leave.status === 'Pending Reviewer' ? '#000' : '#fff'
+                    }"
+                  >
+                    {{ leave.status }}
+                  </button>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <i
+                      class="bi bi-eye"
+                      (click)="openCardFromParent(leave.leave_id)"
+                      style="color: #009688; cursor: pointer"
+                    ></i>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="!myTeamLeaveData.length">
+                <td colspan="7" class="text-center">No records found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav class="d-flex justify-content-end mt-2">
+          <ul class="pagination mb-0">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a
+                class="page-link"
+                (click)="
+                  currentPage > 1 && fetchReviewerLeaves(currentPage - 1)
+                "
+                >Prev</a
+              >
+            </li>
+
+            <li
+              class="page-item"
+              *ngFor="
+                let page of [].constructor(pagination.totalPages);
+                let i = index
+              "
+              [class.active]="currentPage === i + 1"
             >
-              {{ leave.status }}
-            </button>
-          </td>
-          <td>
-            <div class="d-flex align-items-center justify-content-center">
-              <i
-                class="bi bi-eye"
-                (click)="openCardFromParent(leave.leave_id)"
-                style="color: #009688; cursor: pointer"
-              ></i>
-            </div>
-          </td>
-        </tr>
-        <tr *ngIf="!myTeamLeaveData.length">
-          <td colspan="7" class="text-center">No records found</td>
-        </tr>
-      </tbody>
-    </table>
+              <a class="page-link" (click)="fetchReviewerLeaves(i + 1)">{{
+                i + 1
+              }}</a>
+            </li>
+
+            <li
+              class="page-item"
+              [class.disabled]="currentPage === pagination.totalPages"
+            >
+              <a
+                class="page-link"
+                (click)="
+                  currentPage < pagination.totalPages &&
+                    fetchReviewerLeaves(currentPage + 1)
+                "
+                >Next</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <!-- start here replace end -->
+    </div>
   </div>
-
-  <!-- Pagination -->
-  <nav class="d-flex justify-content-end mt-2">
-    <ul class="pagination mb-0">
-      <li class="page-item" [class.disabled]="currentPage === 1">
-        <a
-          class="page-link"
-          (click)="currentPage > 1 && fetchReviewerLeaves(currentPage - 1)"
-          >Prev</a
-        >
-      </li>
-
-      <li
-        class="page-item"
-        *ngFor="
-          let page of [].constructor(pagination.totalPages);
-          let i = index
-        "
-        [class.active]="currentPage === i + 1"
-      >
-        <a class="page-link" (click)="fetchReviewerLeaves(i + 1)">{{
-          i + 1
-        }}</a>
-      </li>
-
-      <li
-        class="page-item"
-        [class.disabled]="currentPage === pagination.totalPages"
-      >
-        <a
-          class="page-link"
-          (click)="
-            currentPage < pagination.totalPages &&
-              fetchReviewerLeaves(currentPage + 1)
-          "
-          >Next</a
-        >
-      </li>
-    </ul>
-  </nav>
+  <!-- Right Section (Leave Summary) -->
+  <div class="col-12 col-lg-3 mb-4">
+    <div class="d-flex flex-column gap-3">
+      <app-available-leave-card [modelType]="modelType"></app-available-leave-card>
+    </div>
+  </div>
 </div>
 
-<app-leave-card  [isOpen]="cardOpen"></app-leave-card>
+<app-leave-card [isOpen]="cardOpen"></app-leave-card>

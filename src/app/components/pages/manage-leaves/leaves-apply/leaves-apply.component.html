@@ -1,142 +1,173 @@
-<div
-  class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3"
->
-  <h5 class="fw-bold mb-0">Leave Application</h5>
-  <div class="text-md-end text-start mt-2 mt-md-0">
-    <strong>Manager :-</strong> Abhisek Jaiswal &nbsp;&nbsp;
-    <strong>Reviewer :-</strong> Anirudha Kotgire & Mandar Lande
-  </div>
-</div>
+<!-- Main Layout -->
+<div class="row">
+  <!-- Left Section (Child Routes) -->
+  <div class="col-12 col-lg-9 mb-4">
+    <div class="card shadow-sm p-3">
+      <!-- start here replace code -->
+      <div>
+        <div
+          class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3"
+        >
+          <h5 class="fw-bold mb-0">Leave Application</h5>
+          <div class="text-md-end text-start mt-2 mt-md-0">
+            <strong>Manager :-</strong> Abhisek Jaiswal &nbsp;&nbsp;
+            <strong>Reviewer :-</strong> Anirudha Kotgire & Mandar Lande
+          </div>
+        </div>
 
-<div class="mb-3 d-flex align-items-center gap-4">
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="radio"
-      name="leaveDay"
-      id="fullDay"
-      [value]="'fullDay'"
-      [(ngModel)]="leaveType"
-      checked
-    />
-    <label class="form-check-label" for="fullDay">Full Day</label>
-  </div>
+        <div class="mb-3 d-flex align-items-center gap-4">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="leaveDay"
+              id="fullDay"
+              [value]="'fullDay'"
+              [(ngModel)]="leaveType"
+              checked
+            />
+            <label class="form-check-label" for="fullDay">Full Day</label>
+          </div>
 
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="radio"
-      name="leaveDay"
-      id="halfDay"
-      [value]="'halfDay'"
-      [(ngModel)]="leaveType"
-    />
-    <label class="form-check-label" for="halfDay">Half Day</label>
-  </div>
-</div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="leaveDay"
+              id="halfDay"
+              [value]="'halfDay'"
+              [(ngModel)]="leaveType"
+            />
+            <label class="form-check-label" for="halfDay">Half Day</label>
+          </div>
+        </div>
 
-<!-- ✅ Show only when Full Day is selected -->
-<div *ngIf="leaveType === 'fullDay'">
-  <div class="row mb-3 align-items-center">
-    <label for="startDate" class="col-sm-2 col-form-label">Start Date</label>
-    <div class="col-sm-4">
-      <input
-        type="date"
-        class="form-control"
-        [(ngModel)]="startDate"
-        name="startDate"
-      />
+        <!-- ✅ Show only when Full Day is selected -->
+        <div *ngIf="leaveType === 'fullDay'">
+          <div class="row mb-3 align-items-center">
+            <label for="startDate" class="col-sm-2 col-form-label"
+              >Start Date</label
+            >
+            <div class="col-sm-4">
+              <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="startDate"
+                name="startDate"
+              />
+            </div>
+          </div>
+
+          <div class="row mb-3 align-items-center">
+            <label for="endDate" class="col-sm-2 col-form-label"
+              >End Date</label
+            >
+            <div class="col-sm-4">
+              <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="endDate"
+                name="endDate"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- ✅ Show only when Half Day is selected -->
+        <div *ngIf="leaveType === 'halfDay'">
+          <div class="row mb-3 align-items-center">
+            <label for="halfDate" class="col-sm-2 col-form-label">Date</label>
+            <div class="col-sm-4">
+              <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="halfDate"
+                name="halfDate"
+              />
+            </div>
+          </div>
+
+          <div class="row mb-3 align-items-center">
+            <label for="halfTime" class="col-sm-2 col-form-label">Time</label>
+            <div class="col-sm-4">
+              <input
+                type="time"
+                class="form-control"
+                [(ngModel)]="halfTime"
+                name="halfTime"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 row align-items-center">
+          <label for="leaveType" class="col-sm-2 col-form-label"
+            >Leave Type</label
+          >
+          <div class="col-sm-3">
+            <select
+              class="form-select"
+              [(ngModel)]="selectedLeaveType"
+              name="leaveType"
+            >
+              <option hidden selected value="">Select Leave Type</option>
+              <option value="casual">Casual Leave</option>
+              <option value="sick">Sick Leave</option>
+              <option value="emergency">Emergency Leave</option>
+              <option value="carryForward">Carry Forward Leave</option>
+              <option value="compensatory">Compensatory Leave</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ✅ Show No. of Days only for Full Day -->
+        <div
+          class="mb-3 row align-items-center"
+          *ngIf="leaveType === 'fullDay'"
+        >
+          <label for="noOfDays" class="col-sm-2 col-form-label"
+            >No. of Days</label
+          >
+          <div class="col-sm-3">
+            <input
+              type="number"
+              class="form-control text-muted"
+              placeholder="Auto Calculated"
+              [value]="calculateDays()"
+              style="background-color: #e5f4f3"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="reason" class="form-label">Reason</label>
+          <div class="col-sm-3">
+            <textarea
+              class="form-control"
+              [(ngModel)]="reason"
+              rows="3"
+              placeholder="Enter your Reason"
+              name="reason"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-secondary">Cancel</button>
+          <button type="button" class="btn btn-success" (click)="submitLeave()">
+            Submit
+          </button>
+        </div>
+      </div>
+
+      <!-- start here replace end -->
     </div>
   </div>
-
-  <div class="row mb-3 align-items-center">
-    <label for="endDate" class="col-sm-2 col-form-label">End Date</label>
-    <div class="col-sm-4">
-      <input
-        type="date"
-        class="form-control"
-        [(ngModel)]="endDate"
-        name="endDate"
-      />
+  <!-- Right Section (Leave Summary) -->
+  <!-- Right Section (Leave Summary) -->
+  <div class="col-12 col-lg-3 mb-4">
+    <div class="d-flex flex-column gap-3">
+      <app-available-leave-card></app-available-leave-card>
     </div>
   </div>
-</div>
-
-<!-- ✅ Show only when Half Day is selected -->
-<div *ngIf="leaveType === 'halfDay'">
-  <div class="row mb-3 align-items-center">
-    <label for="halfDate" class="col-sm-2 col-form-label">Date</label>
-    <div class="col-sm-4">
-      <input
-        type="date"
-        class="form-control"
-        [(ngModel)]="halfDate"
-        name="halfDate"
-      />
-    </div>
-  </div>
-
-  <div class="row mb-3 align-items-center">
-    <label for="halfTime" class="col-sm-2 col-form-label">Time</label>
-    <div class="col-sm-4">
-      <input
-        type="time"
-        class="form-control"
-        [(ngModel)]="halfTime"
-        name="halfTime"
-      />
-    </div>
-  </div>
-</div>
-
-<div class="mb-3 row align-items-center">
-  <label for="leaveType" class="col-sm-2 col-form-label">Leave Type</label>
-  <div class="col-sm-3">
-    <select
-      class="form-select"
-      [(ngModel)]="selectedLeaveType"
-      name="leaveType"
-    >
-      <option hidden selected value="">Select Leave Type</option>
-      <option value="casual">Casual Leave</option>
-      <option value="sick">Sick Leave</option>
-      <option value="emergency">Emergency Leave</option>
-      <option value="carryForward">Carry Forward Leave</option>
-      <option value="compensatory">Compensatory Leave</option>
-    </select>
-  </div>
-</div>
-
-<!-- ✅ Show No. of Days only for Full Day -->
-<div class="mb-3 row align-items-center" *ngIf="leaveType === 'fullDay'">
-  <label for="noOfDays" class="col-sm-2 col-form-label">No. of Days</label>
-  <div class="col-sm-3">
-    <input
-      type="number"
-      class="form-control text-muted"
-      placeholder="Auto Calculated"
-      [value]="calculateDays()"
-      style="background-color: #e5f4f3"
-    />
-  </div>
-</div>
-
-<div class="mb-3">
-  <label for="reason" class="form-label">Reason</label>
-  <div class="col-sm-3">
-    <textarea
-      class="form-control"
-      [(ngModel)]="reason"
-      rows="3"
-      placeholder="Enter your Reason"
-      name="reason"
-    ></textarea>
-  </div>
-</div>
-
-<div class="d-flex gap-2">
-  <button type="button" class="btn btn-secondary">Cancel</button>
-  <button type="button" class="btn btn-success" (click)="submitLeave()">
-    Submit
-  </button>
 </div>

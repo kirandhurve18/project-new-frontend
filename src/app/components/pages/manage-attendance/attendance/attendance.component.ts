@@ -29,7 +29,7 @@ export class AttendanceComponent implements OnInit {
   cross_close_icon = `${environment.BASE_PATH_ASSETS}/icons/cross_close_icon.svg`;
   arrow_left_icon = `${environment.BASE_PATH_ASSETS}/icons/arrow_left_icon.svg`;
   arrow_right_icon = `${environment.BASE_PATH_ASSETS}/icons/arrow_right_icon.svg`;
-  
+
   checkedIn = false;
   checkedOut = false;
   employee_id: string = '';
@@ -89,12 +89,19 @@ export class AttendanceComponent implements OnInit {
     if (!this.employee_id) return;
 
     try {
-      const coords = await this.getCurrentLocation();
+      let coords = null
+      try {
+        coords = await this.getCurrentLocation();
+        console.log("coords success--> --> ", coords)
+      } catch (error) {
+        console.log(error);
+        console.log("coords ---> fail--> ", coords)
+      }
       const payload = {
         employee_id: this.employee_id,
         checkin_location: 'Office',
-        latitude: coords.latitude.toString(),
-        longitude: coords.longitude.toString(),
+        latitude: coords?.latitude?.toString() || '',
+        longitude: coords?.longitude.toString() || '',
       };
 
       console.log('📤 Sending check-in payload:', payload);
@@ -132,12 +139,21 @@ export class AttendanceComponent implements OnInit {
     if (!this.employee_id) return;
 
     try {
-      const coords = await this.getCurrentLocation();
+      let coords = null
+      try {
+        coords = await this.getCurrentLocation();
+        console.log("coords success--> --> ", coords)
+      } catch (error) {
+        console.log(error);
+        console.log("coords ---> fail--> ", coords)
+      }
+
+
       const payload = {
         employee_id: this.employee_id,
         checkout_location: 'Office',
-        latitude: coords.latitude.toString(),
-        longitude: coords.longitude.toString(),
+        latitude: coords?.latitude.toString() || '',
+        longitude: coords?.longitude.toString() || '',
       };
 
       console.log('📤 Sending check-out payload:', payload);
@@ -192,9 +208,9 @@ export class AttendanceComponent implements OnInit {
 
     // console.log("this.viewDate ---> ", this.viewDate)
     const baseDate = this.viewDate
-    ? this.viewDate  // parse string/ISO date
-    : new Date();
-    
+      ? this.viewDate  // parse string/ISO date
+      : new Date();
+
     // console.log("baseDate ---> ", baseDate)
     // convert to Asia/Kolkata timezone
     const zonedDate = toZonedTime(baseDate, 'Asia/Kolkata');
@@ -273,6 +289,10 @@ export class AttendanceComponent implements OnInit {
     }
     console.log('📌 Loaded employee_id:', this.employee_id);
 
+    // const address = this.getAddressFromLatLng(18.5204, 73.8567); // Pune coords
+    // console.log("Address:", address);
+
+
     this.refreshAttendance();
     this.fetchAttendance();
   }
@@ -290,13 +310,28 @@ export class AttendanceComponent implements OnInit {
           },
           (error) => {
             console.error('❌ Location error:', error);
-            reject(error);
+            // reject(error);
           }
         );
       } else {
-        reject(new Error('Geolocation not supported'));
+        // reject(new Error('Geolocation not supported'));
       }
     });
   }
+
+
+  // getAddressFromLatLng(lat, lng) {
+  //   try {
+  //     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+  //     const response = await axios.get(url, {
+  //       headers: { "User-Agent": "Vibhu" },
+  //     });
+
+  //     return response.data.display_name;
+  //   } catch (error) {
+  //     console.error("Error in reverse geocoding:", error.message);
+  //     return null;
+  //   }
+  // }
 
 }

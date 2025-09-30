@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Superadmin } from '../../../../core/services/superadmin';
 import { Router } from '@angular/router';
+import { AvailableLeaveCardComponent } from '../../../cards/available-leave.card/available-leave.card.component';
 
 @Component({
   selector: 'app-leaves-apply',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AvailableLeaveCardComponent],
   templateUrl: './leaves-apply.component.html',
   styleUrls: ['./leaves-apply.component.css']
 })
@@ -29,7 +30,7 @@ export class LeavesApplyComponent implements OnInit {
 
   constructor(private superadmin: Superadmin, private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   calculateDays(): string {
     if (this.startDate && this.endDate) {

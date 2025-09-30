@@ -313,15 +313,15 @@
                       <tr
                         *ngFor="
                           let item of [
-                            '10th',
-                            '12th',
-                            'Graduation',
-                            'Post Graduation'
+                            'tenth',
+                            'twelfth',
+                            'graduation',
+                            'post graduation'
                           ];
                           let i = index
                         "
                       >
-                        <td>{{ item }}</td>
+                        <td>{{ item == 'post graduation'? 'Post Graduation' : item == 'graduation'? 'Graduation' : item == 'twelfth'? 'Twelfth' : item == 'tenth' ? 'Tenth' : item }}</td>
                         <td>
                           <input
                             type="number"

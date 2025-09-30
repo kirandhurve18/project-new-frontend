@@ -85,7 +85,7 @@ export class UpdateEmployeeComponent implements OnInit {
   teamManagers: any[] = [];
   roles: any[] = [];
   bloodGroups: string[] = ['A+', 'B+', 'A-', 'B-', 'AB+', 'AB-', 'O-', 'O+'];
-  qualifications: string[] = ['10th', '12th', 'Graduation', 'Post Graduation'];
+  qualifications: string[] = ['tenth', 'twelfth', 'graduation', 'post graduation'];
   uploadedFiles: { [key: string]: File } = {};
 
 
@@ -162,10 +162,10 @@ export class UpdateEmployeeComponent implements OnInit {
   };
 
   qualificationMap: any = {
-    '10th': { year: '', percentage: '' },
-    '12th': { year: '', percentage: '' },
-    Graduation: { year: '', percentage: '' },
-    'Post Graduation': { year: '', percentage: '' },
+    'tenth': { year: '', percentage: '' },
+    'twelfth': { year: '', percentage: '' },
+    'graduation': { year: '', percentage: '' },
+    'post graduation': { year: '', percentage: '' },
   };
 
   /** ================================
@@ -330,7 +330,9 @@ export class UpdateEmployeeComponent implements OnInit {
    ================================ */
   syncQualificationData() {
     for (const q of this.qualifications) {
+      console.log("q --> ", q);
       const key = q.toLowerCase().replace(' ', '_');
+            console.log("key --> ", key);
       this.formData[`${key}_passing_year`] = this.qualificationMap[q].year;
       this.formData[`${key}_percentage`] = this.qualificationMap[q].percentage;
     }
@@ -338,7 +340,10 @@ export class UpdateEmployeeComponent implements OnInit {
 
   patchQualificationMap() {
     for (const q of this.qualifications) {
+      console.log("q --> ", q);
       const key = q.toLowerCase().replace(' ', '_');
+      console.log("key --> ", key);
+      
       this.qualificationMap[q].year = this.formData[`${key}_passing_year`] || '';
       this.qualificationMap[q].percentage = this.formData[`${key}_percentage`] || '';
     }

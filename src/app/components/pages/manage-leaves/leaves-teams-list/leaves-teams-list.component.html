@@ -1,129 +1,153 @@
-<div class="d-flex flex-column p-2">
-  <!-- Search + Filter Row -->
-  <div class="row g-3 w-100 mb-3">
-    <div class="col-12 col-sm d-flex align-items-center gap-3">
-      <input
-        type="text"
-        [(ngModel)]="searchTerm"
-        (input)="onSearchChange()"
-        class="form-control"
-        style="height: 42px"
-        placeholder="Search Team member"
-      />
-      <select
-        [(ngModel)]="statusFilter"
-        (change)="onStatusChange()"
-        class="form-select"
-        style="height: 42px"
-      >
-        <option value="">All Status</option>
-        <option value="Pending">Pending</option>
-        <!-- <option value="Pending Reviewer">Pending Reviewer</option> -->
-        <option value="Approved">Approved</option>
-        <option value="Rejected">Rejected</option>
-      </select>
-    </div>
-
-    <div class="col-12 col-sm-auto ms-sm-auto">
-      <button
-        class="btn btn-teal w-100 w-md-auto"
-        (click)="applyLeaveForTeamMember()"
-        style="font-size: 15px; font-weight: 700; height: 42px"
-      >
-        Apply Leave for Team Member
-      </button>
-    </div>
-  </div>
-
-  <!-- Team Leave Table -->
-  <div class="table-responsive">
-    <table class="table table-borderless align-middle text-center">
-      <thead
-        class="text-white"
-        style="background-color: #009688; color: aliceblue"
-      >
-        <tr>
-          <th scope="col" style="background-color: #009688">Name</th>
-          <th scope="col" style="background-color: #009688">Leave Type</th>
-          <th scope="col" style="background-color: #009688">From Date</th>
-          <th scope="col" style="background-color: #009688">To Date</th>
-          <th
-            scope="col"
-            style="min-width: 150px"
-            style="background-color: #009688"
-          >
-            Reason
-          </th>
-          <th scope="col" style="background-color: #009688">Status</th>
-          <th scope="col" style="background-color: #009688">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let myteamleave of myTeamLeaveData; let i = index"
-          [class.bg-light]="i % 2 === 0"
-        >
-          <td>{{ myteamleave.full_name }}</td>
-          <td>{{ myteamleave.leave_type }}</td>
-          <td>{{ myteamleave.from_date }}</td>
-          <td>{{ myteamleave.to_date }}</td>
-          <td
-            class="text-truncate"
-            style="max-width: 150px"
-            [title]="myteamleave.reason"
-          >
-            {{ myteamleave.reason }}
-          </td>
-          <td>
-            <span
-              class="badge rounded-pill px-2 py-1"
-              [ngStyle]="{
-                backgroundColor: getStatusBgColor(myteamleave.status),
-                color:
-                  myteamleave.status === 'Pending Manager' ? '#000' : '#fff'
-              }"
+<!-- Main Layout -->
+<div class="row">
+  <!-- Left Section (Child Routes) -->
+  <div class="col-12 col-lg-9 mb-4">
+    <div class="card shadow-sm p-3">
+      <!-- start here replace code -->
+      <div class="d-flex flex-column p-2">
+        <!-- Search + Filter Row -->
+        <div class="row g-3 w-100 mb-3">
+          <div class="col-12 col-sm d-flex align-items-center gap-3">
+            <input
+              type="text"
+              [(ngModel)]="searchTerm"
+              (input)="onSearchChange()"
+              class="form-control"
+              style="height: 42px"
+              placeholder="Search Team member"
+            />
+            <select
+              [(ngModel)]="statusFilter"
+              (change)="onStatusChange()"
+              class="form-select"
+              style="height: 42px"
             >
-              {{ myteamleave.status || "Pending" }}
-            </span>
-          </td>
-          <td>
-            <div class="d-flex align-items-center justify-content-center">
-              <i
-                class="bi bi-eye"
-                (click)="openCardFromParent(myteamleave.leave_id)"
-                style="color: #009688; cursor: pointer; font-size: 18px"
-              ></i>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+              <option value="">All Status</option>
+              <option value="Pending">Pending</option>
+              <!-- <option value="Pending Reviewer">Pending Reviewer</option> -->
+              <option value="Approved">Approved</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
 
-  <!-- Pagination -->
-  <div class="d-flex justify-content-between align-items-center mt-3">
-    <div>
-      Showing {{ limit }} of {{ totalRecords }} entries
+          <div class="col-12 col-sm-auto ms-sm-auto">
+            <button
+              class="btn btn-teal w-100 w-md-auto"
+              (click)="applyLeaveForTeamMember()"
+              style="font-size: 15px; font-weight: 700; height: 42px"
+            >
+              Apply Leave for Team Member
+            </button>
+          </div>
+        </div>
+
+        <!-- Team Leave Table -->
+        <div class="table-responsive">
+          <table class="table table-borderless align-middle text-center">
+            <thead
+              class="text-white"
+              style="background-color: #009688; color: aliceblue"
+            >
+              <tr>
+                <th scope="col" style="background-color: #009688">Name</th>
+                <th scope="col" style="background-color: #009688">
+                  Leave Type
+                </th>
+                <th scope="col" style="background-color: #009688">From Date</th>
+                <th scope="col" style="background-color: #009688">To Date</th>
+                <th
+                  scope="col"
+                  style="min-width: 150px"
+                  style="background-color: #009688"
+                >
+                  Reason
+                </th>
+                <th scope="col" style="background-color: #009688">Status</th>
+                <th scope="col" style="background-color: #009688">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let myteamleave of myTeamLeaveData; let i = index"
+                [class.bg-light]="i % 2 === 0"
+              >
+                <td>{{ myteamleave.full_name }}</td>
+                <td>{{ myteamleave.leave_type }}</td>
+                <td>{{ myteamleave.from_date }}</td>
+                <td>{{ myteamleave.to_date }}</td>
+                <td
+                  class="text-truncate"
+                  style="max-width: 150px"
+                  [title]="myteamleave.reason"
+                >
+                  {{ myteamleave.reason }}
+                </td>
+                <td>
+                  <span
+                    class="badge rounded-pill px-2 py-1"
+                    [ngStyle]="{
+                      backgroundColor: getStatusBgColor(myteamleave.status),
+                      color:
+                        myteamleave.status === 'Pending Manager'
+                          ? '#000'
+                          : '#fff'
+                    }"
+                  >
+                    {{ myteamleave.status || "Pending" }}
+                  </span>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <i
+                      class="bi bi-eye"
+                      (click)="openCardFromParent(myteamleave.leave_id)"
+                      style="color: #009688; cursor: pointer; font-size: 18px"
+                    ></i>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div>Showing {{ limit }} of {{ totalRecords }} entries</div>
+          <nav>
+            <ul class="pagination mb-0">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="onChangePage(currentPage - 1)"
+                  >Previous</a
+                >
+              </li>
+              <li
+                *ngFor="let page of totalPagesArray"
+                class="page-item"
+                [class.active]="page === currentPage"
+              >
+                <a class="page-link" (click)="onChangePage(page)">{{ page }}</a>
+              </li>
+              <li
+                class="page-item"
+                [class.disabled]="currentPage === totalPages"
+              >
+                <a class="page-link" (click)="onChangePage(currentPage + 1)"
+                  >Next</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <!-- start here replace end -->
     </div>
-    <nav>
-      <ul class="pagination mb-0">
-        <li class="page-item" [class.disabled]="currentPage === 1">
-          <a class="page-link" (click)="onChangePage(currentPage - 1)"
-            >Previous</a
-          >
-        </li>
-        <li
-          *ngFor="let page of totalPagesArray"
-          class="page-item"
-          [class.active]="page === currentPage"
-        >
-          <a class="page-link" (click)="onChangePage(page)">{{ page }}</a>
-        </li>
-        <li class="page-item" [class.disabled]="currentPage === totalPages">
-          <a class="page-link" (click)="onChangePage(currentPage + 1)">Next</a>
-        </li>
-      </ul>
-    </nav>
+  </div>
+  <!-- Right Section (Leave Summary) -->
+  <div class="col-12 col-lg-3 mb-4">
+    <div class="d-flex flex-column gap-3">
+      <app-available-leave-card [modelType]="modelType"></app-available-leave-card>
+    </div>
   </div>
 </div>
 

@@ -5,11 +5,12 @@ import { Superadmin } from '../../../../core/services/superadmin';
 import { environment } from '../../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { LeaveCardComponent } from '../../../cards/leave.card/leave.card.component';
+import { AvailableLeaveCardComponent } from '../../../cards/available-leave.card/available-leave.card.component';
 
 @Component({
   selector: 'app-leaves-status',
   standalone: true,
-  imports: [CommonModule, FormsModule, LeaveCardComponent],
+  imports: [CommonModule, FormsModule, LeaveCardComponent, AvailableLeaveCardComponent],
   templateUrl: './leaves-status.component.html',
   styleUrls: ['./leaves-status.component.css']
 })
@@ -80,11 +81,11 @@ export class LeavesStatusComponent implements OnInit {
   }
 
   openDeletePopup(leave: any) {
-    if(leave.status == 'Cancelled'){
+    if (leave.status == 'Cancelled') {
       this.toastr.info("Leave Alread Cancelled")
       return;
     }
-    if(leave.status !== 'Pending'){
+    if (leave.status !== 'Pending') {
       this.toastr.info("Only Pending Leaves Can be cancelled");
       return;
     }

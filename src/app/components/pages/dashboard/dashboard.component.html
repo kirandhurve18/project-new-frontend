@@ -177,16 +177,15 @@
         </div>
       </div>
 
-      <!-- My Tasks -->
-      <div class="p-3 bg-white rounded shadow-sm">
-        <p class="body-title text-center mb-3">My Tasks</p>
-
+      <!-- My Taskssuper -->
+      <div class="p-3 bg-white rounded shadow-sm mb-3">
+        <h5 class="fw-bold text-center mb-3">My Tasks</h5>
         <ul class="list-group mb-3" *ngIf="tasks.length > 0">
           <li
             class="list-group-item d-flex justify-content-between align-items-center"
             *ngFor="let task of tasks; let i = index"
           >
-            <span>{{ task }}</span>
+            <span>{{ task.title }}</span>
             <div class="btn-group btn-group-sm">
               <button class="btn btn-outline-primary" (click)="editTask(i)">
                 <i class="bi bi-pencil-fill"></i>
@@ -197,11 +196,10 @@
             </div>
           </li>
         </ul>
-
         <div class="d-flex justify-content-end">
           <button
-            class="btn btn-sm text-white"
-            style="background-color: #009688"
+            class="btn btn-sm"
+            style="background-color: #009688; color: aliceblue"
             (click)="openAddTaskPopup()"
           >
             + Add Item
@@ -410,7 +408,7 @@
       </div>
     </div>
 
-    <!-- My Tasks -->
+    <!-- My Tasks other -->
     <div class="col-lg-4 col-md-12 mb-3">
       <div class="p-3 bg-white rounded shadow-sm mb-3">
         <h5 class="fw-bold text-center mb-3">My Tasks</h5>
@@ -450,7 +448,7 @@
             <span>Timesheets</span>
             <div class="d-flex align-items-center">
               <span>{{ approvalPendings.timeSheets }}</span>
-              <button 
+              <button
                 class="btn btn-sm border-0"
                 (click)="goToTeamworksummary()"
               >
@@ -462,7 +460,7 @@
             <span>Leave Request</span>
             <div class="d-flex align-items-center">
               <span>{{ approvalPendings.leave_request }}</span>
-              <button 
+              <button
                 class="btn btn-sm border-0"
                 (click)="goToTeamLeavesteam()"
               >

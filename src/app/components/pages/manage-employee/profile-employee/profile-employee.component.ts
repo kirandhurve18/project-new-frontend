@@ -51,6 +51,7 @@ export class ProfileEmployeeComponent implements OnInit {
    BASE_URL_IMAGE: string = '';
    cross_close_icon = `${environment.BASE_PATH_ASSETS}/icons/cross_close_icon.svg`;
    showPassword: boolean = false
+   
  
    /** ================================
     * DATA SOURCES
@@ -221,7 +222,24 @@ export class ProfileEmployeeComponent implements OnInit {
        this.getEmployeeDetails(this.employeeId);
      }
    }
- 
+ getDepartmentName(id: string): string {
+  return this.departments.find(d => d._id === id)?.department_name || '-';
+}
+getDesignationName(id: string): string {
+  return this.designations.find(d => d._id === id)?.designation_name || '-';
+}
+getTeamLeadName(id: string): string {
+  const lead = this.teamLeads.find(l => l._id === id);
+  return lead ? `${lead.first_name} ${lead.last_name}` : '-';
+}
+getTeamManagerName(id: string): string {
+  const manager = this.teamManagers.find(m => m._id === id);
+  return manager ? `${manager.first_name} ${manager.last_name}` : '-';
+}
+getRoleName(id: string): string {
+  return this.roles.find(r => r._id === id)?.role_name || '-';
+}
+
  
    // ✅ Fetch menus for permissions
    loadMenu() {
@@ -628,10 +646,13 @@ export class ProfileEmployeeComponent implements OnInit {
    }
  
  
-   getFileUrl(path: string): string {
-     return `${this.BASE_URL_IMAGE}/hrms/dashboard/server_preview_file?key=${path}`; // replace with env
- 
-   }
+ getFileUrl(path: string | undefined): string {
+  if (!path) {
+    return '#'; // or return an empty string, depending on your use case
+  }
+  return `${environment.baseUrl}/${path}`;
+}
+
  
    removeUploadedDocument(path: string | null, _id: string, key: string) {
      let payload = {

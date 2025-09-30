@@ -5,18 +5,19 @@ import { Superadmin } from '../../../../core/services/superadmin';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../environments/environment';
 import { LeaveCardComponent } from '../../../cards/leave.card/leave.card.component';
+import { AvailableLeaveCardComponent } from '../../../cards/available-leave.card/available-leave.card.component';
 
 @Component({
   selector: 'app-leaves-reviewer-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, LeaveCardComponent],
+  imports: [CommonModule, FormsModule, LeaveCardComponent, AvailableLeaveCardComponent],
   templateUrl: './leaves-reviewer-list.component.html',
   styleUrls: ['./leaves-reviewer-list.component.css']
 })
 export class LeavesReviewerListComponent implements OnInit {
   @ViewChild(LeaveCardComponent) leaveCard!: LeaveCardComponent;
   cardOpen: boolean = false;
-
+  modelType: string = '4';
   // credentials
   userRole: string = '';
   employee_id: string | null = '';

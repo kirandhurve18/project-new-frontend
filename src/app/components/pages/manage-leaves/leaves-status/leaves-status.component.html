@@ -1,78 +1,105 @@
-<div class="table-responsive">
-  <table class="table table-borderless table-striped align-middle text-center">
-<thead>
-  <tr>
-    <th scope="col" >Sr No</th>
-    <th scope="col">Apply Date</th>
-    <th scope="col">EL</th>
-    <th scope="col">Leave Type</th>
-    <th scope="col">Start Date</th>
-    <th scope="col">End Date</th>
-    <th scope="col">Paid</th>
-    <th scope="col">Unpaid</th>
-    <th scope="col" style="min-width: 90px; white-space: nowrap">Total Days</th>
-    <th scope="col" style="min-width: 150px">Reason</th>
-    <th scope="col">Status</th>
-    <th scope="col">Action</th>
-  </tr>
-</thead>
-
-    <tbody>
-      <tr *ngFor="let leave of leaveData; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ leave.applyDate }}</td>
-        <td>
-          <ng-container *ngIf="leave.el; else noEL">
-            <input type="checkbox" class="form-check-input" checked disabled />
-          </ng-container>
-          <ng-template #noEL>-</ng-template>
-        </td>
-        <td>{{ leave.leaveType }}</td>
-        <td>{{ leave.startDate }}</td>
-        <td>{{ leave.endDate }}</td>
-        <td>{{ leave.paid || "-" }}</td>
-        <td>{{ leave.unpaid || "-" }}</td>
-        <td>{{ leave.totalDays || "-" }}</td>
-        <td
-          class="text-truncate"
-          style="max-width: 150px"
-          title="{{ leave.reason }}"
+<!-- Main Layout -->
+<div class="row">
+  <!-- Left Section (Child Routes) -->
+  <div class="col-12 col-lg-9 mb-4">
+    <div class="card shadow-sm p-3">
+      <!-- start here replace code -->
+      <div class="table-responsive">
+        <table
+          class="table table-borderless table-striped align-middle text-center"
         >
-          {{ leave.reason }}
-        </td>
-        <td>
-  <span
-  class="badge rounded-pill px-2 py-1"
-  [ngClass]="{
-    'bg-success': leave.status === 'Approved',
-    'bg-danger': leave.status === 'Rejected',
-    'bg-warning text-dark': leave.status === 'Pending' || leave.status === 'Cancelled'
-  }"
->
-  {{ leave.status }}
-</span>
-        </td>
-        <td class="d-flex justify-content-center gap-2">
-          <img
-            [src]="view_solid_icon"
-            width="20"
-            height="20"
-            alt="View"
-            class="cursor-pointer"            
-            (click)="openCardFromParent(leave.leave_id)"
-          />
-          <img
-            [src]="delete_solid_icon"
-            width="20"
-            height="20"
-            alt="Delete"
-            class="cursor-pointer"
-            (click)="openDeletePopup(leave)"
-          />
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <thead>
+            <tr>
+              <th scope="col">Sr No</th>
+              <th scope="col">Apply Date</th>
+              <th scope="col">EL</th>
+              <th scope="col">Leave Type</th>
+              <th scope="col">Start Date</th>
+              <th scope="col">End Date</th>
+              <th scope="col">Paid</th>
+              <th scope="col">Unpaid</th>
+              <th scope="col" style="min-width: 90px; white-space: nowrap">
+                Total Days
+              </th>
+              <th scope="col" style="min-width: 150px">Reason</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let leave of leaveData; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ leave.applyDate }}</td>
+              <td>
+                <ng-container *ngIf="leave.el; else noEL">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    checked
+                    disabled
+                  />
+                </ng-container>
+                <ng-template #noEL>-</ng-template>
+              </td>
+              <td>{{ leave.leaveType }}</td>
+              <td>{{ leave.startDate }}</td>
+              <td>{{ leave.endDate }}</td>
+              <td>{{ leave.paid || "-" }}</td>
+              <td>{{ leave.unpaid || "-" }}</td>
+              <td>{{ leave.totalDays || "-" }}</td>
+              <td
+                class="text-truncate"
+                style="max-width: 150px"
+                title="{{ leave.reason }}"
+              >
+                {{ leave.reason }}
+              </td>
+              <td>
+                <span
+                  class="badge rounded-pill px-2 py-1"
+                  [ngClass]="{
+                    'bg-success': leave.status === 'Approved',
+                    'bg-danger': leave.status === 'Rejected',
+                    'bg-warning text-dark':
+                      leave.status === 'Pending' || leave.status === 'Cancelled'
+                  }"
+                >
+                  {{ leave.status }}
+                </span>
+              </td>
+              <td class="d-flex justify-content-center gap-2">
+                <img
+                  [src]="view_solid_icon"
+                  width="20"
+                  height="20"
+                  alt="View"
+                  class="cursor-pointer"
+                  (click)="openCardFromParent(leave.leave_id)"
+                />
+                <img
+                  [src]="delete_solid_icon"
+                  width="20"
+                  height="20"
+                  alt="Delete"
+                  class="cursor-pointer"
+                  (click)="openDeletePopup(leave)"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- start here replace end -->
+    </div>
+  </div>
+  <!-- Right Section (Leave Summary) -->
+  <div class="col-12 col-lg-3 mb-4">
+    <div class="d-flex flex-column gap-3">
+      <app-available-leave-card></app-available-leave-card>
+    </div>
+  </div>
 </div>
 
 <div

@@ -74,7 +74,7 @@ export class SidebarComponent implements OnInit {
               console.log("baseLink ---> ", baseLink)
               if('remote-work-agreement' == perm.menu.key && ['WFO'].includes(this.work_mode)) return undefined;
               if(this.userRole == '1' && 'leave-management' == perm.menu.key){
-                baseLink.link = '/main/leave/teams-reviewer-list'
+                baseLink.link = '/main/leave/teams-list'
               }
               return {
                 ...baseLink,
@@ -128,6 +128,16 @@ export class SidebarComponent implements OnInit {
       ].some(route => currentUrl.startsWith(route));
     }
 
+    if (link === '/main/leave' || link === '/main/leave/teams-list') {
+      return [
+        '/main/leave/status',
+        '/main/leave/apply',
+        '/main/leave/teams-list',
+        '/main/leave/teams-pending-list',
+        '/main/leave/teams-reviewer-list',
+      ].some(route => currentUrl.startsWith(route));
+    }
+    
     if (link === '/main/leave/summary') {
       return [
         '/main/leave/summary/active',

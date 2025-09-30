@@ -110,6 +110,19 @@ export class DashboardComponent implements OnInit {
 
   deleteTask(index: number): void {
     // this.tasks.splice(index, 1);
+      const task = this.tasks[index];
+    this.superadmin.deleteTask(task._id).subscribe({
+      next: (res) => {
+        if (res?.success) {
+          this.loadTasks()
+          this.toastr.success(res?.message || 'Task updated successfully ✅');
+        }
+      },
+      error: (err) => {
+        console.error('❌ Failed to update task:', err);
+        this.toastr.error(err?.error?.message || 'Failed to update task ❌');
+      }
+    });
   }
 
   submitTask(): void {
@@ -124,7 +137,8 @@ export class DashboardComponent implements OnInit {
       this.superadmin.updateTask(task._id, payload).subscribe({
         next: (res) => {
           if (res?.success) {
-            this.tasks[this.editingIndex] = res.data;
+            this.loadTasks()
+            // this.tasks[this.editingIndex] = res.data;
             this.toastr.success(res?.message || 'Task updated successfully ✅');
           }
         },
@@ -139,7 +153,8 @@ export class DashboardComponent implements OnInit {
       this.superadmin.addTask(payload).subscribe({
         next: (res) => {
           if (res?.success) {
-            this.tasks.push(res.data);
+            // this.tasks.push(res.data);
+            this.loadTasks()
             this.toastr.success(res?.message || 'Task added successfully ✅');
           }
         },
@@ -200,7 +215,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadTasks(): void {
-    this.superadmin.getMyTasks().subscribe({
+    this.superadmin.getMyTasks(this.employee_id).subscribe({
       next: (res) => {
         if (res?.success && res?.data) {
           this.tasks = res.data;

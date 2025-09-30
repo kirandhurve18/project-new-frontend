@@ -75,11 +75,16 @@ export class Superadmin {
     );
   }
 
-  getMyTasks(): Observable<any> {
-    return this.http.post<any>(
-      `${this.baseUrl}/hrms/dashboard/my_tasks`,
-      '',
-      { headers: this.getHeaders('url') }
+  getMyTasks(employee_id: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.baseUrl}/hrms/dashboard/tasks`,
+      {
+        headers: this.getHeaders('url'),
+        params: {
+          employee_id: employee_id,
+          order: 'desc'
+        }
+      }
     );
   }
 
@@ -966,24 +971,43 @@ export class Superadmin {
     );
   }
 
+  deleteTask(id: string,): Observable<any> {
+    return this.http.delete<any>(
+      `${this.baseUrl}/hrms/dashboard/tasks/${id}`,
+      { headers: this.getHeaders('json') }
+    );
+  }
+
+
+  getAddressFromLatLng(lat: any, lng: any) {
+    try {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+      const response = this.http.get(url, {
+        headers: { "User-Agent": "Vibhu" },
+      });
+      console.log("response ---> ", response);
+      return response;
+
+    } catch (error) {
+      console.log("error ---> ", error)
+      return null;
+    }
+  }
+
   // 📌 Get team leaves taken by team lead/superadmin
-getTeamLeavesTaken(payload: { employee_id: string }): Observable<any> {
-  return this.http.post(
-    `${this.baseUrl}/hrms/leave/get_leave_taken_by_team`,
-    payload,
-    { headers: this.getHeaders('json') }
-  );
-}
-getCurrentUpcomingLeaves(payload: { _id: string }): Observable<any> {
-  return this.http.post<any>(
-    `${this.baseUrl}/hrms/leave/get_leave_list_by_team`,
-    payload,
-    { headers: this.getHeaders('json') }
-  );
-}
-
-
-
-
+  getTeamLeavesTaken(payload: { employee_id: string }): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}/hrms/leave/get_leave_taken_by_team`,
+      payload,
+      { headers: this.getHeaders('json') }
+    );
+  }
+  getCurrentUpcomingLeaves(payload: { _id: string }): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}/hrms/leave/get_leave_list_by_team`,
+      payload,
+      { headers: this.getHeaders('json') }
+    );
+  }
 
 }
