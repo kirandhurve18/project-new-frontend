@@ -19,7 +19,7 @@ export class HierarchyEmployeeComponent implements OnInit {
   totalEntries: number = 0;       // Total records from API
   totalPages: number = 0;         // Total pages for pagination
 
-  constructor(private superadmin: Superadmin, private router: Router) {}
+  constructor(private superadmin: Superadmin, private router: Router) { }
 
   ngOnInit(): void {
     this.loadEmployees();

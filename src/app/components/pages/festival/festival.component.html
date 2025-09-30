@@ -73,10 +73,7 @@
               </div>
             </div>
 
-            <div
-              class="dashboard-new_lead-item"
-              *ngFor="let fest of festivals"
-            >
+            <div class="dashboard-new_lead-item" *ngFor="let fest of festivals">
               <div class="item-col item-col1 text-center">
                 {{ fest.sr < 10 ? "0" + fest.sr : fest.sr }}
               </div>
@@ -103,13 +100,9 @@
           >
             <div class="text-muted small">
               Showing
-              {{
-                (currentPage - 1) * entriesToShow + 1
-              }}
+              {{ (currentPage - 1) * entriesToShow + 1 }}
               to
-              {{
-                Math.min(currentPage * entriesToShow, totalItems)
-              }}
+              {{ Math.min(currentPage * entriesToShow, totalItems) }}
               of {{ totalItems }} entries
             </div>
 

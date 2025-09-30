@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Superadmin } from '../../../core/services/superadmin';
 import { environment } from '../../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-festival',
@@ -37,7 +38,7 @@ export class FestivalComponent implements OnInit {
   loading: boolean = false;
   Math = Math;
 
-  constructor(private router: Router, private superadmin: Superadmin) {}
+  constructor(private router: Router, private superadmin: Superadmin, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     let user: any = localStorage.getItem('user');
@@ -114,15 +115,19 @@ export class FestivalComponent implements OnInit {
 
     this.loading = true;
     this.superadmin.addFestivalLeaves(payload).subscribe({
-      next: () => {
+      next: (response) => {
         this.loading = false;
-        this.loadFestivals(1); // reload from first page
-        this.closeAddFestival();
+        if(response && response.success){
+          this.toastr.success(response.message)
+          this.loadFestivals(1); // reload from first page
+          this.closeAddFestival();
+        } else {
+          this.toastr.error(response.message)
+        }
       },
       error: (err) => {
         this.loading = false;
-        console.error('Failed to add festival:', err);
-        alert('Failed to add festival. Please try again.');
+        this.toastr.error(err.error.message)
       }
     });
   }
@@ -161,7 +166,7 @@ export class FestivalComponent implements OnInit {
   // Update Festival Submit
   submitEditFestival() {
     if (!this.editFestival.name || !this.editFestival.date) {
-      alert('Please fill in all fields');
+      this.toastr.error('Please fill in all fields');
       return;
     }
 
@@ -174,15 +179,21 @@ export class FestivalComponent implements OnInit {
 
     this.loading = true;
     this.superadmin.updateFestivalLeave(payload).subscribe({
-      next: () => {
+      next: (response) => {
         this.loading = false;
-        this.loadFestivals(this.currentPage);
-        this.closeEditFestival();
+         if(response && response.success){
+          this.toastr.success(response.message)
+          this.loadFestivals(this.currentPage);
+          this.closeEditFestival();
+        } else {
+          this.toastr.error(response.message)
+        }
       },
       error: (err) => {
         this.loading = false;
-        console.error('Failed to update festival:', err);
-        alert('Failed to update festival. Please try again.');
+        this.toastr.error(err.error.message);
+        // console.error('Failed to update festival:', err);
+        // alert('Failed to update festival. Please try again.');
       }
     });
   }

@@ -1,72 +1,95 @@
-@media (max-width: 576px) {
-  .btn {
-    width: 100%;
-    text-align: center;
-  }
-}
-.dashboard-new_lead-box {
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
-  overflow-x: auto;
+/* ===============================
+   TABLE STYLING
+================================== */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
 }
 
-.dashboard-new_lead-header,
-.dashboard-new_lead-item {
-  display: flex;
-  justify-content: space-between;
+.table th,
+.table td {
+  padding: 10px 14px;
+  vertical-align: middle;
+  border: 1px solid #e0e0e0;
+}
+
+/* Header */
+.table th {
+  background-color: #009688;
+  color: #fff;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* Alternate row background */
+.table tbody tr:nth-child(even) {
+  background-color: #f7fdfc;
+}
+
+/* ===============================
+   UPLOAD PILL STYLING
+================================== */
+.file-pill {
+  display: inline-flex;
   align-items: center;
-  border-bottom: 1px solid #dee2e6;
-  padding: 0.75rem;
+  background: #f8f9fa;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 13px;
+  max-width: 250px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.dashboard-new_lead-header {
-  background-color: #009688;
-  color: white;
+/* Filename inside pill */
+.file-pill span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Delete button */
+.delete-btn {
+  margin-left: 8px;
+  background: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  font-size: 12px;
   font-weight: bold;
+  cursor: pointer;
+  padding: 0 6px;
+  line-height: 18px;
+  transition: background 0.2s, color 0.2s;
 }
 
-.dashboard-new_lead-header * {
-  color: white;
+.delete-btn:hover {
+  background: #e53935;
+  color: #fff;
+  border-color: #e53935;
 }
 
-.item-col {
-  flex: 1;
-  text-align: center;
-  padding: 0 0.5rem;
+/* ===============================
+   FILE INPUT RESET
+================================== */
+input[type="file"] {
+  font-size: 13px;
 }
 
-
-.bg-light-row {
-  background-color: #E5f4f3; /* Alternate row color */
-}
-@media (max-width: 576px) {
-  .modal-dialog {
-    max-width: 95% !important;
-    margin: 0 auto;
-  }
-
-  .modal-content {
-    height: auto !important;
-    padding: 10px;
-  }
-
-  .modal-header, .modal-body, .modal-footer {
-    padding: 10px !important;
-  }
-
-  .modal-title {
-    font-size: 1rem;
-  }
-
-  .modal-footer button {
-    font-size: 0.875rem;
-  }
-}
-.page-item.active .page-link {
-  background-color: #009688;
-  border-color: #009688;
-  color: white;
+input[type="file"]::-webkit-file-upload-button {
+  background: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-right: 6px;
 }
 
-
-
+input[type="file"]::-webkit-file-upload-button:hover {
+  background: #e0e0e0;
+}

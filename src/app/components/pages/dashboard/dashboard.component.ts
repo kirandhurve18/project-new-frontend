@@ -1,6 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
-import { ViewChild, ElementRef } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Superadmin } from '../../../core/services/superadmin';
 import { FormsModule } from '@angular/forms';
@@ -25,15 +24,16 @@ interface Task {
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
-   currentIndex = 0;
+  currentIndex = 0;
 
-  users = [
-    { name: 'Alish', date: '11-05-1998', type: 'Birthday', image: 'assets/images/alish.svg' },
-    { name: 'Vibha', date: '02-07-1995', type: 'Anniversary', image: 'assets/images/vibha.svg' },
-    { name: 'Omm', date: '23-09-1999', type: 'Birthday', image: 'assets/images/om.svg' },
-    { name: 'Shrikant', date: '14-01-1992', type: 'Anniversary', image: 'assets/images/shrikant.svg' },
+  users: any = [
+    { first_name: 'Alish', date: '11-05-1998', type: 'Birthday', image: 'assets/images/alish.svg' },
+    { first_name: 'Vibha', date: '02-07-1995', type: 'Work Anniversary', image: 'assets/images/vibha.svg' },
+    { first_name: 'Omm', date: '23-09-1999', type: 'Birthday', image: 'assets/images/om.svg' },
+    { first_name: 'Shrikant', date: '14-01-1992', type: 'Anniversary', image: 'assets/images/shrikant.svg' },
   ];
 
   prevUser() {
@@ -108,6 +108,7 @@ export class DashboardComponent implements OnInit {
     this.loadLateComers();
     this.refreshAttendance()
     this.loadTeamOnLeaveToday();
+    this.loadListUpcomingEvents();
   }
 
   openAddTaskPopup(): void {
@@ -133,7 +134,7 @@ export class DashboardComponent implements OnInit {
 
   deleteTask(index: number): void {
     // this.tasks.splice(index, 1);
-      const task = this.tasks[index];
+    const task = this.tasks[index];
     this.superadmin.deleteTask(task._id).subscribe({
       next: (res) => {
         if (res?.success) {
@@ -220,6 +221,7 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
   loadLateComers(): void {
     const now = new Date();
     const month = now.getMonth() + 1; // JS months are 0-based
@@ -369,4 +371,20 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  loadListUpcomingEvents(): void {
+    this.superadmin.loadListUpcomingEvents().subscribe({
+      next: (res) => {
+        if (res?.success) {
+          this.users = res.data || [];
+        }
+      },
+      error: (err) => {
+        console.error('Failed to fetch attendance summary:', err);
+      }
+    });
+  }
+
+  getPassportPhotoUrl(photoKey: string): string {
+    return `${environment.baseUrl}/hrms/dashboard/server_preview_file?key=${photoKey}`;
+  }
 }

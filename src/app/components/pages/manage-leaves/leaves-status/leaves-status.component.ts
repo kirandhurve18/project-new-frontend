@@ -33,14 +33,14 @@ export class LeavesStatusComponent implements OnInit {
   selectedLeave: any = null;
 
   // Replace this with logged-in employee id
-  employee_id: string | null = '';
+  employee_id: string = '';
 
   constructor(private superadmin: Superadmin, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     let user: any = localStorage.getItem('user');
     this.userRole = localStorage.getItem('user_role');
-    this.employee_id = localStorage.getItem('employee_id')
+    this.employee_id = localStorage.getItem('employee_id') || '';
 
     if (!user) {
       this.router.navigate(['/login']);
@@ -104,24 +104,22 @@ export class LeavesStatusComponent implements OnInit {
       const payload = {
         leave_id: this.leaveToDelete.id,
         status: 'Cancelled',
-        updated_by: this.employee_id,
+        updated_by_id: this.employee_id,
       };
 
       this.superadmin.cancelLeave(payload).subscribe({
         next: (res: any) => {
           if (res.success) {
-            this.leaveData = this.leaveData.map(l =>
-              l.id === this.leaveToDelete.id ? { ...l, status: 'Cancelled' } : l
-            );
-            alert(res.message || 'Leave cancelled successfully');
+            this.loadLeaveDetails()
+            this.toastr.success(res.message);
           } else {
-            alert('Failed to cancel leave. Try again.');
+            this.toastr.error(res.message);
           }
           this.closePopup();
         },
         error: (err) => {
+          this.toastr.error(err.error.message);
           console.error('Error cancelling leave:', err);
-          alert('Something went wrong while cancelling leave.');
           this.closePopup();
         }
       });

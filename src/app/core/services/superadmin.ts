@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, from, map, Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 
@@ -709,13 +709,14 @@ export class Superadmin {
     );
   }
 
-  cancelLeave(payload: { leave_id: string; status: string; approver_id?: string }) {
+  cancelLeave(payload: { leave_id: string; status: string; updated_by_id: string }) {
     return this.http.post(
-      `${this.baseUrl}/hrms/leave/update_leave_status`,
+      `${this.baseUrl}/hrms/leave/update_leave_status_by_employee`,
       payload,
       { headers: this.getHeaders('json') }
     );
   }
+  
   getTeamOnLeave(payload: any) {
     return this.http.post<any>(
       `${this.baseUrl}/hrms/leave/get_leave_details_by_team`,
@@ -979,19 +980,16 @@ export class Superadmin {
   }
 
 
-  getAddressFromLatLng(lat: any, lng: any) {
-    try {
-      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
-      const response = this.http.get(url, {
-        headers: { "User-Agent": "Vibhu" },
-      });
-      console.log("response ---> ", response);
-      return response;
+  getAddressFromLatLng(latitude: any, longitude: any) {
 
-    } catch (error) {
-      console.log("error ---> ", error)
-      return null;
-    }
+    const url = `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=674ee1f336530402396178adid70af0`;
+    const response = this.http.get(url, {
+      headers: this.getHeaders('json'),
+    });
+
+    return response;
+
+
   }
 
   // 📌 Get team leaves taken by team lead/superadmin
@@ -1002,11 +1000,55 @@ export class Superadmin {
       { headers: this.getHeaders('json') }
     );
   }
+
   getCurrentUpcomingLeaves(payload: { _id: string }): Observable<any> {
     return this.http.post<any>(
       `${this.baseUrl}/hrms/leave/get_leave_list_by_team`,
       payload,
       { headers: this.getHeaders('json') }
+    );
+  }
+
+  loadListUpcomingEvents(): Observable<any> {
+    return this.http.get<any>(
+      `${this.baseUrl}/hrms/dashboard/list_upcoming_events`,
+      { headers: this.getHeaders('json') }
+    );
+  }
+
+
+  getCurrentLocationLatLong(): Promise<{ latitude: number; longitude: number }> {
+    return new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            resolve({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          },
+          (error) => {
+            console.error('Location error:', error);
+            reject(error);
+          }
+        );
+      } else {
+        reject(new Error('Geolocation not supported'));
+      }
+    });
+  }
+
+
+  getCurrentLocationLatLongObservable(): Observable<{ latitude: string; longitude: string }> {
+    return from(this.getCurrentLocationLatLong()).pipe(
+      map(coords => ({
+        latitude: coords.latitude.toString(),
+        longitude: coords.longitude.toString(),
+      })),
+      catchError(err => {
+        console.error('Error getting location:', err);
+        return of({ latitude: '', longitude: '' });
+      })
     );
   }
 

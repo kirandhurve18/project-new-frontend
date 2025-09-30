@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Superadmin } from '../../../../core/services/superadmin';
 import { environment } from '../../../../environments/environment';
 import { EmployeeFilterPipe } from '../../../../core/pipes/employee-filter.pipe';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-attendance-reportindividual',
@@ -21,12 +22,26 @@ export class AttendanceReportIndividualComponent implements OnInit {
   search_icon = `${environment.BASE_PATH_ASSETS}/icons/search_icon.svg`;
 
 
-  constructor(private router: Router, private superadmin: Superadmin) { }
+  constructor(private router: Router, private superadmin: Superadmin, private toastr: ToastrService ) { }
 
   attendanceReportData: any[] = [];
   employeeList: any[] = [];
   searchTerm: string = '';
-  entriesToShow = 5;
+  entriesToShow = 10;
+
+  summary: any = {
+    "totalDays": 0,
+    "weekOff": 0,
+    "present": 0,
+    "absent": 0,
+    "halfDay": 0,
+    "lateMark": 0,
+    "earlyLeave": 0,
+    "lateJoining": 0,
+    "compOff": 0,
+    "electricityIssue": 0
+  };
+
 
   // filters
   selectedEmployee: string = '';
@@ -92,6 +107,8 @@ export class AttendanceReportIndividualComponent implements OnInit {
     this.superadmin.getEmployeeAttendanceReport(params).subscribe({
       next: (res) => {
         if (res.success && res.data) {
+
+          this.summary = res.summary;
           this.attendanceReportData = res.data.map((item: any, index: number) => ({
             SNo: index + 1 + (this.page - 1) * this.entriesToShow,
             checkInDate: item.checkin_date,
@@ -100,14 +117,16 @@ export class AttendanceReportIndividualComponent implements OnInit {
             checkOutDate: item.checkout_date,
             checkOutTime: item.checkout_time || '-', // handle null
             checkOutLocation: item.checkout_location || '-', // handle null
-
           }));
           this.totalRecords = res.pagination?.totalRecords || this.attendanceReportData.length;
+          this.toastr.success(res.message || "Report Fetched Successfully");
         } else {
           this.attendanceReportData = [];
+          this.toastr.success(res.message || "Report Not found");
         }
       },
       error: (err) => {
+        this.toastr.success(err.error.message || "Report Not found");
         console.error('Error fetching attendance report:', err);
       },
     });

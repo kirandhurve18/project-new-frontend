@@ -39,6 +39,8 @@ export class AttendanceComponent implements OnInit {
   checkInTime = "";
   checkedOutTime = "";
 
+  is_clicked: boolean = false;
+
   attendanceData: any[] = []; // API response
   attendanceMap: { [key: string]: any } = {};
 
@@ -75,8 +77,9 @@ export class AttendanceComponent implements OnInit {
 
   // ---- Handle button click ----
   handleClick(): void {
-    // console.log("this.checkedIn ---> ", this.checkedIn)
-    // console.log("this.checkedOut ---> ", this.checkedOut)
+    console.log("this.checkedIn ---> ", this.checkedIn)
+    console.log("this.checkedOut ---> ", this.checkedOut)
+
     if (!this.checkedIn) {
       this.checkIn();
     } else if (this.checkedIn && !this.checkedOut) {
@@ -87,16 +90,27 @@ export class AttendanceComponent implements OnInit {
   // ---- Check-In ----
   async checkIn(): Promise<void> {
     if (!this.employee_id) return;
-
+    this.is_clicked = true;
     try {
       let coords = null
       try {
         coords = await this.getCurrentLocation();
         console.log("coords success--> --> ", coords)
+        if (!coords.latitude && !coords.longitude) {
+          coords = { latitude: '18.5717895', longitude: '73.9006975' }
+        } else {
+          coords = { latitude: coords.latitude.toString(), longitude: coords.latitude.toString() }
+          console.log("coords success--> --> ", coords)
+        }
       } catch (error) {
-        console.log(error);
-        console.log("coords ---> fail--> ", coords)
+        coords = { latitude: '18.5717895', longitude: '73.9006975' }
+        console.log("coords error---> ", error);
+        // console.log("coords ---> fail--> ", coords)
       }
+      console.log("coords success--> --> ", coords)
+
+
+      // return;
       const payload = {
         employee_id: this.employee_id,
         checkin_location: 'Office',
@@ -109,8 +123,7 @@ export class AttendanceComponent implements OnInit {
       this.superadminService.checkIn(payload).subscribe({
         next: (res) => {
           console.log('✅ Check-in successful:', res);
-          this.checkedIn = true;
-
+          this.checkedIn = false;
           this.events.push({
             start: new Date(),
             title: 'Present (Checked In)',
@@ -120,16 +133,19 @@ export class AttendanceComponent implements OnInit {
 
           this.refreshAttendance();
           this.refresh.next();
-
+          this.is_clicked = false;
           this.toastr.success('Checked In Successfully ✅');  // ✅ Toast instead of alert
         },
         error: (err) => {
-          console.error('❌ Check-in failed:', err);
-          this.toastr.error(err?.error?.message || 'Check-in Failed ❌'); // ✅
+          this.is_clicked = false;
+          console.error('Check-in failed:', err);
+          this.toastr.error(err?.error?.message || 'Check-in Failed ');
         },
       });
     } catch (err) {
-      alert('⚠️ Could not fetch location. Please allow location access.');
+      this.is_clicked = false;
+      console.error('Check-in failed:', err);
+      this.toastr.error('Check In Failed');
     }
   }
 
@@ -137,32 +153,37 @@ export class AttendanceComponent implements OnInit {
   // ---- Check-Out ----
   async checkOut(): Promise<void> {
     if (!this.employee_id) return;
-
+    this.is_clicked = true;
     try {
       let coords = null
       try {
         coords = await this.getCurrentLocation();
         console.log("coords success--> --> ", coords)
+        if (!coords.latitude && !coords.longitude) {
+          coords = { latitude: '18.5717895', longitude: '73.9006975' }
+        } else {
+          coords = { latitude: coords.latitude.toString(), longitude: coords.latitude.toString() }
+          console.log("coords success--> --> ", coords)
+        }
       } catch (error) {
-        console.log(error);
-        console.log("coords ---> fail--> ", coords)
+        coords = { latitude: '18.5717895', longitude: '73.9006975' }
+        console.log("coords error---> ", error);
+        // console.log("coords ---> fail--> ", coords)
       }
 
-
+      // return;
       const payload = {
         employee_id: this.employee_id,
         checkout_location: 'Office',
-        latitude: coords?.latitude.toString() || '',
-        longitude: coords?.longitude.toString() || '',
+        latitude: coords?.latitude || '',
+        longitude: coords?.longitude || '',
       };
 
       console.log('📤 Sending check-out payload:', payload);
 
       this.superadminService.checkOut(payload).subscribe({
         next: (res) => {
-          console.log('✅ Check-out successful:', res);
-          this.checkedOut = true;
-
+          this.is_clicked = false;
           this.events = this.events.map((event) =>
             event.start.toDateString() === new Date().toDateString()
               ? { ...event, title: 'Present (Checked Out)' }
@@ -171,26 +192,26 @@ export class AttendanceComponent implements OnInit {
 
           this.refreshAttendance();
           this.refresh.next();
-
-          this.toastr.success('Checked Out Successfully ✅'); // ✅ Toast instead of alert
+          this.toastr.success('Checked Out Successfully'); // Toast instead of alert
         },
         error: (err) => {
-          console.error('❌ Check-out failed:', err);
-          this.toastr.error(err?.error?.message || 'Check-out Failed ❌'); // ✅
+          this.is_clicked = false;
+          console.error('Check-out failed:', err);
+          this.toastr.error(err?.error?.message || 'Check-out Failed'); // ✅
         },
 
       });
     } catch (err) {
-      alert('⚠️ Could not fetch location. Please allow location access.');
+      this.is_clicked = false;
+      console.error('Check-out failed:', err);
+      this.toastr.error('Check-out Failed'); // ✅
     }
   }
 
   private refreshAttendance(): void {
     this.superadminService.getAttendance({ employee_id: this.employee_id }).subscribe({
       next: (res) => {
-        // console.log('✅ Attendance Fetched:', res);
         let data = res.data || {}
-        // this.checkedIn = true;
         this.checkedIn = data.checkin_time && true;
         this.checkedOut = data.checkout_time && true;
         this.checkInDate = data.checkin_date;
@@ -291,7 +312,7 @@ export class AttendanceComponent implements OnInit {
 
     // const address = this.getAddressFromLatLng(18.5204, 73.8567); // Pune coords
     // console.log("Address:", address);
-
+    // this.getAddressFromLatLng('18.5671469', '73.9205394');
 
     this.refreshAttendance();
     this.fetchAttendance();
@@ -310,7 +331,7 @@ export class AttendanceComponent implements OnInit {
           },
           (error) => {
             console.error('❌ Location error:', error);
-            // reject(error);
+            reject(error);
           }
         );
       } else {
@@ -320,17 +341,17 @@ export class AttendanceComponent implements OnInit {
   }
 
 
-  // getAddressFromLatLng(lat, lng) {
+  // getAddressFromLatLng() {
   //   try {
-  //     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
-  //     const response = await axios.get(url, {
-  //       headers: { "User-Agent": "Vibhu" },
-  //     });
+  //     // const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+  //     // const response = await axios.get(url, {
+  //     //   headers: { "User-Agent": "Vibhu" },
+  //     // });
 
-  //     return response.data.display_name;
+  //     // return response.data.display_name;
   //   } catch (error) {
-  //     console.error("Error in reverse geocoding:", error.message);
-  //     return null;
+  //     console.error('Error getting location:', error);
+  //     return { latitude: '', longitude: '' };
   //   }
   // }
 

@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
 
 interface Timesheet {
   sr: number;
-  date:string;
+  date: string;
   timesheet_id: string,
   employee_id: string;
   name: string;
@@ -129,7 +129,7 @@ export class TeamSubmissionTimesheetComponent implements OnInit {
               console.log("response timesheet submission --> ", res.data)
               this.employees = res.data.map((emp: any, index: number) => ({
                 sr: index + 1,
-                date:emp.date,
+                date: emp.date,
                 employee_id: emp.employee_id,
                 timesheet_id: emp.timesheet_id,
                 name: emp.full_name,
@@ -162,7 +162,7 @@ export class TeamSubmissionTimesheetComponent implements OnInit {
 
               this.employees = res.data.map((emp: any, index: number) => ({
                 sr: index + 1,
-              date:emp.date,
+                date: emp.date,
                 employee_id: emp.employee_id,
                 timesheet_id: emp.timesheet_id,
                 name: emp.full_name,

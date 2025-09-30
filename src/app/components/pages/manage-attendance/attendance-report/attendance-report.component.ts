@@ -6,6 +6,7 @@ import { CalendarWrapperModule } from '../../../../shared/calendar-wrapper/calen
 import { Superadmin } from '../../../../core/services/superadmin';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-attendance-report',
@@ -24,7 +25,7 @@ export class AttendanceReportComponent implements OnInit {
   search_icon = `${environment.BASE_PATH_ASSETS}/icons/search_icon.svg`;
 
 
-  constructor(private router: Router, private superadmin: Superadmin) { }
+  constructor(private router: Router, private superadmin: Superadmin, private toastr: ToastrService) { }
 
   // UI States
   entriesToShow = 10;
@@ -155,8 +156,8 @@ export class AttendanceReportComponent implements OnInit {
     this.superadmin.getEmployeeAttendanceReport(payload).subscribe({
       next: (res) => {
         if (res.success) {
+        
           this.setPagination(res.pagination);
-
           this.attendanceReportData = res.data.map(
             (item: any, index: number) => ({
               _id: item._id, // ✅ Needed for status update
@@ -175,9 +176,11 @@ export class AttendanceReportComponent implements OnInit {
               currentStatus: item.status,
             })
           );
+          this.toastr.success(res.message || "Report Fetched Successfully")
         }
       },
       error: (err) => {
+        this.toastr.error(err.error.message || "Report not found")
         console.error('API Error (Report):', err);
       },
     });

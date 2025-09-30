@@ -62,98 +62,114 @@
       <!-- Employees on Leave -->
       <!-- Employees on Leave Today -->
       <div class="card p-0 shadow-sm border-0 mb-3">
-<div class="card-body p-0 m-1">
-  <p class="body-title text-center py-1 m-0">
-    Employees on Leave Today
-  </p>
+        <div class="card-body p-0 m-1">
+          <p class="body-title text-center py-1 m-0">
+            Employees on Leave Today
+          </p>
 
-  <div class="p-2">
-    <table class="table leave-table">
-      <thead class="table-header">
-        <tr>
-          <th class="text-center">Name</th>
-          <th class="text-center">Department</th>
-          <th class="text-center">Start Date</th>
-          <th class="text-center">End Date</th>
-        </tr>
-      </thead>
+          <div class="p-2">
+            <table class="table leave-table">
+              <thead class="table-header">
+                <tr>
+                  <th class="text-center">Name</th>
+                  <th class="text-center">Department</th>
+                  <th class="text-center">Start Date</th>
+                  <th class="text-center">End Date</th>
+                </tr>
+              </thead>
 
-      <!-- Scrollable body -->
- <tbody class="table-body">
-  <tr
-    *ngFor="let emp of employeeLeaveData; let i = index"
-     [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0}">
-  
-    <td class="text-center">
-      {{ emp.first_name }} {{ emp.last_name }}
-    </td>
-    <td class="text-center">{{ emp.leave_type | titlecase }}</td>
-    <td class="text-center">{{ emp.start_date }}</td>
-    <td class="text-center">{{ emp.end_date }}</td>
-  </tr>
-</tbody>
-    </table>
-  </div>
-</div>
-
+              <!-- Scrollable body -->
+              <tbody class="table-body">
+                <tr
+                  *ngFor="let emp of employeeLeaveData; let i = index"
+                  [ngClass]="{
+                    'odd-row': i % 2 === 0,
+                    'even-row': i % 2 !== 0
+                  }"
+                >
+                  <td class="text-center">
+                    {{ emp.first_name }} {{ emp.last_name }}
+                  </td>
+                  <td class="text-center">{{ emp.leave_type | titlecase }}</td>
+                  <td class="text-center">{{ emp.start_date }}</td>
+                  <td class="text-center">{{ emp.end_date }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-<div class="card p-0 shadow-sm border-0">
-  <div class="card p-0 shadow-sm border-0">
-  <div class="card-body p-0 m-1">
-    <p class="body-title text-center py-2 m-0">
-      Upcoming Birthdays / Work Anniversaries
-    </p>
+      <div class="card p-0 shadow-sm border-0">
+        <div class="card p-0 shadow-sm border-0">
+          <div class="card-body p-0 m-1">
+            <p class="body-title text-center py-2 m-0">
+              Upcoming Birthdays / Work Anniversaries
+            </p>
 
-    <div class="d-flex justify-content-center align-items-center position-relative">
-      <!-- Left Arrow -->
-      <button
-        class="btn btn-light shadow-sm me-3"
-        style="border-radius: 50%;"
-        (click)="prevUser()"
-        [disabled]="currentIndex === 0"
-      >
-        <i class="bi bi-chevron-left"></i>
-      </button>
+            <div
+              class="d-flex justify-content-center align-items-center position-relative"
+            >
+              <!-- Left Arrow -->
+              <button
+                class="btn btn-light shadow-sm me-3"
+                style="border-radius: 50%"
+                (click)="prevUser()"
+                [disabled]="currentIndex === 0"
+              >
+                <i class="bi bi-chevron-left"></i>
+              </button>
 
-      <!-- Active Card -->
-      <div
-        class="p-4 bg-light rounded-4 shadow-sm d-flex flex-column align-items-center text-center"
-        style="min-width: 250px; max-width: 250px;"
-      >
-        <img
-          [src]="users[currentIndex].image"
-          class="rounded-circle mb-2"
-          alt="profile"
-          width="120"
-          height="120"
-        />
-        <h6 class="m-0">{{ users[currentIndex].name }}</h6>
-        <small>{{ users[currentIndex].date }}</small><br />
-        <span
-          class="badge"
-          [ngClass]="
-            users[currentIndex].type === 'Birthday' ? 'bg-success' : 'bg-info'
-          "
-        >
-          {{ users[currentIndex].type }}
-        </span>
+              <!-- Active Card -->
+              <div
+                class="p-4 bg-light rounded-4 shadow-sm d-flex flex-column align-items-center text-center"
+                style="min-width: 250px; max-width: 250px"
+              >
+                <img
+                  [src]="
+                    getPassportPhotoUrl(users[currentIndex].passport_photo)
+                  "
+                  class="rounded-circle mb-2"
+                  alt="profile"
+                  width="120"
+                  height="120"
+                />
+                <h6 class="m-0">{{ users[currentIndex].first_name }}</h6>
+                <small *ngIf="users[currentIndex].type == 'Work Anniversary'">{{
+                  users[currentIndex].date_of_joining | date : "dd-mm-yyyy"
+                }}</small
+                ><br />
+                <small
+                  *ngIf="users[currentIndex].type !== 'Work Anniversary'"
+                  >{{
+                    users[currentIndex].date_of_birth | date : "dd-mm-yyyy"
+                  }}</small
+                ><br />
+                <!-- <small>{{ users[currentIndex].date }}</small><br /> -->
+                <span
+                  class="badge"
+                  [ngClass]="
+                    users[currentIndex].type === 'Birthday'
+                      ? 'bg-success'
+                      : 'bg-info'
+                  "
+                >
+                  {{ users[currentIndex].type }}
+                </span>
+              </div>
+
+              <!-- Right Arrow -->
+              <button
+                class="btn btn-light shadow-sm ms-3"
+                style="border-radius: 50%"
+                (click)="nextUser()"
+                [disabled]="currentIndex === users.length - 1"
+              >
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <!-- Right Arrow -->
-      <button
-        class="btn btn-light shadow-sm ms-3"
-        style="border-radius: 50%;"
-        (click)="nextUser()"
-        [disabled]="currentIndex === users.length - 1"
-      >
-        <i class="bi bi-chevron-right"></i>
-      </button>
-    </div>
-  </div>
-</div>
-
-</div>
-
     </div>
 
     <!-- Approvals Column -->
@@ -161,38 +177,48 @@
       <div class="p-3 bg-white rounded shadow-sm mb-3">
         <p class="text-center fw-bold fs-5 pt-3 mb-3">Approvals Pending</p>
         <!-- Timesheets -->
-<div class="d-flex justify-content-between">
-  <span>Timesheets</span>
-  <div class="d-flex align-items-center">
-    <button class="btn btn-sm border-0 d-flex align-items-center" (click)="goToTeamSubmission()">
-      <span class="fw-bold">{{ approvalPendings.timeSheets }}</span>
-      <span class="ms-2 fs-2">›</span>
-    </button>
-  </div>
-</div>
+        <div class="d-flex justify-content-between">
+          <span>Timesheets</span>
+          <div class="d-flex align-items-center">
+            <button
+              class="btn btn-sm border-0 d-flex align-items-center"
+              (click)="goToTeamSubmission()"
+            >
+              <span class="fw-bold">{{ approvalPendings.timeSheets }}</span>
+              <span class="ms-2 fs-2">›</span>
+            </button>
+          </div>
+        </div>
 
-<!-- Leave Request -->
-<div class="d-flex justify-content-between">
-  <span>Leave Request</span>
-  <div class="d-flex align-items-center">
-    <button class="btn btn-sm border-0 d-flex align-items-center" (click)="goToTeamLeaves()">
-      <span class="fw-bold">{{ approvalPendings.leave_request }}</span>
-      <span class="ms-2 fs-2">›</span>
-    </button>
-  </div>
-</div>
+        <!-- Leave Request -->
+        <div class="d-flex justify-content-between">
+          <span>Leave Request</span>
+          <div class="d-flex align-items-center">
+            <button
+              class="btn btn-sm border-0 d-flex align-items-center"
+              (click)="goToTeamLeaves()"
+            >
+              <span class="fw-bold">{{ approvalPendings.leave_request }}</span>
+              <span class="ms-2 fs-2">›</span>
+            </button>
+          </div>
+        </div>
 
-<!-- Leaves Pending Reviewer Approval -->
-<div class="d-flex justify-content-between">
-  <span>Leaves Pending Reviewer Approval</span>
-  <div class="d-flex align-items-center">
-    <span class="fw-bold">{{ approvalPendings.leaves_pendings_reviewer_approval }}</span>
-    <button class="btn btn-sm border-0 d-flex align-items-center" (click)="goToPendingReviewer()">
-      <span class="ms-2 fs-2">›</span>
-    </button>
-  </div>
-</div>
-
+        <!-- Leaves Pending Reviewer Approval -->
+        <div class="d-flex justify-content-between">
+          <span>Leaves Pending Reviewer Approval</span>
+          <div class="d-flex align-items-center">
+            <span class="fw-bold">{{
+              approvalPendings.leaves_pendings_reviewer_approval
+            }}</span>
+            <button
+              class="btn btn-sm border-0 d-flex align-items-center"
+              (click)="goToPendingReviewer()"
+            >
+              <span class="ms-2 fs-2">›</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- My Taskssuper -->

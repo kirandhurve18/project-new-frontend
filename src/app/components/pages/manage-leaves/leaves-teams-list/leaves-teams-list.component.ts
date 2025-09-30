@@ -36,7 +36,7 @@ export class LeavesTeamsListComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 1;
   totalRecords: number = 0;
-  limit: number = 10
+  limit: number = 10;
 
   applyLeaveForTeamMember: any;
 

@@ -71,7 +71,7 @@ export class SidebarComponent implements OnInit {
               let baseLink = MENU_CONFIG[perm.menu.key];
               if (!baseLink) return undefined;
 
-              console.log("baseLink ---> ", baseLink)
+              // console.log("baseLink ---> ", baseLink)
               if('remote-work-agreement' == perm.menu.key && ['WFO'].includes(this.work_mode)) return undefined;
               if(this.userRole == '1' && 'leave-management' == perm.menu.key){
                 baseLink.link = '/main/leave/teams-list'

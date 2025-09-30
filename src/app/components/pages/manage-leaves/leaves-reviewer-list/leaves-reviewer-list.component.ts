@@ -86,6 +86,5 @@ export class LeavesReviewerListComponent implements OnInit {
     if (status === 'Cancelled') return '#6C757D';
     return '#FFA500';
   }
-  
 
 }
