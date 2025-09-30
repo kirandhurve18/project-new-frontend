@@ -62,119 +62,137 @@
       <!-- Employees on Leave -->
       <!-- Employees on Leave Today -->
       <div class="card p-0 shadow-sm border-0 mb-3">
-        <div class="card-body p-0 m-1">
-          <p class="body-title text-center py-1 m-0">
-            Employees on Leave Today
-          </p>
-          <div class="p-2" style="overflow-y: auto; height: 250px">
-            <table class="table leave-table">
-              <thead>
-                <tr>
-                  <th class="text-center leave-header sticky-header">Name</th>
-                  <th class="text-center leave-header sticky-header">
-                    Department
-                  </th>
-                  <th class="text-center leave-header sticky-header">
-                    Start Date
-                  </th>
-                  <th class="text-center leave-header sticky-header">
-                    End Date
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  *ngFor="let emp of employeeLeaveData"
-                  style="background-color: #e5f4f3"
-                >
-                  <td class="text-center">
-                    {{ emp.first_name }} {{ emp.last_name }}
-                  </td>
-                  <td class="text-center">{{ emp.leave_type | titlecase }}</td>
-                  <td class="text-center">{{ emp.start_date }}</td>
-                  <td class="text-center">{{ emp.end_date }}</td>
-                  <!-- <td class="text-center">
-                    <span
-                      [ngClass]="{
-                        'text-success': emp.status === 'Approved',
-                        'text-danger': emp.status !== 'Approved'
-                      }"
-                    >
-                      {{ emp.status }}
-                    </span>
-                  </td> -->
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+<div class="card-body p-0 m-1">
+  <p class="body-title text-center py-1 m-0">
+    Employees on Leave Today
+  </p>
+
+  <div class="p-2">
+    <table class="table leave-table">
+      <thead class="table-header">
+        <tr>
+          <th class="text-center">Name</th>
+          <th class="text-center">Department</th>
+          <th class="text-center">Start Date</th>
+          <th class="text-center">End Date</th>
+        </tr>
+      </thead>
+
+      <!-- Scrollable body -->
+ <tbody class="table-body">
+  <tr
+    *ngFor="let emp of employeeLeaveData; let i = index"
+     [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0}">
+  
+    <td class="text-center">
+      {{ emp.first_name }} {{ emp.last_name }}
+    </td>
+    <td class="text-center">{{ emp.leave_type | titlecase }}</td>
+    <td class="text-center">{{ emp.start_date }}</td>
+    <td class="text-center">{{ emp.end_date }}</td>
+  </tr>
+</tbody>
+    </table>
+  </div>
+</div>
+
+      </div>
+<div class="card p-0 shadow-sm border-0">
+  <div class="card p-0 shadow-sm border-0">
+  <div class="card-body p-0 m-1">
+    <p class="body-title text-center py-2 m-0">
+      Upcoming Birthdays / Work Anniversaries
+    </p>
+
+    <div class="d-flex justify-content-center align-items-center position-relative">
+      <!-- Left Arrow -->
+      <button
+        class="btn btn-light shadow-sm me-3"
+        style="border-radius: 50%;"
+        (click)="prevUser()"
+        [disabled]="currentIndex === 0"
+      >
+        <i class="bi bi-chevron-left"></i>
+      </button>
+
+      <!-- Active Card -->
+      <div
+        class="p-4 bg-light rounded-4 shadow-sm d-flex flex-column align-items-center text-center"
+        style="min-width: 250px; max-width: 250px;"
+      >
+        <img
+          [src]="users[currentIndex].image"
+          class="rounded-circle mb-2"
+          alt="profile"
+          width="120"
+          height="120"
+        />
+        <h6 class="m-0">{{ users[currentIndex].name }}</h6>
+        <small>{{ users[currentIndex].date }}</small><br />
+        <span
+          class="badge"
+          [ngClass]="
+            users[currentIndex].type === 'Birthday' ? 'bg-success' : 'bg-info'
+          "
+        >
+          {{ users[currentIndex].type }}
+        </span>
       </div>
 
-      <div class="card p-0 shadow-sm border-0">
-        <div class="card-body p-0 m-1">
-          <p class="body-title text-center py-2 m-0">
-            Upcoming Birthdays / Work Anniversaries
-          </p>
+      <!-- Right Arrow -->
+      <button
+        class="btn btn-light shadow-sm ms-3"
+        style="border-radius: 50%;"
+        (click)="nextUser()"
+        [disabled]="currentIndex === users.length - 1"
+      >
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
 
-          <!-- Scrollable Row -->
-          <div class="d-flex justify-content-center">
-            <div
-              class="p-3 bg-light rounded-4 shadow-sm d-flex flex-column align-items-center text-center"
-              style="min-width: 200px"
-            >
-              <img
-                [src]="image_vibha"
-                class="rounded-circle mb-2"
-                alt="vibha"
-                width="100"
-                height="100"
-              />
-              <h6 class="m-0">Vibha</h6>
-              <small>11-05-1998</small><br />
-              <span class="badge bg-success mt-1">Birthday</span>
-            </div>
-          </div>
-        </div>
-      </div>
+</div>
+
     </div>
 
     <!-- Approvals Column -->
     <div class="custom-col-lg-27 col-sm-12 mb-3">
       <div class="p-3 bg-white rounded shadow-sm mb-3">
-        <p class="body-title mb-3 text-center">Approvals Pending</p>
+        <p class="text-center fw-bold fs-5 pt-3 mb-3">Approvals Pending</p>
         <!-- Timesheets -->
-        <div class="d-flex justify-content-between">
-          <span>Timesheets</span>
-          <div class="d-flex align-items-center">
-            <button class="btn btn-sm border-0" (click)="goToTeamSubmission()">
-              <span>{{ approvalPendings.timeSheets }}</span>
-              <span class="ms-2 fs-3">›</span>
-            </button>
-          </div>
-        </div>
-        <!-- Leave Request -->
-        <div class="d-flex justify-content-between">
-          <span>Leave Request</span>
-          <div class="d-flex align-items-center">
-            <button class="btn btn-sm border-0" (click)="goToTeamLeaves()">
-              <span>{{ approvalPendings.leave_request }}</span>
-              <span class="ms-2 fs-3">›</span>
-            </button>
-          </div>
-        </div>
+<div class="d-flex justify-content-between">
+  <span>Timesheets</span>
+  <div class="d-flex align-items-center">
+    <button class="btn btn-sm border-0 d-flex align-items-center" (click)="goToTeamSubmission()">
+      <span class="fw-bold">{{ approvalPendings.timeSheets }}</span>
+      <span class="ms-2 fs-2">›</span>
+    </button>
+  </div>
+</div>
 
-        <!-- Leaves Pending Reviewer Approval -->
-        <div class="d-flex justify-content-between">
-          <span>Leaves Pending Reviewer Approval</span>
-          <div class="d-flex align-items-center">
-            <span>{{
-              approvalPendings.leaves_pendings_reviewer_approval
-            }}</span>
-            <button class="btn btn-sm border-0" (click)="goToPendingReviewer()">
-              <span class="ms-2 fs-3">›</span>
-            </button>
-          </div>
-        </div>
+<!-- Leave Request -->
+<div class="d-flex justify-content-between">
+  <span>Leave Request</span>
+  <div class="d-flex align-items-center">
+    <button class="btn btn-sm border-0 d-flex align-items-center" (click)="goToTeamLeaves()">
+      <span class="fw-bold">{{ approvalPendings.leave_request }}</span>
+      <span class="ms-2 fs-2">›</span>
+    </button>
+  </div>
+</div>
+
+<!-- Leaves Pending Reviewer Approval -->
+<div class="d-flex justify-content-between">
+  <span>Leaves Pending Reviewer Approval</span>
+  <div class="d-flex align-items-center">
+    <span class="fw-bold">{{ approvalPendings.leaves_pendings_reviewer_approval }}</span>
+    <button class="btn btn-sm border-0 d-flex align-items-center" (click)="goToPendingReviewer()">
+      <span class="ms-2 fs-2">›</span>
+    </button>
+  </div>
+</div>
+
       </div>
 
       <!-- My Taskssuper -->

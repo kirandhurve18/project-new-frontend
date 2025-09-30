@@ -30,7 +30,7 @@ export class LeavesReviewerListComponent implements OnInit {
   myTeamLeaveData: any[] = [];
   pagination: any = {};
   currentPage: number = 1;
-  pageSize: number = 5;
+  pageSize: number = 10;
 
   // Filters
   searchTerm: string = '';
@@ -86,5 +86,6 @@ export class LeavesReviewerListComponent implements OnInit {
     if (status === 'Cancelled') return '#6C757D';
     return '#FFA500';
   }
+  
 
 }

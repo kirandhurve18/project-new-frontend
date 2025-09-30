@@ -1,3 +1,4 @@
+/* Attendance summary box */
 .attendance-summary-box {
   display: flex;
   align-items: center;
@@ -5,8 +6,31 @@
   background-color: greenyellow;
   border-radius: 14px;
   min-height: 70px;
+  padding: 0.5rem 1rem;
 }
 
+/* Numbers inside summary box */
+.attendance-no {
+  font-size: 2rem;      /* increased size */
+  font-weight: 800;     /* extra bold */
+  margin: 0;
+  line-height: 1;
+}
+
+/* Different colors for stats */
+.attendance-present {
+  color: #28a745; /* green */
+}
+
+.attendance-late {
+  color: #ff9800; /* orange */
+}
+
+.attendance-leave {
+  color: #dc3545; /* red */
+}
+
+/* Text Styles */
 .body-text {
   font-size: 1rem;
   font-weight: 400;
@@ -23,10 +47,17 @@
   padding-bottom: 0;
 }
 
+/* Leave table styles */
 .leave-header {
   background-color: #009688 !important;
   color: #fff !important;
   border: none !important;
+}
+
+.leave-table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
 }
 
 .leave-table th,
@@ -36,92 +67,51 @@
   border: none !important;
 }
 
-::-webkit-scrollbar {
-  display: none;
+/* Sticky header row */
+.leave-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: #009688;
+  color: #fff;
 }
 
-.attendance-no {
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-@media (min-width: 992px) {
-  .custom-col-lg-55 {
-    flex: 0 0 42%;
-    max-width: 42%;
-  }
-  .custom-col-lg-27 {
-    flex: 0 0 29%;
-    max-width: 29%;
-  }
-}
-
-:host {
+/* Scrollable tbody */
+.leave-table tbody {
   display: block;
-  background-color: #ecf0f5;
-  min-height: 100vh;
-  padding: 0;
-  margin: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  width: 100%;
 }
 
-body {
-  background-color: #ecf0f5 !important;
-  margin: 0;
-  padding: 0;
-  height: 100vh;
+.leave-table thead,
+.leave-table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 }
 
-html {
-  background-color: #ecf0f5;
-  height: 100%;
-}
-.attendance-summary-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: greenyellow;
-  border-radius: 14px;
-  min-height: 70px;
+/* Alternate row colors for Employees on Leave Today table */
+.leave-table tbody tr:nth-child(odd) {
+  background-color: #2eb2a9;
 }
 
-.body-text {
-  font-size: 1rem;
-  font-weight: 400;
-  color: #000;
-  margin-bottom: 0;
-  padding-bottom: 0;
+.leave-table tbody tr:nth-child(even) {
+  background-color: #ffffff;
 }
 
-.body-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #000;
-  margin-bottom: 0;
-  padding-bottom: 0;
+/* Optional hover effect */
+.leave-table tbody tr:hover {
+  background-color: #0c302f;
+  transition: background-color 0.2s ease-in-out;
 }
 
-.leave-header {
-  background-color: #009688 !important;
-  color: #fff !important;
-  border: none !important;
-}
-
-.leave-table th,
-.leave-table td {
-  vertical-align: middle !important;
-  text-align: center;
-  border: none !important;
-}
-
+/* Hide scrollbar */
 ::-webkit-scrollbar {
   display: none;
 }
 
-.attendance-no {
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
+/* Layout responsive adjustments */
 @media (min-width: 992px) {
   .custom-col-lg-55 {
     flex: 0 0 42%;
@@ -131,4 +121,21 @@ html {
     flex: 0 0 29%;
     max-width: 29%;
   }
+}
+
+/* General background */
+:host,
+body,
+html {
+  background-color: #1fe0d3;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+.odd-row {
+  background-color: #0e6761 !important;
+}
+
+.even-row {
+  background-color: #ffffff !important;
 }

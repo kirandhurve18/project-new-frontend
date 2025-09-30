@@ -27,7 +27,7 @@ export class AttendanceReportComponent implements OnInit {
   constructor(private router: Router, private superadmin: Superadmin) { }
 
   // UI States
-  entriesToShow = 5;
+  entriesToShow = 10;
   searchTerm = '';
   attendanceReportData: any[] = [];
 

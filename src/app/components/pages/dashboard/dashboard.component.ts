@@ -1,5 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
+import { ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Superadmin } from '../../../core/services/superadmin';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +25,28 @@ interface Task {
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
+
+   currentIndex = 0;
+
+  users = [
+    { name: 'Alish', date: '11-05-1998', type: 'Birthday', image: 'assets/images/alish.svg' },
+    { name: 'Vibha', date: '02-07-1995', type: 'Anniversary', image: 'assets/images/vibha.svg' },
+    { name: 'Omm', date: '23-09-1999', type: 'Birthday', image: 'assets/images/om.svg' },
+    { name: 'Shrikant', date: '14-01-1992', type: 'Anniversary', image: 'assets/images/shrikant.svg' },
+  ];
+
+  prevUser() {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+    }
+  }
+
+  nextUser() {
+    if (this.currentIndex < this.users.length - 1) {
+      this.currentIndex++;
+    }
+  }
 
   presentCount: number = 0;
   lateCount: number = 0;

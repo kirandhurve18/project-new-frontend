@@ -9,19 +9,17 @@ import { Superadmin } from '../../../../core/services/superadmin';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './hierarchy-employee.component.html',
-  styleUrl: './hierarchy-employee.component.css',
+  styleUrls: ['./hierarchy-employee.component.css'],
 })
 export class HierarchyEmployeeComponent implements OnInit {
   employees: any[] = [];
-  entriesPerPage: number = 10;  // limit
-  searchQuery: string = '';     // search text
-  currentPage: number = 1;      // active page
-  totalEntries: number = 0;     // for showing total records
-  totalPages: number = 0;       // for pagination
+  entriesPerPage: number = 10;    // Rows per page
+  searchQuery: string = '';       // Search text
+  currentPage: number = 1;        // Active page
+  totalEntries: number = 0;       // Total records from API
+  totalPages: number = 0;         // Total pages for pagination
 
-  selectedEmployees: any[] = [];
-
-  constructor(private superadmin: Superadmin, private router: Router) { }
+  constructor(private superadmin: Superadmin, private router: Router) {}
 
   ngOnInit(): void {
     this.loadEmployees();
@@ -29,17 +27,27 @@ export class HierarchyEmployeeComponent implements OnInit {
 
   // 🔹 Load employees from API
   loadEmployees() {
-    this.superadmin.getTeamHierarchy({
+    const payload: {
+      page: number;
+      limit: number;
+      search: string;
+      sortBy: string;
+      order: 'asc' | 'desc';
+    } = {
       page: this.currentPage,
       limit: this.entriesPerPage,
       search: this.searchQuery,
       sortBy: 'designation_name',
-      order: 'asc'
-    }).subscribe({
+      order: 'asc',
+    };
+
+    this.superadmin.getTeamHierarchy(payload).subscribe({
       next: (res) => {
         this.employees = res?.data || [];
-        this.totalEntries = res?.totalRecords || 0;
-        this.totalPages = Math.ceil(this.totalEntries / this.entriesPerPage);
+        this.totalEntries = res?.pagination?.total || 0;
+        this.currentPage = res?.pagination?.page || 1;
+        this.entriesPerPage = res?.pagination?.limit || this.entriesPerPage;
+        this.totalPages = res?.pagination?.totalPages || 1;
       },
       error: (err) => {
         console.error('Failed to fetch employees:', err);
@@ -47,30 +55,39 @@ export class HierarchyEmployeeComponent implements OnInit {
     });
   }
 
-  // 🔹 When page changes
+  // 🔹 Change page
   changePage(page: number) {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
     this.loadEmployees();
   }
 
-  // 🔹 When entries-per-page changes
+  // 🔹 Change entries per page
   onEntriesChange() {
     this.currentPage = 1;
     this.loadEmployees();
   }
 
-  // 🔹 When search is typed
+  // 🔹 Search employees
   onSearchChange() {
     this.currentPage = 1;
     this.loadEmployees();
   }
 
+  // 🔹 Navigate to registration page
   goToRegistration(): void {
     this.router.navigate(['/superadmin/registration']);
   }
 
+  // 🔹 Navigate to update info page with employee ID
   goToUpdateInfo(empId: number | string) {
-    this.router.navigate(['/superadmin/updateinfo']);
+    this.router.navigate(['/superadmin/updateinfo', empId]);
+  }
+
+  // 🔹 Helper to generate page numbers for pagination
+  getPagesArray(): number[] {
+    return Array(this.totalPages)
+      .fill(0)
+      .map((_, i) => i + 1);
   }
 }

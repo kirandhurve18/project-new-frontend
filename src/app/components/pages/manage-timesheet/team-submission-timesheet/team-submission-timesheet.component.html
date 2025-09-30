@@ -86,15 +86,18 @@
             <thead class="table-header">
               <tr>
                 <th>Sr. No</th>
+                <th>Date</th>
                 <th>Team Member Name</th>
                 <th>Mobile Number</th>
                 <th>Report Status</th>
+            
                 <th class="text-center">Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let employee of employees">
                 <td>{{ employee.sr }}</td>
+                <td>{{employee.date}}</td>
                 <td>{{ employee.name }}</td>
                 <td>{{ employee.mobile }}</td>
                 <td
