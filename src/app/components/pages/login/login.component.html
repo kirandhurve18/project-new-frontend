@@ -1,0 +1,102 @@
+<div class="vh-100 vw-100 overflow-hidden position-relative">
+  <img
+    src="{{ background_1 }}"
+    class="img-fluid w-100 h-100 object-fit-cover position-absolute top-0 start-0 z-n1"
+    alt="Background"
+  />
+
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div
+      class="card shadow-lg p-4"
+      style="
+        max-width: 347px;
+        width: 100%;
+        max-height: 442px;
+        height: 100%;
+        border-radius: 1rem;
+      "
+    >
+      <div class="text-center mb-4">
+        <img
+          src="{{ destek_signature }}"
+          alt="Logo"
+          style="height: 100px"
+          *ngIf="logoExists"
+        />
+        <h5 class="mt-1" style="color: #009688">HRMS Portal</h5>
+        <p class="mb-0">Enter your Login Details</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <input
+            type="email"
+            formControlName="email"
+            class="form-control"
+            [ngClass]="{
+              'border border-danger text-danger placeholder-danger':
+                loginForm.get('email')?.invalid && submitted
+            }"
+            placeholder="Email Id"
+          />
+        </div>
+
+        <div class="mb-3 position-relative">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            class="form-control"
+            [ngClass]="{
+              'border border-danger text-danger placeholder-danger':
+                loginForm.get('password')?.invalid && submitted
+            }"
+            placeholder="Password"
+          />
+
+          <i
+            class="bi position-absolute top-50 end-0 translate-middle-y me-3"
+            [ngClass]="[
+              showPassword ? 'bi-eye' : 'bi-eye-slash',
+              loginForm.get('password')?.invalid && submitted
+                ? 'text-danger'
+                : 'text-secondary'
+            ]"
+            (click)="togglePassword()"
+            style="cursor: pointer"
+          ></i>
+        </div>
+
+        <div class="d-grid">
+          <button
+            type="submit"
+            class="btn text-white mx-auto px-4"
+            style="background-color: #009688; border-radius: 2rem; width: 70%"
+          >
+            Login
+          </button>
+        </div>
+      </form>
+
+      <div class="text-center mt-1">
+        <a
+          routerLink="/termsandconditions"
+          class="me-3"
+          style="color: #009688; text-decoration: none"
+        >
+          Terms & Conditions
+        </a>
+        |
+        <a
+          routerLink="/privacyandpolicy"
+          class="me-3"
+          style="color: #009688; text-decoration: none"
+        >
+          Privacy Policy
+        </a>
+        <p class="text-muted small mt-2 mb-0">
+          Copyright ©2025 Destek Infosolutions Pvt Ltd
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

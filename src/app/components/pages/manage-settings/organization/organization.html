@@ -1,0 +1,264 @@
+<div class="container-fluid">
+  <div class="row g-3">
+    <!-- Department Master -->
+    <div class="col-12 col-md-6">
+      <div class="bg-white rounded p-3 shadow-sm">
+        <h6 class="fw-bold mb-3">Department Master</h6>
+
+        <!-- Table Header -->
+        <div class="d-flex fw-semibold text-white bg-teal px-2 py-2">
+          <div style="width: 20%">Sr No</div>
+          <div style="width: 40%">Department Name</div>
+          <div style="width: 20%">Status</div>
+          <div style="width: 20%">Action</div>
+        </div>
+
+        <!-- Department List -->
+        <ng-container *ngIf="departments?.length; else noDept">
+          <div
+            *ngFor="let dept of departments; let i = index"
+            class="d-flex align-items-center px-2 py-2 border-bottom"
+            [ngStyle]="{ 'background-color': i % 2 === 0 ? '#FFFFFF' : '#E5F4F3' }"
+          >
+            <div style="width: 20%">{{ i + 1 }}</div>
+            <div style="width: 40%">
+              {{ dept?.department_name || dept?.dept_name }}
+            </div>
+            <div style="width: 20%">
+              <span
+                [ngClass]="{
+                  'text-success': (dept?.status + '').toLowerCase() === 'active' || dept?.status === true,
+                  'text-danger': (dept?.status + '').toLowerCase() === 'inactive' || dept?.status === false
+                }"
+              >
+                {{ dept?.status === 1 ? 'Active' : dept?.status === 0 ?
+                'Inactive' : dept?.status }}
+              </span>
+            </div>
+            <div style="width: 20%" class="d-flex gap-3">
+              <button
+                class="btn btn-sm p-0 bg-transparent"
+                (click)="openEditPopup('department', i)"
+              >
+                <i class="bi bi-pencil-fill text-dark"></i>
+              </button>
+              <!-- <button
+                class="btn btn-sm p-0 bg-transparent"
+                (click)="deleteItem('department', i)"
+              >
+                <i class="bi bi-trash-fill text-danger"></i>
+              </button> -->
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #noDept>
+          <div class="text-center text-muted py-3">No departments found</div>
+        </ng-template>
+
+        <!-- Add Department Button -->
+        <div class="text-end mt-3">
+          <button
+            class="btn btn-sm px-3"
+            style="background-color: #009688; color: white"
+            (click)="openAddPopup('department')"
+          >
+            Add New Department
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Designation Master -->
+    <div class="col-12 col-md-6">
+      <div class="bg-white rounded p-3 shadow-sm">
+        <h6 class="fw-bold mb-3">Designation Master</h6>
+
+        <!-- Table Header -->
+        <div class="d-flex fw-semibold text-white bg-teal px-2 py-2">
+          <div style="width: 20%">Sr No</div>
+          <div style="width: 40%">Designation Name</div>
+          <div style="width: 20%">Status</div>
+          <div style="width: 20%">Action</div>
+        </div>
+
+        <!-- Designation List -->
+        <ng-container *ngIf="designations?.length; else noDesg">
+          <div
+            *ngFor="let desg of designations; let i = index"
+            class="d-flex align-items-center px-2 py-2 border-bottom"
+            [ngStyle]="{ 'background-color': i % 2 === 0 ? '#FFFFFF' : '#E5F4F3' }"
+          >
+            <div style="width: 20%">{{ i + 1 }}</div>
+            <div style="width: 40%">{{ desg?.designation_name }}</div>
+            <div style="width: 20%">
+              <span
+                [ngClass]="{
+                  'text-success': (desg?.status + '').toLowerCase() === 'active' || desg?.status === true,
+                  'text-danger': (desg?.status + '').toLowerCase() === 'inactive' || desg?.status === false
+                }"
+              >
+                {{ desg?.status === 1 ? 'Active' : desg?.status === 0 ?
+                'Inactive' : desg?.status }}
+              </span>
+            </div>
+            <div style="width: 20%" class="d-flex gap-3">
+              <button
+                class="btn btn-sm p-0 bg-transparent"
+                (click)="openEditPopup('designation', i)"
+              >
+                <i class="bi bi-pencil-fill text-dark"></i>
+              </button>
+              <!-- <button
+                class="btn btn-sm p-0 bg-transparent"
+                (click)="deleteItem('designation', i)"
+              >
+                <i class="bi bi-trash-fill text-danger"></i>
+              </button> -->
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #noDesg>
+          <div class="text-center text-muted py-3">No designations found</div>
+        </ng-template>
+
+        <!-- Add Designation Button -->
+        <div class="text-end mt-3">
+          <button
+            class="btn btn-sm px-3"
+            style="background-color: #009688; color: white"
+            (click)="openAddPopup('designation')"
+          >
+            Add New Designation
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Common Add/Edit Modal -->
+  <div
+    *ngIf="showAddPopup"
+    class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+    style="background-color: rgba(0, 0, 0, 0.5); z-index: 1050"
+  >
+    <div
+      class="rounded shadow bg-light"
+      style="min-width: 500px; max-width: 90%"
+    >
+      <div
+        class="d-flex justify-content-between align-items-center rounded-top"
+        style="background-color: #009688; padding: 0.75rem 1rem"
+      >
+        <h5 class="text-white m-0">
+          {{ isEditing ? 'Update ' + editingType : 'Add New ' + editingType }}
+        </h5>
+        <button class="btn p-0 bg-transparent" (click)="closeAddPopup()">
+          <img
+            [src]="delete_solid_icon"
+            alt="Close"
+            style="width: 16px; height: 16px"
+          />
+        </button>
+      </div>
+
+      <div class="p-3">
+        <!-- Department Dropdown for Designation/SubDesignation -->
+        <!-- Department Dropdown for Designation/SubDesignation -->
+        <div *ngIf="editingType === 'designation' " class="mb-3">
+          <label class="form-label fw-semibold">
+            Select Department <span class="text-danger">*</span>
+          </label>
+          <select class="form-select" [(ngModel)]="selectedDepartmentId">
+            <option [ngValue]="null" disabled>Select department</option>
+            <option
+              *ngFor="let dept of departments"
+              [ngValue]="dept._id || dept.dept_id"
+              [selected]="dept._id === selectedDepartmentId || dept.dept_id === selectedDepartmentId"
+            >
+              {{ dept?.department_name || dept?.dept_name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Designation Dropdown for SubDesignation -->
+        <div *ngIf="editingType === 'subdesignation'" class="mb-3">
+          <!-- <label class="form-label fw-semibold">
+    Select Designation <span class="text-danger">*</span>
+  </label> -->
+          <!-- <select class="form-select" [(ngModel)]="selectedDesignationId">
+    <option [ngValue]="null" disabled>Select designation</option>
+    <option *ngFor="let desg of designations" 
+            [ngValue]="desg._id || desg.desg_id" 
+            [selected]="desg._id === selectedDesignationId || desg.desg_id === selectedDesignationId">
+      {{ desg?.designation_name }}
+    </option>
+  </select> -->
+        </div>
+
+        <!-- Title -->
+        <label class="form-label fw-semibold">
+          {{ editingType | titlecase }} Title <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control mb-3"
+          [(ngModel)]="newItemTitle"
+          [placeholder]="'Enter ' + (editingType | titlecase) + ' Title'"
+        />
+
+        <!-- Status -->
+        <label class="form-label fw-semibold"
+          >Status <span class="text-danger">*</span></label
+        >
+        <select
+          class="form-select mb-3"
+          [(ngModel)]="newItemStatus"
+          [ngClass]="{
+    'text-success border-success': newItemStatus === 'active',
+    'text-danger border-danger': newItemStatus === 'inactive'
+  }"
+        >
+          <option hidden value="">Select Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-success" (click)="submitItem()">
+            {{ isEditing ? 'Update' : 'Submit' }}
+          </button>
+          <button class="btn btn-danger" (click)="closeAddPopup()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div
+    class="toast-container position-fixed top-0 end-0 p-3"
+    style="z-index: 2000"
+  >
+    <div
+      *ngFor="let toast of toasts"
+      class="toast align-items-center text-white border-0 show mb-2"
+      [ngClass]="{
+        'bg-success': toast.type === 'success',
+        'bg-danger': toast.type === 'error',
+        'bg-warning': toast.type === 'warning'
+      }"
+    >
+      <div class="d-flex">
+        <div class="toast-body">{{ toast.message }}</div>
+        <button
+          type="button"
+          class="btn-close btn-close-white me-2 m-auto"
+          (click)="removeToast(toast)"
+        ></button>
+      </div>
+    </div>
+  </div>
+</div>

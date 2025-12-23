@@ -1,0 +1,40 @@
+<div class="container-fluid">
+  <!-- Header -->
+  <div class="row">
+    <div class="col-12 mt-3">
+      <div class="bg-white rounded shadow-sm p-3">
+        <h5 class="fw-bold mb-0">Leave Summary</h5>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="row mt-3">
+    <div class="col-12">
+      <div class="d-flex gap-2 flex-wrap mb-3">
+        <a
+          class="btn btn-custom"
+          routerLink="active"
+          routerLinkActive="active-tab"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Active Leave
+        </a>
+        <a
+          class="btn btn-custom"
+          routerLink="past"
+          routerLinkActive="active-tab"
+          [routerLinkActiveOptions]="{ exact: true }"
+
+        >
+          Past Leave
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="row">
+    <router-outlet></router-outlet>
+  </div>
+</div>

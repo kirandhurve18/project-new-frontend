@@ -1,0 +1,23 @@
+<nav
+  class="sidebar bg-light-teal shadow-sm"
+  [ngClass]="{ collapsed: !isSidebarOpen }"
+>
+  <ul class="nav flex-column m-0 position-relative">
+    <li class="nav-item" *ngFor="let item of navLinks">
+      <a
+        [routerLink]="item.link"
+        [ngClass]="{ 'active-link': isActive(item.link) }"
+        class="nav-link text-dark fw-medium py-2 d-flex align-items-center"
+      >
+        <div class="highlight-bar" *ngIf="isActive(item.link)"></div>
+        <img
+          [src]="item.icon"
+          alt="icon"
+          class="sidebar-icon me-2"
+          height="25"
+        />
+        {{ item.label }}
+      </a>
+    </li>
+  </ul>
+</nav>

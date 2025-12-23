@@ -1,0 +1,231 @@
+<form [formGroup]="timesheetForm" (ngSubmit)="saveTimesheet(2)">
+  <div class="container-fluid my-3">
+    <!-- Header -->
+    <div class="bg-white rounded shadow-sm px-3 py-2">
+      <h5 class="fw-bold mb-0">Log Today's Work</h5>
+    </div>
+  </div>
+
+  <!-- Date Selection -->
+  <div class="container-fluid my-3">
+    <div
+      class="bg-white rounded shadow-sm px-3 py-2 d-flex flex-wrap justify-content-between align-items-center gap-2"
+    >
+      <h6 class="fw-bold mb-0 me-3">Check Work Report</h6>
+      <div class="d-flex align-items-center gap-2 ms-auto flex-wrap">
+        <input
+          type="date"
+          formControlName="date"
+          class="form-control form-control-sm"
+          style="width: auto; min-width: 150px;"
+          [min]="yesterdayDate"
+          [max]="todayDate"
+        />
+        <button
+          type="button"
+          class="btn btn-sm text-white"
+          style="background-color:#009688;"
+          (click)="getWorkReport(timesheetForm.value.date)"
+        >
+          Get Work Report Status
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Work Report -->
+  <div class="container-fluid my-3">
+    <div class="bg-white rounded shadow-sm px-3 py-2">
+      <!-- Section Title -->
+      <div
+        class="d-flex flex-wrap align-items-center justify-content-between border-bottom pb-2"
+      >
+        <h6 class="fw-bold mb-0">My Work Report</h6>
+      </div>
+
+      <div class="bg-light p-3"></div>
+
+      <div class="row">
+        <div class="col-lg-1 d-none d-lg-block"></div>
+
+        <div class="col-12 col-lg-10">
+          <!-- Summary Table -->
+          <div class="table-responsive">
+            <table
+              class="table table-bordered table-sm text-center align-middle"
+            >
+              <thead>
+                <tr>
+                  <th style="background-color:#009688; color:white;">Year</th>
+                  <th style="background-color:#009688; color:white;">Month</th>
+                  <th style="background-color:#009688; color:white;">Date</th>
+                  <th style="background-color:#009688; color:white;">Day</th>
+                  <th style="background-color:#009688; color:white;">Weekend</th>
+                  <th style="background-color:#009688; color:white;">Start Time</th>
+                  <th style="background-color:#009688; color:white;">Regular Hours</th>
+                  <th style="background-color:#009688; color:white;">Break Hours</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ year }}</td>
+                  <td>{{ month }}</td>
+                  <td>{{ date }}</td>
+                  <td>{{ day }}</td>
+                  <td>{{ weekend }}</td>
+                  <td>{{ startTime }}</td>
+                  <td>{{ regularHours }}</td>
+                  <td>{{ breakHours }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Employee Info -->
+          <div class="mt-2 text-center">
+            <div class="d-inline-block align-middle text-wrap">
+              <strong style="color:#009688;">Employee Name:</strong>
+              {{ employeeName }} |
+              <strong style="color:#009688;">Department:</strong>
+              {{ department }} |
+              <strong style="color:#009688;">Team Lead:</strong>
+              {{ teamLead }}
+            </div>
+          </div>
+
+          <div class="bg-light p-3"></div>
+
+          <!-- Time Slots -->
+          <div class="mb-3">
+            <div class="border rounded overflow-auto">
+              <div class="table-responsive">
+                <table
+                  class="table table-bordered m-0 text-center align-middle"
+                  formArrayName="workLogs"
+                >
+                  <thead
+                    class="text-white fw-bold"
+                    style="background-color:#009688;"
+                  >
+                    <tr>
+                      <th style="width:12.5%;">Start Time</th>
+                      <th style="width:12.5%;">End Time</th>
+                      <th style="width:75%;">Activities</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let log of workLogs.controls; let i = index"
+                      [formGroupName]="i"
+                    >
+                      <td>
+                        <input
+                          type="time"
+                          formControlName="startTime"
+                          class="form-control form-control-sm text-center"
+                          readonly
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="time"
+                          formControlName="endTime"
+                          class="form-control form-control-sm text-center"
+                          readonly
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          formControlName="task"
+                          class="form-control form-control-sm"
+                          [readonly]="isSubmitted"
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div *ngIf="['0','1', '5'].includes(submitStatus)" class="row mt-3">
+            <div class="col-12 d-flex flex-wrap justify-content-end gap-2">
+              <ng-container *ngIf="!isSubmitted; else submittedStatus">
+                <button
+                *ngIf="!['5'].includes(submitStatus)"
+                  type="button"
+                  class="btn text-white"
+                  style="background-color:#009688; min-width:120px;"
+                  (click)="saveTimesheet(1)"
+                  [disabled]="loading"
+                >
+                  {{ loading ? "Saving..." : "Save Report" }}
+                </button>
+                <button
+                  type="submit"
+                  class="btn text-white"
+                  style="background-color:#00796B; min-width:120px;"
+                  [disabled]="loading"
+                >
+                  {{ loading ? "Submitting..." : "Final Submit" }}
+                </button>
+              </ng-container>
+
+              <ng-template #submittedStatus>
+                <span
+                  class="badge bg-success p-2 fs-6"
+                  style="min-width:140px;"
+                >
+                  ✅ Timesheet Submitted
+                </span>
+              </ng-template>
+            </div>
+          </div>
+
+          <!-- Status Badges at Bottom -->
+          <div *ngIf="!['0','1'].includes(submitStatus)" class="row mt-4" >
+            <!-- Submitted -->
+            <div *ngIf="['2'].includes(submitStatus)" class="col-12 col-md-4">
+              <div class="card shadow-sm text-center h-100">
+                <div class="card-header text-white fw-bold" style="background:#009688;">
+                  Status
+                </div>
+                <div class="card-body p-2">Submitted</div>
+              </div>
+            </div>
+            <!-- Approved -->
+            <div  *ngIf="['3'].includes(submitStatus)" class="col-12 col-md-4">
+              <div class="card shadow-sm text-center h-100">
+                <div class="card-header text-white fw-bold" style="background:#009688;">
+                  Status
+                </div>
+                <div class="card-body p-2">Approved</div>
+              </div>
+            </div>
+            <!-- Rejected -->
+            <div  *ngIf="['4'].includes(submitStatus)" class="col-12 col-md-4">
+              <div class="card shadow-sm text-center h-100">
+                <div class="card-header text-white fw-bold" style="background:#009688;">
+                  Status
+                </div>
+                <div class="card-body p-2">Rejected</div>
+              </div>
+            </div>
+            <div  *ngIf="['5'].includes(submitStatus)" class="col-12 col-md-4">
+              <div class="card shadow-sm text-center h-100">
+                <div class="card-header text-white fw-bold" style="background:#009688;">
+                  Status
+                </div>
+                <div class="card-body p-2">Reassign</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-1 d-none d-lg-block"></div>
+      </div>
+    </div>
+  </div>
+</form>

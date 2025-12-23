@@ -1,0 +1,25 @@
+.salary-card {
+  max-width: 1617px;
+  height: auto;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .salary-card {
+    padding: 1rem;
+  }
+
+  .table th,
+  .table td {
+    font-size: 0.875rem;
+  }
+}
+
+.required-asterisk {
+  color: red;
+}
+
+.underline-text {
+  text-decoration: underline;
+  cursor: pointer;
+}

@@ -1,0 +1,134 @@
+.attendance-summary-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: greenyellow;
+  border-radius: 14px;
+  min-height: 70px;
+}
+
+.body-text {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #000;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.body-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.leave-header {
+  background-color: #009688 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.leave-table th,
+.leave-table td {
+  vertical-align: middle !important;
+  text-align: center;
+  border: none !important;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.attendance-no {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+@media (min-width: 992px) {
+  .custom-col-lg-55 {
+    flex: 0 0 42%;
+    max-width: 42%;
+  }
+  .custom-col-lg-27 {
+    flex: 0 0 29%;
+    max-width: 29%;
+  }
+}
+
+:host {
+  display: block;
+  background-color: #ecf0f5;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: #ecf0f5 !important;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+html {
+  background-color: #ecf0f5;
+  height: 100%;
+}
+.attendance-summary-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: greenyellow;
+  border-radius: 14px;
+  min-height: 70px;
+}
+
+.body-text {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #000;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.body-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.leave-header {
+  background-color: #009688 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.leave-table th,
+.leave-table td {
+  vertical-align: middle !important;
+  text-align: center;
+  border: none !important;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.attendance-no {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+@media (min-width: 992px) {
+  .custom-col-lg-55 {
+    flex: 0 0 42%;
+    max-width: 42%;
+  }
+  .custom-col-lg-27 {
+    flex: 0 0 29%;
+    max-width: 29%;
+  }
+}

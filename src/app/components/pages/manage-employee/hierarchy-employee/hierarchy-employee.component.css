@@ -1,0 +1,32 @@
+/* Sticky header for table */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  color: white;
+}
+
+/* Table wrapper to allow horizontal scroll */
+.table-scroll-wrapper {
+  overflow-x: auto;
+}
+
+/* Alternate row colors */
+.row.gx-0 {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .row > .col {
+    min-width: 120px;
+    font-size: 12px;
+    padding: 0.3rem;
+  }
+
+  .sticky-header > .col {
+    font-size: 12px;
+  }
+}
+

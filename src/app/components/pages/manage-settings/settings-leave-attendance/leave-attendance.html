@@ -1,0 +1,170 @@
+<div class="container-fluid">
+  <div class="row g-3">
+    <!-- Leave & Service Periods -->
+    <div class="col-12 col-md-6">
+      <div class="bg-white rounded p-3 shadow-sm h-100">
+        <h6 class="fw-bold mb-3">Leave & Service Periods</h6>
+
+        <div class="d-flex fw-semibold text-white bg-teal px-2 py-2">
+          <div style="width: 10%">Sr No</div>
+          <div style="width: 40%">Title</div>
+          <div style="width: 30%">Duration</div>
+          <div style="width: 20%">Action</div>
+        </div>
+
+        <ng-container *ngIf="LeaveAttendance.length > 0; else noLeave">
+          <div *ngFor="let item of LeaveAttendance; let i = index"
+               [ngStyle]="{ 'background-color': i % 2 === 0 ? '#E5F4F3' : '#FFFFFF' }"
+               class="d-flex align-items-center px-2 py-2 border-bottom">
+            <div style="width: 10%">{{ i + 1 }}</div>
+            <div style="width: 40%">{{ item.title }}</div>
+            <div style="width: 30%">{{ item.duration }}</div>
+            <div style="width: 20%" class="d-flex gap-3">
+              <i class="bi bi-pencil-fill text-dark cursor-pointer" (click)="openEditPopup('Period', i)"></i>
+              <i class="bi bi-trash-fill text-danger cursor-pointer" (click)="deleteItem('Period', i)"></i>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noLeave>
+          <div class="text-center py-3 text-muted">No leave periods found</div>
+        </ng-template>
+
+        <div class="text-end mt-3">
+          <button class="btn btn-sm px-3" style="background-color: #009688; color:white"
+                  (click)="openAddPopup('Period')">
+            + Add New Period
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Week Off Setup -->
+    <div class="col-12 col-md-6">
+      <div class="bg-white rounded p-3 shadow-sm h-100">
+        <h6 class="fw-bold mb-3">Week Off Setup</h6>
+
+        <div class="d-flex fw-semibold text-white bg-teal px-2 py-2">
+          <div style="width: 10%">Sr No</div>
+          <div style="width: 40%">Work Mode</div>
+          <div style="width: 30%">Days</div>
+          <div style="width: 20%">Action</div>
+        </div>
+
+        <ng-container *ngIf="weekoff.length > 0; else noWeekoff">
+          <div *ngFor="let item of weekoff; let i = index"
+               [ngStyle]="{ 'background-color': i % 2 === 0 ? '#E5F4F3' : '#FFFFFF' }"
+               class="d-flex align-items-center px-2 py-2 border-bottom">
+            <div style="width: 10%">{{ i + 1 }}</div>
+            <div style="width: 40%">{{ item.work_mode }}</div>
+            <div style="width: 30%">{{ item.days }}</div>
+            <div style="width: 20%" class="d-flex gap-3">
+              <i class="bi bi-pencil-fill text-dark cursor-pointer" (click)="openEditPopup('weekoff', i)"></i>
+              <i class="bi bi-trash-fill text-danger cursor-pointer" (click)="deleteItem('weekoff', i)"></i>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noWeekoff>
+          <div class="text-center py-3 text-muted">No weekoff setup found</div>
+        </ng-template>
+
+        <div class="text-end mt-3">
+          <button class="btn btn-sm px-3" style="background-color: #009688; color:white"
+                  (click)="openAddPopup('weekoff')">
+            + Add New Setup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-4"></div>
+
+  <!-- Shifts -->
+  <div class="row g-3">
+    <div class="col-12 col-md-6">
+      <div class="bg-white rounded p-3 shadow-sm h-100">
+        <h6 class="fw-bold mb-3">Shift Timings & Grace Rules</h6>
+
+        <div class="d-flex fw-semibold text-white bg-teal px-2 py-2">
+          <div style="width: 10%">Sr No</div>
+          <div style="width: 40%">Title</div>
+          <div style="width: 30%">Timings</div>
+          <div style="width: 20%">Action</div>
+        </div>
+
+        <ng-container *ngIf="shifts.length > 0; else noShifts">
+          <div *ngFor="let item of shifts; let i = index"
+               [ngStyle]="{ 'background-color': i % 2 === 0 ? '#E5F4F3' : '#FFFFFF' }"
+               class="d-flex align-items-center px-2 py-2 border-bottom">
+            <div style="width: 10%">{{ i + 1 }}</div>
+            <div style="width: 40%">{{ item.title }}</div>
+            <div style="width: 30%">{{ item.timings }}</div>
+            <div style="width: 20%" class="d-flex gap-3">
+              <i class="bi bi-pencil-fill text-dark cursor-pointer" (click)="openEditPopup('shift', i)"></i>
+              <i class="bi bi-trash-fill text-danger cursor-pointer" (click)="deleteItem('shift', i)"></i>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noShifts>
+          <div class="text-center py-3 text-muted">No shift timings found</div>
+        </ng-template>
+
+        <div class="text-end mt-3">
+          <button class="btn btn-sm px-3" style="background-color: #009688; color:white"
+                  (click)="openAddPopup('shift')">
+            + Add New Shift
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="showAddPopup"
+     class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+     style="background-color: rgba(0, 0, 0, 0.5); z-index: 1050">
+  <div class="rounded shadow bg-light" style="min-width: 500px; max-width: 90%;">
+    <div class="d-flex justify-content-between align-items-center rounded-top"
+         style="background-color: #009688; padding: 0.75rem 1rem">
+      <h5 class="text-white m-0">
+        {{ isEditing ? 'Update ' + (editingType | titlecase) : 'Add New ' + (editingType | titlecase) }}
+      </h5>
+      <span style="cursor: pointer" (click)="closeAddPopup()">&times;</span>
+    </div>
+    <div class="p-3">
+
+      <!-- Period -->
+      <ng-container *ngIf="editingType === 'Period'">
+        <label class="form-label fw-semibold">Period Title <span class="text-danger">*</span></label>
+        <input type="text" class="form-control mb-3" [(ngModel)]="newItemTitle" placeholder="Enter title" />
+
+        <label class="form-label fw-semibold">Duration (e.g. 30 Days)</label>
+        <input type="text" class="form-control mb-3" [(ngModel)]="newItemExtra" placeholder="Enter duration" />
+      </ng-container>
+
+      <!-- Weekoff -->
+      <ng-container *ngIf="editingType === 'weekoff'">
+        <label class="form-label fw-semibold">Work Mode <span class="text-danger">*</span></label>
+        <input type="text" class="form-control mb-3" [(ngModel)]="newWorkMode" placeholder="Work From Office / Remote" />
+
+        <label class="form-label fw-semibold">Days <span class="text-danger">*</span></label>
+        <input type="text" class="form-control mb-3" [(ngModel)]="newDays" placeholder="e.g. Saturday, Sunday" />
+      </ng-container>
+
+      <!-- Shift -->
+      <ng-container *ngIf="editingType === 'shift'">
+        <label class="form-label fw-semibold">Shift Title <span class="text-danger">*</span></label>
+        <input type="text" class="form-control mb-3" [(ngModel)]="newItemTitle" placeholder="Enter shift name" />
+
+        <label class="form-label fw-semibold">Timings</label>
+        <input type="text" class="form-control mb-3" [(ngModel)]="newItemExtra" placeholder="HH:MM AM/PM" />
+      </ng-container>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button class="btn btn-success" (click)="submitItem()">Submit</button>
+        <button class="btn btn-danger" (click)="closeAddPopup()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

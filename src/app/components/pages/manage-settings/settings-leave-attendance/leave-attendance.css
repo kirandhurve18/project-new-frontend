@@ -1,0 +1,62 @@
+.btn-custom {
+  background-color: white;
+  color: #000;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-custom.active-tab {
+  background-color: #009688;
+  color: white;
+}
+
+.btn-custom-sm {
+  background-color: #009688;
+  color: white;
+  padding: 0.4rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.4rem;
+}
+
+.custom-card {
+  min-height: 346px;
+  max-width: 100%;
+ box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.table-header {
+  background-color: #009c9c;
+  color: white;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+@media (min-width: 768px) {
+  .custom-card {
+    width: 575px;
+  }
+}
+
+.bg-teal {
+  background-color: #009688; /* teal-600 */
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.w-20 {
+  width: 20%;
+}
+.w-40 {
+  width: 40%;
+}

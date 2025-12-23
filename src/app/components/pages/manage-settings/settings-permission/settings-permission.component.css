@@ -1,0 +1,39 @@
+/* Custom Modal Sizing */
+.custom-modal-content {
+  max-width: 830px;
+  width: 100%;
+  max-height: 899px;
+  height: auto;
+  margin: auto;
+  border-radius: 12px;
+  overflow-y: auto;
+}
+
+/* Responsive for Tablet */
+@media (max-width: 768px) {
+  .custom-modal-content {
+    max-width: 95%;
+    height: auto;
+  }
+}
+
+/* Responsive for Mobile */
+@media (max-width: 480px) {
+  .custom-modal-content {
+    max-width: 100%;
+    border-radius: 0;
+  }
+}
+
+/* Make checkboxes use custom style with black tick */
+.form-check-input:checked {
+  background-color: black !important;
+  border-color: black !important;
+}
+
+/* Optional: improve checkbox appearance across browsers */
+.form-check-input {
+  width: 1.1em;
+  height: 1.1em;
+  cursor: pointer;
+}

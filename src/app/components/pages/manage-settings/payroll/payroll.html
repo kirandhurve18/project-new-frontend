@@ -1,0 +1,112 @@
+<div class="container-fluid">
+  <div class="row g-3">
+    <!-- Income Components -->
+    <div class="col-12 col-md-6">
+      <div class="bg-white rounded p-3 shadow-sm">
+        <h6 class="fw-bold mb-3">Income Components</h6>
+        <div class="d-flex fw-semibold text-white bg-teal px-2 py-2">
+          <div style="width: 10%">Sr No</div>
+          <div style="width: 50%">Component</div>
+          <div style="width: 20%">Status</div>
+          <div style="width: 20%">Action</div>
+        </div>
+
+        <div *ngFor="let income of incomeComponents; let i = index"
+             [ngStyle]="{ 'background-color': i % 2 === 0 ? '#E5F4F3' : '#FFFFFF' }"
+             class="d-flex align-items-center px-2 py-2 border-bottom">
+          <div style="width: 10%">{{ i + 1 }}</div>
+          <div style="width: 50%">{{ income.name }}</div>
+          <div style="width: 20%">
+            <span [ngClass]="{ 'text-danger': income.status === 'Inactive', 'text-success': income.status === 'Active' }">
+              {{ income.status }}
+            </span>
+          </div>
+          <div style="width: 20%" class="d-flex gap-4">
+            <i class="bi bi-pencil-fill text-dark cursor-pointer" (click)="openEditPopup('income', i)"></i>
+            <i class="bi bi-trash-fill text-danger cursor-pointer" (click)="deleteItem('income', i)"></i>
+          </div>
+        </div>
+
+        <div class="text-end mt-3">
+          <button class="btn btn-sm px-3" style="background-color: #009688; color:white" (click)="openAddPopup('income')">
+            Add New Income Component
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deduction Components -->
+    <div class="col-12 col-md-6">
+      <div class="bg-white rounded p-3 shadow-sm">
+        <h6 class="fw-bold mb-3">Deduction Components</h6>
+        <div class="d-flex fw-semibold text-white bg-teal px-2 py-2">
+          <div style="width: 10%">Sr No</div>
+          <div style="width: 50%">Component</div>
+          <div style="width: 20%">Status</div>
+          <div style="width: 20%">Action</div>
+        </div>
+
+        <div *ngFor="let deduction of deductionComponents; let i = index"
+             [ngStyle]="{ 'background-color': i % 2 === 0 ? '#E5F4F3' : '#FFFFFF' }"
+             class="d-flex align-items-center px-2 py-2 border-bottom">
+          <div style="width: 10%">{{ i + 1 }}</div>
+          <div style="width: 50%">{{ deduction.name }}</div>
+          <div style="width: 20%">
+            <span [ngClass]="{ 'text-danger': deduction.status === 'Inactive', 'text-success': deduction.status === 'Active' }">
+              {{ deduction.status }}
+            </span>
+          </div>
+          <div style="width: 20%" class="d-flex gap-4">
+            <i class="bi bi-pencil-fill text-dark cursor-pointer" (click)="openEditPopup('deduction', i)"></i>
+            <i class="bi bi-trash-fill text-danger cursor-pointer" (click)="deleteItem('deduction', i)"></i>
+          </div>
+        </div>
+
+        <div class="text-end mt-3">
+          <button class="btn btn-sm px-3" style="background-color: #009688; color:white" (click)="openAddPopup('deduction')">
+            Add New Deduction Component
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div *ngIf="showAddPopup"
+       class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+       style="background-color: rgba(0, 0, 0, 0.5); z-index: 1050">
+    <div class="rounded shadow bg-light" style="min-width: 500px; max-width: 90%;">
+      <div class="d-flex justify-content-between align-items-center rounded-top"
+           style="background-color: #009688; padding: 0.75rem 1rem">
+        <h5 class="text-white m-0">
+          {{ isEditing ? ('Update ' + editingType.charAt(0).toUpperCase() + editingType.slice(1)) : ('Add New ' + editingType.charAt(0).toUpperCase() + editingType.slice(1)) }}
+        </h5>
+        <img src="Vector.svg" alt="Close" (click)="closeAddPopup()" style="cursor: pointer; width: 16px; height: 16px" />
+      </div>
+      <div class="p-3">
+        <label for="taskTitle" class="form-label fw-semibold">
+          {{ editingType.charAt(0).toUpperCase() + editingType.slice(1) }} Title <span class="text-danger">*</span>
+        </label>
+        <input
+          type="text"
+          class="form-control mb-3"
+          id="taskTitle"
+          placeholder="Enter {{ editingType.charAt(0).toUpperCase() + editingType.slice(1) }} Title"
+          [(ngModel)]="newItemTitle"
+          name="taskTitle"
+        />
+        <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
+        <select class="form-select mb-3" [(ngModel)]="newItemStatus">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-success" (click)="submitItem()">
+            {{ isEditing ? 'Update' : 'Submit' }}
+          </button>
+          <button class="btn btn-danger" (click)="closeAddPopup()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

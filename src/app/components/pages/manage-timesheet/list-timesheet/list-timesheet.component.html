@@ -1,0 +1,149 @@
+<div class="my-3">
+  <div
+    class="bg-light rounded shadow-sm px-3 py-3 border d-flex justify-content-between align-items-center"
+  >
+    <h5 class="fw-bold mb-0">Timesheet Status & History</h5>
+  </div>
+</div>
+
+<div class="bg-white rounded shadow-sm p-3">
+  <!-- 🔹 Date Filters -->
+  <div class="row g-3 align-items-end mb-4">
+    <div class="col-md-3">
+      <label class="form-label fw-semibold">From Date</label>
+      <input type="date" class="form-control" [(ngModel)]="fromDate" />
+    </div>
+    <div class="col-md-3">
+      <label class="form-label fw-semibold">To Date</label>
+      <input type="date" class="form-control" [(ngModel)]="toDate" />
+    </div>
+    <div class="col-md-3">
+      <button
+        class="btn btn-teal w-100 mt-md-0 mt-2"
+        (click)="getTimesheetStatus()"
+      >
+        Get Work Report Status
+      </button>
+    </div>
+  </div>
+
+  <!-- 🔹 Pagination & Search -->
+  <div class="row justify-content-between align-items-center mb-3">
+    <div class="col-md-auto mb-2 mb-md-0">
+      <label class="me-2">Show</label>
+      <select
+        class="form-select d-inline-block w-auto"
+        [(ngModel)]="limit"
+        (change)="changeLimit(limit)"
+      >
+        <option [ngValue]="5">5</option>
+        <option [ngValue]="10">10</option>
+        <option [ngValue]="25">25</option>
+        <option [ngValue]="50">50</option>
+      </select>
+      <label class="ms-2">entries</label>
+    </div>
+    <div class="col-md-auto">
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search..."
+          [(ngModel)]="searchTerm"
+        />
+        <span class="input-group-text bg-white">
+          <i class="bi bi-search"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 Timesheet Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered text-center align-middle">
+      <thead class="table-header">
+        <tr>
+          <th>Sr.No.</th>
+          <th>Date</th>
+          <th>Day</th>
+          <th>Timesheet Status</th>
+          <th>Approval Status</th>
+          <th>Approved By</th>
+          <th>Note/Reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of filteredTimesheets; let i = index">
+          <td>{{ (page - 1) * limit + i + 1 }}</td>
+          <td>{{ row.date | date : "dd-MMM-yyyy" }}</td>
+          <td>{{ row.date | date : "EEE" }}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-warning text-dark': row.submitStatus == 1,
+                'bg-info': row.submitStatus == 2,
+                'bg-success': row.submitStatus == 3,
+                'bg-danger': row.submitStatus == 4,
+                'bg-primary': row.submitStatus == 5,
+                'bg-secondary': row.submitStatus == 0
+              }"
+            >
+              {{ getSubmitStatusLabel(row.submitStatus) }}
+            </span>
+          </td>
+          <td>
+            <span
+              *ngIf="row.approvedBy && row.submitStatus == 3"
+              class="badge bg-success"
+              >Approved</span
+            >
+            <span
+              *ngIf="row.rejectedBy && row.submitStatus == 4"
+              class="badge bg-danger"
+              >Rejected</span
+            >
+            <span *ngIf="row.rejectedBy && [2, 5].includes(row.submitStatus)" class="badge bg-secondary"
+              >Reassigned</span
+            >
+            <span
+              *ngIf="!row.approvedBy && !row.rejectedBy"
+              class="badge bg-warning text-dark"
+              >Pending</span
+            >
+          </td>
+          <td>{{ row.approvedBy || "-" }}</td>
+          <td>{{ row.note || "-" }}</td>
+        </tr>
+        <tr *ngIf="filteredTimesheets.length === 0">
+          <td colspan="7">No Records Found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 🔹 Pagination Footer -->
+  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+    <div>
+      Showing {{ (page - 1) * limit + 1 }} to
+      {{ Math.min(page * limit, timesheetList.length) }}
+      of {{ timesheetList.length }} entries
+    </div>
+    <div class="btn-group mt-2 mt-md-0">
+      <button
+        class="btn btn-outline-secondary btn-sm"
+        (click)="prevPage()"
+        [disabled]="page === 1"
+      >
+        Previous
+      </button>
+      <button
+        class="btn btn-outline-secondary btn-sm"
+        (click)="nextPage()"
+        [disabled]="page === totalPages"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>

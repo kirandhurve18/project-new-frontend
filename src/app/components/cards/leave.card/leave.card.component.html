@@ -1,0 +1,170 @@
+<!-- Modal for Leave Review -->
+<div
+  *ngIf="isOpen"
+  class="modal d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div
+      class="modal-content"
+      style="max-height: 90vh; display: flex; flex-direction: column"
+    >
+      <!-- Fixed Header -->
+ <!-- Fixed Header -->
+<div
+  class="modal-header d-flex justify-content-between align-items-center"
+  style="
+    background-color: #009688;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1055;
+  "
+>
+  <h5 class="modal-title fw-bold mb-0">{{ title }}</h5>
+
+  <img
+    [src]="cross_close_icon"
+    alt="Close"
+    (click)="onToggle()"
+    style="cursor: pointer; width: 24px; height: 24px"
+  />
+</div>
+
+
+      <!-- Scrollable Body -->
+      <div class="modal-body" style="overflow-y: auto; flex: 1">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Employee Name</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="leave_details.full_name"
+              readonly
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Apply Date</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="leave_details.createdAt"
+              readonly
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Leave Type</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="leave_details.leave_type"
+              readonly
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Start Date</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="leave_details.from_date"
+              readonly
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">End Date</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="leave_details.to_date"
+              readonly
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Total Days</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="leave_details.number_of_days"
+              readonly
+            />
+          </div>
+          <div class="col-md-6 d-flex align-items-center mb-0 me-3">
+            <label class="form-label fw-semibold mb-0 me-3">Status</label>
+            <span
+              class="d-inline-block text-center rounded-pill px-3 py-1"
+              [ngStyle]="{
+                backgroundColor: getStatusBgColor(leave_details.status),
+                color:
+                  leave_details.status === 'Pending Manager' ? '#000' : '#fff'
+              }"
+              style="min-width: 150px"
+            >
+              {{ leave_details.status }}
+            </span>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold">Reason</label>
+            <textarea
+              class="form-control"
+              [placeholder]= ""
+              [(ngModel)]="leave_details.reason"
+              readonly
+            ></textarea>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold">Rejection Reason</label>
+            <textarea
+              class="form-control"
+              [placeholder]= "['1', '2', '3'].includes(modelType) ? 'Enter your Rejection Reason': ''"
+              [(ngModel)]="leave_details.rejection_reason"
+              [readonly]="!['1', '2', '3'].includes(modelType)"
+            ></textarea>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold">Manager Comment</label>
+            <textarea
+              class="form-control"
+              [placeholder]= "['2', '3'].includes(modelType) ? 'Enter your comments': ''"
+              [(ngModel)]="leave_details.manager_comment"
+              [readonly]="!['2', '3'].includes(modelType)"
+            ></textarea>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label fw-semibold">Reviewer Comments</label>
+            <textarea
+              class="form-control"
+              [placeholder]= "['1'].includes(modelType) ? 'Enter your comments': ''"
+              [(ngModel)]="leave_details.reviewer_comment"
+              [readonly]="!['1'].includes(modelType)"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fixed Footer -->
+      <div
+        *ngIf="['1', '2', '3'].includes(modelType)"
+        class="modal-footer"
+        style="position: sticky; bottom: 0; background: #fff; z-index: 1055"
+      >
+        <button
+          class="btn btn-success px-4"
+          (click)="updateLeaveStatus('Approved')"
+        >
+          Approve
+        </button>
+        <button
+          class="btn btn-danger px-4"
+          (click)="updateLeaveStatus('Rejected')"
+        >
+          Reject
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

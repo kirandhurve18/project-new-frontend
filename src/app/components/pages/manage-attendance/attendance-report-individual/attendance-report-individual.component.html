@@ -1,0 +1,225 @@
+<div class="container-fluid">
+  <!-- Header -->
+  <div
+    class="d-flex rounded flex-wrap justify-content-between align-items-center bg-white p-3 box-shadow mb-3"
+  >
+    <div class="d-flex align-items-center mb-2 mb-md-0">
+      <h5 class="fw-bold">Attendance Report</h5>
+    </div>
+    <div class="d-flex align-items-center flex-wrap" style="gap: 24px">
+      <button class="btn btn-white" (click)="navigateToDailyAttendance()">
+        Daily Attendance
+      </button>
+      <button class="btn btn-teal">Employee Attendance Report</button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="d-flex flex-column rounded bg-white p-3 box-shadow">
+    <div class="d-flex flex-column">
+      <div class="d-flex align-items-center mb-2">
+        <h5 class="fw-bold">Employee Attendance Report</h5>
+      </div>
+      <div class="d-flex align-items-center justify-content-between flex-wrap">
+        <!-- Employee select -->
+        <div class="d-flex align-items-center gap-3 mb-3 mb-lg-0">
+          <label class="fw-bold" for="employee">Select Employee:</label>
+
+          <div class="dropdown">
+            <button
+              class="btn dropdown-toggle teal-btn"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style="background-color: #009688; color: #ffffff"
+            >
+              {{ selectedEmployeeName || "Select Employee" }}
+            </button>
+
+            <ul class="dropdown-menu custom-dropdown p-2 scrollable-dropdown">
+              <!-- Search inside dropdown -->
+              <li class="dropdown-search">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search employee..."
+                  [(ngModel)]="searchText"
+                />
+              </li>
+              
+
+              <!-- Employee list -->
+              <li
+                *ngFor="let emp of employeeList | employeeFilter : searchText"
+                (click)="selectEmployee(emp)"
+              >
+                <a class="dropdown-item" href="javascript:void(0)">
+                  {{ emp.full_name }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Date pickers + button -->
+        <div class="d-flex align-items-center flex-wrap gap-3">
+          <input
+            type="date"
+            class="form-control"
+            style="width: 150px"
+            [(ngModel)]="fromDate"
+          />
+          <input
+            type="date"
+            class="form-control"
+            style="width: 150px"
+            [(ngModel)]="toDate"
+          />
+          <button class="btn btn-teal px-4" (click)="getAttendance()">
+            Get Attendance
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div
+      style="
+        width: 100%;
+        height: 2px;
+        background-color: #009688;
+        margin: 1rem 0;
+      "
+    ></div>
+
+    <!-- Entries & Search -->
+    <div
+      class="d-flex justify-content-between align-items-center flex-wrap mb-3"
+    >
+      <div class="d-flex align-items-center mb-2 mb-md-0">
+        <label class="me-2 mb-0">Show</label>
+        <select
+          [(ngModel)]="entriesToShow"
+          (change)="onEntriesChange()"
+          class="form-select form-select-sm"
+          style="width: 70px"
+        >
+          <option [value]="5">5</option>
+          <option [value]="10">10</option>
+          <option [value]="15">15</option>
+          <option [value]="20">20</option>
+        </select>
+        <span class="ms-2">entries</span>
+      </div>
+
+      <!-- <div class="input-group" style="max-width: 300px">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+          class="form-control"
+          placeholder="Search Attendance"
+        />
+        <span class="input-group-text bg-white">
+          <img src="{{search_icon}}" alt="Search" width="16" />
+        </span>
+      </div> -->
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="table-header">
+          <tr>
+            <th>S.No</th>
+            <th>Check In Date</th>
+            <th>Check In Time</th>
+            <th>Check In Location</th>
+            <th>Check Out Date</th>
+            <th>Check Out Time</th>
+            <th>Check Out Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of attendanceReportData">
+            <td>{{ item.SNo }}</td>
+            <td>{{ item.checkInDate }}</td>
+            <td>{{ item.checkInTime }}</td>
+            <td>{{ item.checkInLocation }}</td>
+            <td>{{ item.checkOutDate }}</td>
+            <td>{{ item.checkOutTime }}</td>
+            <td>{{ item.checkOutLocation }}</td>
+          </tr>
+          <tr *ngIf="attendanceReportData.length === 0">
+            <td colspan="7" class="text-center">No records found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer text-muted text-start">
+      Showing {{ attendanceReportData.length }} of {{ totalRecords }} entries
+    </div>
+  </div>
+
+  <!-- Attendance Summary -->
+  <div class="row gx-4 gy-4 mt-3">
+    <div class="col-sm-12 col-md-6 mx-auto">
+      <div class="rounded bg-white p-3 box-shadow">
+        <div class="d-flex align-items-center justify-content-center mb-3">
+          <h5 class="fw-bold">Attendance Summary</h5>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table" style="border: 1px solid #000">
+            <tbody>
+              <tr class="bg-light-teal">
+                <td class="fw-bold" style="border: 1px solid #000">
+                  Total Days
+                </td>
+                <td style="border: 1px solid #000">31</td>
+              </tr>
+              <tr>
+                <td class="fw-bold" style="border: 1px solid #000">Week Off</td>
+                <td style="border: 1px solid #000">8</td>
+              </tr>
+              <tr class="bg-light-teal">
+                <td class="fw-bold" style="border: 1px solid #000">Present</td>
+                <td style="border: 1px solid #000">18</td>
+              </tr>
+              <tr>
+                <td class="fw-bold" style="border: 1px solid #000">Absent</td>
+                <td style="border: 1px solid #000">10</td>
+              </tr>
+              <tr>
+                <td class="fw-bold" style="border: 1px solid #000">
+                  Half Day Leave
+                </td>
+                <td style="border: 1px solid #000">0</td>
+              </tr>
+              <tr>
+                <td class="fw-bold" style="border: 1px solid #000">
+                  Late Mark
+                </td>
+                <td style="border: 1px solid #000">7</td>
+              </tr>
+              <tr>
+                <td class="fw-bold" style="border: 1px solid #000">
+                  Early Leave
+                </td>
+                <td style="border: 1px solid #000">10</td>
+              </tr>
+              <tr>
+                <td class="fw-bold" style="border: 1px solid #000">
+                  Late Joining
+                </td>
+                <td style="border: 1px solid #000">10</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

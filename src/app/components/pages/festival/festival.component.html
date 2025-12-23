@@ -1,0 +1,326 @@
+<div class="container-fluid">
+  <!-- Header with Add Festival Button -->
+  <div class="container-fluid my-3">
+    <div
+      class="bg-white rounded shadow-sm px-3 py-3 d-flex justify-content-between align-items-center flex-wrap"
+    >
+      <h5 class="fw-bold mb-0">Festival Leave</h5>
+      <button
+        *ngIf="userRole == '1'"
+        class="btn text-white fw-semibold px-4 py-2"
+        style="background-color: #009688"
+        (click)="openAddFestival()"
+      >
+        Add Festival
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Card -->
+  <div class="container-fluid d-flex justify-content-center my-4">
+    <div
+      class="card shadow rounded w-100"
+      style="max-width: 1617px; height: 770px"
+    >
+      <div class="card-body d-flex flex-column justify-content-start">
+        <!-- Table Filters -->
+        <div
+          class="d-flex justify-content-between align-items-center flex-wrap mb-3"
+        >
+          <div class="d-flex align-items-center mb-2 mb-md-0">
+            <label class="me-2 mb-0">Show</label>
+            <select
+              [(ngModel)]="entriesToShow"
+              (ngModelChange)="loadFestivals(1)"
+              class="form-select form-select-sm"
+              style="width: 70px"
+            >
+              <option [value]="5">5</option>
+              <option [value]="10">10</option>
+              <option [value]="15">15</option>
+              <option [value]="50">50</option>
+            </select>
+            <span class="ms-2">entries</span>
+          </div>
+
+          <div class="input-group" style="max-width: 300px">
+            <input
+              type="text"
+              [(ngModel)]="searchTerm"
+              (ngModelChange)="onSearchChange()"
+              class="form-control"
+              placeholder="Search Festival"
+            />
+            <span class="input-group-text bg-white">
+              <img src="{{ search_icon }}" alt="Search" width="16" />
+            </span>
+          </div>
+        </div>
+
+        <!-- Festival Table -->
+        <div class="row dashboard-row dashboard-new_lead mt-2">
+          <div class="dashboard-new_lead-box">
+            <div class="dashboard-new_lead-header">
+              <div class="item-col item-col1 text-center">Sr. No.</div>
+              <div class="item-col item-col2 text-center">Festival</div>
+              <div class="item-col item-col3 text-center">Festival Date</div>
+              <div class="item-col item-col4 text-center">Festival Day</div>
+              <div
+                *ngIf="userRole == '1'"
+                class="item-col item-col5 text-center"
+              >
+                Action
+              </div>
+            </div>
+
+            <div
+              class="dashboard-new_lead-item"
+              *ngFor="let fest of festivals"
+            >
+              <div class="item-col item-col1 text-center">
+                {{ fest.sr < 10 ? "0" + fest.sr : fest.sr }}
+              </div>
+              <div class="item-col item-col2 text-center">{{ fest.name }}</div>
+              <div class="item-col item-col3 text-center">{{ fest.date }}</div>
+              <div class="item-col item-col4 text-center">{{ fest.day }}</div>
+              <div
+                *ngIf="userRole == '1'"
+                class="item-col item-col5 text-center"
+              >
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="openEditFestival(fest.festival_id)"
+                >
+                  <i class="bi bi-pencil-fill"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pagination + Footer -->
+          <div
+            class="card-footer d-flex flex-wrap justify-content-between align-items-center mt-3"
+          >
+            <div class="text-muted small">
+              Showing
+              {{
+                (currentPage - 1) * entriesToShow + 1
+              }}
+              to
+              {{
+                Math.min(currentPage * entriesToShow, totalItems)
+              }}
+              of {{ totalItems }} entries
+            </div>
+
+            <nav>
+              <ul class="pagination pagination-sm mb-0">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <a
+                    class="page-link"
+                    href="javascript:void(0)"
+                    (click)="goToPage(currentPage - 1)"
+                    >Previous</a
+                  >
+                </li>
+
+                <li
+                  *ngFor="let page of [].constructor(totalPages); let i = index"
+                  class="page-item"
+                  [class.active]="currentPage === i + 1"
+                >
+                  <a
+                    class="page-link"
+                    href="javascript:void(0)"
+                    (click)="goToPage(i + 1)"
+                    >{{ i + 1 }}</a
+                  >
+                </li>
+
+                <li
+                  class="page-item"
+                  [class.disabled]="currentPage === totalPages"
+                >
+                  <a
+                    class="page-link"
+                    href="javascript:void(0)"
+                    (click)="goToPage(currentPage + 1)"
+                    >Next</a
+                  >
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Festival Modal -->
+  <div
+    *ngIf="showAddModal"
+    class="modal fade show d-block"
+    style="background-color: rgba(0, 0, 0, 0.5)"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 10px; overflow: hidden">
+        <!-- Modal Header -->
+        <div
+          class="modal-header d-flex justify-content-between align-items-center"
+          style="background-color: #009688"
+        >
+          <h5 class="modal-title text-white m-0">Add Festival</h5>
+          <img
+            [src]="cross_close_icon"
+            alt="Close"
+            (click)="closeAddFestival()"
+            style="cursor: pointer; width: 16px; height: 16px"
+          />
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <form #festivalForm="ngForm">
+            <!-- Festival Name -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Festival</label>
+              <input
+                type="text"
+                class="form-control"
+                name="festivalName"
+                [(ngModel)]="newFestival.name"
+                placeholder="Enter Festival Name"
+                required
+                #festivalName="ngModel"
+              />
+              <div
+                *ngIf="festivalName.invalid && festivalName.touched"
+                class="text-danger small mt-1"
+              >
+                Festival name is required.
+              </div>
+            </div>
+
+            <!-- Festival Date -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Festival Date</label>
+              <input
+                type="date"
+                class="form-control"
+                name="festivalDate"
+                [(ngModel)]="newFestival.date"
+                placeholder="Enter Festival Date"
+                required
+                #festivalDate="ngModel"
+              />
+              <div
+                *ngIf="festivalDate.invalid && festivalDate.touched"
+                class="text-danger small mt-1"
+              >
+                Festival date is required.
+              </div>
+            </div>
+
+            <!-- Fixed Holiday Checkbox -->
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [(ngModel)]="newFestival.isFixed"
+                name="isFixed"
+                id="fixedHolidayCheck"
+              />
+              <label class="form-check-label" for="fixedHolidayCheck">
+                This is a fixed-date holiday (same every year)
+              </label>
+            </div>
+          </form>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button
+            class="btn btn-success"
+            (click)="submitFestival()"
+            [disabled]="festivalForm.invalid || loading"
+          >
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm me-2"
+            ></span>
+            Submit
+          </button>
+          <button class="btn btn-danger" (click)="closeAddFestival()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Festival Modal -->
+  <div
+    *ngIf="showEditModal"
+    class="modal fade show d-block"
+    style="background-color: rgba(0, 0, 0, 0.5)"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 10px; overflow: hidden">
+        <div
+          class="modal-header d-flex justify-content-between align-items-center"
+          style="background-color: #009688"
+        >
+          <h5 class="modal-title text-white m-0">Edit Festival</h5>
+          <img
+            [src]="cross_close_icon"
+            alt="Close"
+            (click)="closeEditFestival()"
+            style="cursor: pointer; width: 16px; height: 16px"
+          />
+        </div>
+
+        <div class="modal-body">
+          <form #editFestivalForm="ngForm">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Festival</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="editFestival.name"
+                name="editFestivalName"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Festival Date</label>
+              <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="editFestival.date"
+                name="editFestivalDate"
+                required
+              />
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            class="btn btn-success"
+            (click)="submitEditFestival()"
+            [disabled]="loading"
+          >
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm me-2"
+            ></span>
+            Update
+          </button>
+          <button class="btn btn-danger" (click)="closeEditFestival()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

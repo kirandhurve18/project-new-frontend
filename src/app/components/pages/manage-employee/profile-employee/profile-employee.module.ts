@@ -1,0 +1,17 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+import { ProfileEmployeeComponent } from './profile-employee.component';
+
+const ProfileEmployeeRoutes: Routes = [
+  { path: '', component: ProfileEmployeeComponent },
+
+];
+@NgModule({
+  declarations: [],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(ProfileEmployeeRoutes),
+  ],
+})
+export class ProfileEmployeeModule { }

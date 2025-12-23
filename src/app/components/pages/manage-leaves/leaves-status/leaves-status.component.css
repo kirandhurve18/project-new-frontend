@@ -1,0 +1,44 @@
+table thead th {
+  background-color: #009688 !important;
+  color: #fff !important;
+  font-weight: 600;
+  text-align: center;
+}
+/* ✅ Custom alternate rows (override Bootstrap table-striped) */
+.table.table-striped > tbody > tr:nth-of-type(odd) {
+  --bs-table-accent-bg: #ffffff; /* White */
+}
+
+.table.table-striped > tbody > tr:nth-of-type(even) {
+  --bs-table-accent-bg: #e5f4f3; /* Light teal */
+}
+
+/* ✅ Optional hover effect */
+.table.table-striped > tbody > tr:hover {
+  background-color: #ffffff !important; /* Light teal hover */
+}
+
+/* Target only the table container */
+.table-responsive {
+  overflow-x: auto;         /* ensures horizontal scroll */
+  scrollbar-color: #ADD8E6 #f1f1f1; /* Firefox: thumb (faint blue), track (light grey) */
+  scrollbar-width: thin;
+}
+
+/* Chrome, Edge, Safari */
+.table-responsive::-webkit-scrollbar {
+  height: 8px;  /* horizontal scrollbar height */
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #ADD8E6;  /* faint blue */
+  border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background-color: #87CEEB; /* slightly stronger blue on hover */
+}

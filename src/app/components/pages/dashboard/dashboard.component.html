@@ -1,0 +1,642 @@
+<div *ngIf="userRole == '1'" class="container-fluid p-2">
+  <div class="container mb-3">
+    <div
+      class="row pe-3 d-flex align-items-center box-shadow rounded-4"
+      style="min-height: 130px; background-color: #ffffff !important"
+    >
+      <div class="col-4 body-title d-flex align-items-center">
+        <div class="w-100 d-flex flex-column align-items-center">
+          <span>Today's Attendance</span>
+          <span>Summary</span>
+        </div>
+      </div>
+      <div class="col-8">
+        <div class="row gap-3">
+          <!-- Present -->
+          <div
+            class="col attendance-summary-box"
+            style="background-color: #00ce0040; color: #28a745; cursor: pointer"
+            (click)="goToReport('present')"
+          >
+            <span style="font-weight: 600"> Present </span>
+            <span class="attendance-no">{{ presentCount }}</span>
+          </div>
+
+          <!-- Late -->
+          <div
+            class="col attendance-summary-box"
+            style="background-color: #ffc10740; color: #ffc107; cursor: pointer"
+            (click)="goToReport('late')"
+          >
+            <span style="font-weight: 600"> Late </span>
+            <span class="attendance-no">{{ lateCount }}</span>
+          </div>
+
+          <!-- On Leave -->
+          <div
+            class="col attendance-summary-box"
+            style="background-color: #17a2b840; color: #17a2b8; cursor: pointer"
+            (click)="goToReport('leave')"
+          >
+            <span style="font-weight: 600"> On leave </span>
+            <span class="attendance-no">{{ onLeaveCount }}</span>
+          </div>
+
+          <!-- On Leave -->
+          <!-- <div
+            class="col attendance-summary-box"
+            style="background-color: #3c8dbc40; color: #3c8dbc"
+          >
+            <span style="font-weight: 600"> On Leave </span>
+            <span class="attendance-no">{{ onLeaveCount }}</span>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Columns -->
+  <div class="row g-2">
+    <!-- Admin Column -->
+    <div *ngIf="role === 'admin'" class="custom-col-lg-55 col-sm-12 mb-3">
+      <!-- Employees on Leave -->
+      <!-- Employees on Leave Today -->
+      <div class="card p-0 shadow-sm border-0 mb-3">
+        <div class="card-body p-0 m-1">
+          <p class="body-title text-center py-1 m-0">
+            Employees on Leave Today
+          </p>
+          <div class="p-2" style="overflow-y: auto; height: 250px">
+            <table class="table leave-table">
+              <thead>
+                <tr>
+                  <th class="text-center leave-header sticky-header">Name</th>
+                  <th class="text-center leave-header sticky-header">
+                    Department
+                  </th>
+                  <th class="text-center leave-header sticky-header">
+                    Start Date
+                  </th>
+                  <th class="text-center leave-header sticky-header">
+                    End Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let emp of employeeLeaveData"
+                  style="background-color: #e5f4f3"
+                >
+                  <td class="text-center">
+                    {{ emp.first_name }} {{ emp.last_name }}
+                  </td>
+                  <td class="text-center">{{ emp.leave_type | titlecase }}</td>
+                  <td class="text-center">{{ emp.start_date }}</td>
+                  <td class="text-center">{{ emp.end_date }}</td>
+                  <!-- <td class="text-center">
+                    <span
+                      [ngClass]="{
+                        'text-success': emp.status === 'Approved',
+                        'text-danger': emp.status !== 'Approved'
+                      }"
+                    >
+                      {{ emp.status }}
+                    </span>
+                  </td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card p-0 shadow-sm border-0">
+        <div class="card-body p-0 m-1">
+          <p class="body-title text-center py-2 m-0">
+            Upcoming Birthdays / Work Anniversaries
+          </p>
+
+          <!-- Scrollable Row -->
+          <div class="d-flex justify-content-center">
+            <div
+              class="p-3 bg-light rounded-4 shadow-sm d-flex flex-column align-items-center text-center"
+              style="min-width: 200px"
+            >
+              <img
+                [src]="image_vibha"
+                class="rounded-circle mb-2"
+                alt="vibha"
+                width="100"
+                height="100"
+              />
+              <h6 class="m-0">Vibha</h6>
+              <small>11-05-1998</small><br />
+              <span class="badge bg-success mt-1">Birthday</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Approvals Column -->
+    <div class="custom-col-lg-27 col-sm-12 mb-3">
+      <div class="p-3 bg-white rounded shadow-sm mb-3">
+        <p class="body-title mb-3 text-center">Approvals Pending</p>
+        <!-- Timesheets -->
+        <div class="d-flex justify-content-between">
+          <span>Timesheets</span>
+          <div class="d-flex align-items-center">
+            <button class="btn btn-sm border-0" (click)="goToTeamSubmission()">
+              <span>{{ approvalPendings.timeSheets }}</span>
+              <span class="ms-2 fs-3">›</span>
+            </button>
+          </div>
+        </div>
+        <!-- Leave Request -->
+        <div class="d-flex justify-content-between">
+          <span>Leave Request</span>
+          <div class="d-flex align-items-center">
+            <button class="btn btn-sm border-0" (click)="goToTeamLeaves()">
+              <span>{{ approvalPendings.leave_request }}</span>
+              <span class="ms-2 fs-3">›</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Leaves Pending Reviewer Approval -->
+        <div class="d-flex justify-content-between">
+          <span>Leaves Pending Reviewer Approval</span>
+          <div class="d-flex align-items-center">
+            <span>{{
+              approvalPendings.leaves_pendings_reviewer_approval
+            }}</span>
+            <button class="btn btn-sm border-0" (click)="goToPendingReviewer()">
+              <span class="ms-2 fs-3">›</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Tasks -->
+      <div class="p-3 bg-white rounded shadow-sm">
+        <p class="body-title text-center mb-3">My Tasks</p>
+
+        <ul class="list-group mb-3" *ngIf="tasks.length > 0">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let task of tasks; let i = index"
+          >
+            <span>{{ task }}</span>
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-outline-primary" (click)="editTask(i)">
+                <i class="bi bi-pencil-fill"></i>
+              </button>
+              <button class="btn btn-outline-danger" (click)="deleteTask(i)">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </div>
+          </li>
+        </ul>
+
+        <div class="d-flex justify-content-end">
+          <button
+            class="btn btn-sm text-white"
+            style="background-color: #009688"
+            (click)="openAddTaskPopup()"
+          >
+            + Add Item
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Late Comers This Month -->
+    <div class="custom-col-lg-27 col-sm-12 mb-3">
+      <div class="d-flex justify-content-center">
+        <div class="bg-white rounded shadow-sm w-100" style="max-width: 400px">
+          <!-- Title -->
+          <p class="text-center fw-bold fs-5 pt-3 mb-3">
+            Late Comers This Month
+          </p>
+
+          <!-- Header Row -->
+          <div
+            class="d-flex justify-content-between fw-semibold px-4 py-2 text-white text-center"
+            style="background-color: #009688"
+          >
+            <div class="w-50">Name</div>
+            <div class="w-50">Count</div>
+          </div>
+
+          <!-- Dynamic Data Rows -->
+          <div
+            class="d-flex justify-content-between px-4 py-2 text-center"
+            *ngFor="let emp of lateComers; let i = index"
+            [ngStyle]="{ 'background-color': i % 2 !== 0 ? '#e6f2f0' : '' }"
+          >
+            <div class="w-50">{{ emp.full_name }}</div>
+            <div class="w-50">{{ emp.late_count }}</div>
+          </div>
+
+          <!-- Empty Row if no data -->
+          <div
+            *ngIf="lateComers.length === 0"
+            class="d-flex justify-content-between px-4 py-2 text-center"
+            style="background-color: #e6f2f0"
+          >
+            <div class="w-50">No Data</div>
+            <div class="w-50">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="userRole !== '1'"
+  class="container-fluid"
+  style="background-color: #ecf0f5; min-height: 100vh; padding-top: 1rem"
+>
+  <div class="row">
+    <!-- Attendance + Team Members Column -->
+    <div class="col-lg-4 col-md-12 mb-3">
+      <!-- Status Card -->
+      <div class="p-3 bg-white rounded shadow-sm mb-3">
+        <!-- Status blocks -->
+        <div
+          *ngIf="attendanceStatus === 'present'"
+          class="p-3 rounded bg-success-subtle d-flex align-items-center gap-3 shadow-sm mb-2"
+        >
+          <i class="bi bi-check-circle-fill text-success fs-3"></i>
+          <div>
+            <div class="fw-semibold text-success">Present</div>
+            <small
+              >Check in Time :- <strong>{{ checkInTime }}</strong></small
+            >
+          </div>
+        </div>
+
+        <div
+          *ngIf="attendanceStatus === 'cheked_out'"
+          class="p-3 rounded bg-success-subtle d-flex align-items-center gap-3 shadow-sm mb-2"
+        >
+          <i class="bi bi-check-circle-fill text-success fs-3"></i>
+          <div>
+            <div class="fw-semibold text-success">Present</div>
+            <small
+              >Check in Time :- <strong>{{ checkInTime }}</strong></small
+            >
+            <br />
+            <small
+              >Check Out Time :- <strong>{{ checkedOutTime }}</strong></small
+            >
+          </div>
+        </div>
+
+        <div
+          *ngIf="attendanceStatus === 'late'"
+          class="p-3 rounded bg-warning-subtle d-flex align-items-center gap-3 shadow-sm mb-2"
+        >
+          <i class="bi bi-exclamation-triangle-fill text-warning fs-3"></i>
+          <div>
+            <div class="fw-semibold text-warning">Late</div>
+            <small
+              >Check in Time :- <strong>{{ checkInTime }}</strong></small
+            >
+          </div>
+        </div>
+
+        <div
+          *ngIf="attendanceStatus === 'not_checked'"
+          class="p-3 rounded bg-info-subtle d-flex align-items-center gap-3 shadow-sm mb-2"
+        >
+          <i class="bi bi-question-circle-fill text-info fs-3"></i>
+          <div>
+            <div class="fw-semibold text-info">Not Checked In Yet</div>
+            <small>Mark your attendance to avoid late mark</small>
+          </div>
+        </div>
+
+        <div
+          *ngIf="attendanceStatus === 'leave'"
+          class="p-3 rounded bg-primary-subtle d-flex align-items-center gap-3 shadow-sm mb-2"
+        >
+          <i class="bi bi-moon-fill text-primary fs-3"></i>
+          <div>
+            <div class="fw-semibold text-primary">You're on Leave Today</div>
+            <small>No attendance required. Enjoy your time off!</small>
+          </div>
+        </div>
+
+        <div
+          *ngIf="attendanceStatus === 'weekly_off'"
+          class="p-3 rounded bg-secondary-subtle d-flex align-items-center gap-3 shadow-sm mb-2"
+        >
+          <i class="bi bi-calendar-x-fill text-secondary fs-3"></i>
+          <div>
+            <div class="fw-semibold text-secondary">It's Your Weekly Off</div>
+            <small>No attendance required today.</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Button Card -->
+      <!-- <div class="p-3 bg-white rounded shadow-sm mb-3">
+        <h5 class="fw-bold text-center mb-3">Mark Attendance</h5>
+        <div class="mt-3 text-center">
+          <button
+            class="btn px-4 py-2"
+            style="background-color: #009688; color: white"
+            (click)="handleClick()"
+          >
+            {{ getButtonLabel() }}
+          </button>
+        </div>
+      </div> -->
+
+      <!-- Team Members on Leave Today -->
+      <div
+        *ngIf="userRole == '2' || userRole == '3'"
+        class="card p-0 shadow-sm border-0 mb-3"
+      >
+        <div class="card-body p-0 m-1">
+          <p class="body-title text-center py-1 m-0">
+            Team Members on Leave Today
+          </p>
+          <div class="p-2" style="overflow-y: auto; height: 250px">
+            <table class="table leave-table">
+              <thead>
+                <tr>
+                  <th class="text-center leave-header sticky-header">Name</th>
+                  <th class="text-center leave-header sticky-header">
+                    Leave Type
+                  </th>
+                  <th class="text-center leave-header sticky-header">
+                    Start Date
+                  </th>
+                  <th class="text-center leave-header sticky-header">
+                    End Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let emp of teamOnLeaveToday; let i = index"
+                  [ngStyle]="{
+                    'background-color': i % 2 === 0 ? '#e5f4f3' : ''
+                  }"
+                >
+                  <td class="text-center">{{ emp.full_name }}</td>
+                  <td class="text-center">{{ emp.leave_type | titlecase }}</td>
+                  <td class="text-center">
+                    {{ emp.from_date | date : "dd/MM/yyyy" }}
+                  </td>
+                  <td class="text-center">
+                    {{ emp.to_date | date : "dd/MM/yyyy" }}
+                  </td>
+                </tr>
+
+                <!-- If no one is on leave -->
+                <tr *ngIf="teamOnLeaveToday.length === 0">
+                  <td colspan="4" class="text-center text-muted">
+                    🎉 No team members are on leave today
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Tasks -->
+    <div class="col-lg-4 col-md-12 mb-3">
+      <div class="p-3 bg-white rounded shadow-sm mb-3">
+        <h5 class="fw-bold text-center mb-3">My Tasks</h5>
+        <ul class="list-group mb-3" *ngIf="tasks.length > 0">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let task of tasks; let i = index"
+          >
+            <span>{{ task.title }}</span>
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-outline-primary" (click)="editTask(i)">
+                <i class="bi bi-pencil-fill"></i>
+              </button>
+              <button class="btn btn-outline-danger" (click)="deleteTask(i)">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </div>
+          </li>
+        </ul>
+        <div class="d-flex justify-content-end">
+          <button
+            class="btn btn-sm"
+            style="background-color: #009688; color: aliceblue"
+            (click)="openAddTaskPopup()"
+          >
+            + Add Item
+          </button>
+        </div>
+      </div>
+      <div
+        *ngIf="userRole == '2' || userRole == '3'"
+        class="custom-col-lg-4 col-sm-12 mb-3"
+      >
+        <div class="p-3 bg-white rounded shadow-sm mb-3">
+          <p class="body-title mb-3 text-center">Approvals Pending</p>
+          <div class="d-flex justify-content-between">
+            <span>Timesheets</span>
+            <div class="d-flex align-items-center">
+              <span>{{ approvalPendings.timeSheets }}</span>
+              <button 
+                class="btn btn-sm border-0"
+                (click)="goToTeamworksummary()"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Leave Request</span>
+            <div class="d-flex align-items-center">
+              <span>{{ approvalPendings.leave_request }}</span>
+              <button 
+                class="btn btn-sm border-0"
+                (click)="goToTeamLeavesteam()"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+          <!-- <div class="d-flex justify-content-between">
+            <span>Leaves Pending Reviewer Approval</span>
+            <div class="d-flex align-items-center">
+              <span>{{
+                approvalPendings.leaves_pendings_reviewer_approval
+              }}</span>
+              <button
+                class="btn btn-sm border-0"
+                (click)="goToTeamworksummary()"
+              >
+                ›
+              </button>
+            </div>
+          </div> -->
+        </div>
+
+        <!-- My Tasks -->
+        <!-- <div class="p-3 bg-white rounded shadow-sm">
+        <p class="body-title text-center mb-3">My Tasks</p>
+
+        <ul class="list-group mb-3" *ngIf="tasks.length > 0">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let task of tasks; let i = index"
+          >
+            <span>{{ task }}</span>
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-outline-primary" (click)="editTask(i)">
+                <i class="bi bi-pencil-fill"></i>
+              </button>
+              <button class="btn btn-outline-danger" (click)="deleteTask(i)">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </div>
+          </li>
+        </ul>
+
+        <div class="d-flex justify-content-end">
+          <button
+            class="btn btn-sm text-white"
+            style="background-color: #009688"
+            (click)="openAddTaskPopup()"
+          >
+            + Add Item
+          </button>
+        </div>
+      </div> -->
+      </div>
+    </div>
+
+    <!-- Winners -->
+    <div class="col-lg-4 col-md-12 mb-3">
+      <div class="bg-white rounded shadow-sm h-70">
+        <h4 class="fw-bold text-center mb-3 px-3 pt-3">
+          🏆 Winners for April 2025 🏆
+        </h4>
+        <hr class="m-0" style="border: 2px solid #009688" />
+        <div
+          class="px-3 py-3 d-flex justify-content-between align-items-center"
+        >
+          <img [src]="image_omm" alt="Leader" />
+          <div class="text-center w-100">
+            <div class="fw-medium">Leader of the Month</div>
+            <div class="fw-bold fs-6">Om Gaikwad</div>
+            <div class="small">Business Analyst / Founder's Office</div>
+          </div>
+        </div>
+        <hr class="m-0" style="border: 2px solid #009688" />
+        <div
+          class="px-3 py-3 d-flex justify-content-between align-items-center"
+        >
+          <img [src]="image_omm" alt="Performer" />
+          <div class="text-center w-100">
+            <div class="fw-medium">Performer of the Month</div>
+            <div class="fw-bold fs-6">Ibrahim Kothari</div>
+            <div class="small">Executive / Graphics Design</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Task Popup -->
+<div
+  *ngIf="showAddTaskPopup"
+  class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+  style="background-color: rgba(0, 0, 0, 0.5); z-index: 1050"
+>
+  <div class="rounded shadow bg-light" style="min-width: 400px">
+    <div
+      class="d-flex justify-content-between align-items-center rounded-top"
+      style="background-color: #009688; padding: 0.75rem 1rem"
+    >
+      <h5 class="text-white m-0">
+        {{ isEditing ? "Update Task" : "Add Task" }}
+      </h5>
+      <img
+        [src]="cross_close_icon"
+        alt="Close"
+        (click)="closeAddTaskPopup()"
+        style="cursor: pointer; width: 16px; height: 16px"
+      />
+    </div>
+    <div class="p-3">
+      <label for="taskTitle" class="form-label fw-semibold"
+        >Task Title <span class="text-danger">*</span></label
+      >
+      <input
+        type="text"
+        class="form-control mb-3"
+        id="taskTitle"
+        placeholder="Enter Task Title"
+        [(ngModel)]="newTaskTitle"
+      />
+      <div class="d-flex justify-content-end gap-2">
+        <button class="btn btn-danger" (click)="closeAddTaskPopup()">
+          Cancel
+        </button>
+        <button class="btn btn-success" (click)="submitTask()">
+          {{ isEditing ? "Update" : "Submit" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Add Task Modal -->
+<div
+  *ngIf="showAddTaskPopup"
+  class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+  style="background-color: rgba(0, 0, 0, 0.5); z-index: 1050"
+>
+  <div class="rounded shadow bg-light" style="min-width: 500px; max-width: 90%">
+    <div
+      class="d-flex justify-content-between align-items-center rounded-top"
+      style="background-color: #009688; padding: 0.75rem 1rem"
+    >
+      <h5 class="text-white m-0">
+        {{ isEditing ? "Update Task" : "Add Task" }}
+      </h5>
+      <img
+        [src]="cross_close_icon"
+        alt="Close"
+        (click)="closeAddTaskPopup()"
+        style="cursor: pointer; width: 16px; height: 16px"
+      />
+    </div>
+    <div class="p-3">
+      <label for="taskTitle" class="form-label fw-semibold">
+        Task Title <span class="text-danger">*</span>
+      </label>
+      <input
+        type="text"
+        class="form-control mb-3"
+        id="taskTitle"
+        placeholder="Enter Task Title"
+        [(ngModel)]="newTaskTitle"
+        name="taskTitle"
+      />
+      <div class="d-flex justify-content-end gap-2">
+        <button class="btn btn-success" (click)="submitTask()">
+          {{ isEditing ? "Update" : "Submit" }}
+        </button>
+        <button class="btn btn-danger" (click)="closeAddTaskPopup()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

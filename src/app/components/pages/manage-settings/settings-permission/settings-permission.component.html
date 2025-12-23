@@ -1,0 +1,267 @@
+<!-- Add Role Header & Button -->
+<div class="my-3">
+  <div
+    class="bg-white rounded shadow-sm px-3 py-3 d-flex justify-content-between align-items-center flex-wrap"
+  >
+    <h5 class="fw-bold mb-0">Role List</h5>
+    <button
+      type="button"
+      class="btn btn-sm mt-2 mt-md-0"
+      style="background-color: #009688; color: #ffffff"
+      data-bs-toggle="modal"
+      data-bs-target="#addRoleModal"
+      (click)="openAddRoleModal()"
+    >
+      Add New Role
+    </button>
+  </div>
+</div>
+
+<!-- Role Cards -->
+<div class="container-fluid px-0">
+  <div class="row">
+    <div class="col-12 col-sm-6 col-lg-4 mb-4" *ngFor="let role of roleList">
+      <div
+        class="bg-white p-3 rounded shadow-sm d-flex flex-column justify-content-between h-100 position-relative"
+      >
+        <div>
+          <h6 class="fw-bold mb-2">{{ role.role_name }}</h6>
+          <a
+            href="#"
+            class="text-decoration-none fw-semibold"
+            style="color: #009688"
+            data-bs-toggle="modal"
+            data-bs-target="#addRoleModal"
+            (click)="openEditRoleModal(role)"
+          >
+            Edit Role
+          </a>
+          <p class="text-muted mb-0 mt-2">
+            Total {{ role.users }} users assigned
+          </p>
+        </div>
+        <img
+          src="{{ copy_regular_1_icon }}"
+          alt="logo"
+          class="position-absolute"
+          style="bottom: 15px; right: 15px; width: 20px; height: 20px"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Table View -->
+<div class="container-fluid px-0">
+  <div
+    class="d-none d-md-flex fw-bold px-3 py-2"
+    style="background-color: #009688; color: white"
+  >
+    <div class="col-1">#</div>
+    <div class="col-2">Role Name</div>
+    <div class="col-4">Modules Assigned</div>
+    <div class="col-2 text-center">Users Assigned</div>
+    <div class="col-2 text-center">Status</div>
+    <div class="col-1 text-center">Edit</div>
+  </div>
+
+  <div
+    *ngFor="let role of fullRoleList; let i = index"
+    class="d-flex flex-column flex-md-row align-items-start align-items-md-center px-3 py-3 border-bottom"
+    [ngStyle]="{ 'background-color': i % 2 === 0 ? '#E5F4F3' : '#FFFFFF' }"
+  >
+    <div class="col-12 col-md-1 fw-semibold mb-2 mb-md-0">{{ i + 1 }}</div>
+    <div class="col-12 col-md-2 fw-semibold mb-2 mb-md-0">
+      {{ role.role_name }}
+    </div>
+
+    <!-- ✅ Show comma-separated module names -->
+    <div class="col-12 col-md-4 small mb-2 mb-md-0">
+      {{ role.moduleNames || "No modules assigned" }}
+    </div>
+
+    <div class="col-12 col-md-2 text-md-center mb-2 mb-md-0">
+      {{ role.users }}
+    </div>
+    <div class="col-12 col-md-2 text-md-center mb-2 mb-md-0">
+      <span
+        [ngClass]="{
+          'text-success fw-semibold': role.status === 'Active',
+          'text-danger fw-semibold': role.status === 'Inactive'
+        }"
+        >{{ role.status }}</span
+      >
+    </div>
+    <div class="col-12 col-md-1 text-md-center">
+      <i
+        class="bi bi-pencil-fill"
+        style="cursor: pointer"
+        data-bs-toggle="modal"
+        data-bs-target="#addRoleModal"
+        (click)="openEditRoleModal(role)"
+      ></i>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="addRoleModal"
+  tabindex="-1"
+  aria-labelledby="addRoleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content custom-modal-content">
+      <!-- Modal Header -->
+      <div
+        class="modal-header px-4 py-3 d-flex justify-content-between align-items-center"
+        style="background-color: #009688; color: #ffffff"
+      >
+        <h5 class="modal-title fw-bold mb-0" id="addRoleModalLabel">
+          {{ modalTitle }}
+        </h5>
+        <img
+          [src]="delete_solid_icon"
+          alt="Close"
+          (click)="closeAddRoleModal()"
+          data-bs-dismiss="modal"
+          style="cursor: pointer; width: 16px; height: 16px"
+        />
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body px-4 py-3">
+        <form (ngSubmit)="saveRole()" #roleForm="ngForm">
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label for="roleName" class="form-label fw-semibold"
+                >Role Name</label
+              >
+              <input
+                type="text"
+                id="roleName"
+                class="form-control"
+                placeholder="Enter Role Name"
+                [(ngModel)]="currentRole.role_name"
+                name="role_name"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="roleStatus" class="form-label fw-semibold"
+                >Role Status</label
+              >
+              <select
+                id="roleStatus"
+                class="form-select"
+                [(ngModel)]="currentRole.is_active"
+                name="is_active"
+                required
+              >
+                <option [ngValue]="true">Active</option>
+                <option [ngValue]="false">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <!-- <div class="col-12">
+              <label for="roleDesc" class="form-label fw-semibold">Role Description</label>
+              <textarea id="roleDesc" class="form-control" placeholder="Enter Role Description"
+                        [(ngModel)]="currentRole.description" name="description" rows="2"></textarea>
+            </div> -->
+          </div>
+
+          <hr />
+
+          <!-- Role Permissions -->
+          <h6 class="fw-bold">Role Permissions</h6>
+          <div class="d-flex flex-wrap align-items-center mb-3 gap-4">
+            <span class="fw-semibold">Administrator Access</span>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="selectAll"
+                (change)="toggleSelectAll($event)"
+              />
+              <label class="form-check-label fw-semibold" for="selectAll"
+                >Select All</label
+              >
+            </div>
+          </div>
+
+          <!-- Permission List -->
+          <div class="table-responsive">
+            <table class="table table-borderless align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>Module</th>
+                  <th>Read</th>
+                  <th>Write</th>
+                  <th>Create</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let module of permissions">
+                  <td class="fw-semibold" style="min-width: 180px">
+                    {{ module.name }}
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        [(ngModel)]="module.read"
+                        [name]="'read_' + module.key"
+                      />
+                      <label class="form-check-label">Read</label>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        [(ngModel)]="module.write"
+                        [name]="'write_' + module.key"
+                      />
+                      <label class="form-check-label">Write</label>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        [(ngModel)]="module.create"
+                        [name]="'create_' + module.key"
+                      />
+                      <label class="form-check-label">Create</label>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer px-4 py-3">
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-success">
+              {{ modalTitle === "Add Role" ? "Add Role" : "Update Role" }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+@import "ngx-toastr/toastr";
+
+/* Hide scrollbar for Chrome, Safari, Edge */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+* {
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for IE, Edge (legacy) */
+* {
+  -ms-overflow-style: none;
+}

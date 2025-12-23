@@ -1,0 +1,51 @@
+.btn-teal {
+  background-color: #008080;
+  border-color: #008080;
+  color: white;
+}
+
+.btn-teal:hover {
+  background-color: #006666;
+  border-color: #006666;
+}
+
+.table-header th {
+  font-weight: 400;
+  background-color: #009688 !important;
+  color: white !important;
+  border-color: #009688 !important;
+  font-size: 16px;
+  text-align: center;
+  vertical-align: middle;
+}
+tbody td {
+  font-size: 16px;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 400;
+  color: #000000;
+}
+.view-report-btn {
+  background-color: #009688;
+  border-color: #009688;
+  color: white;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 400;
+}
+.view-report-btn:hover {
+  background-color: #006666;
+  border-color: #006666;
+}
+.reassign-timesheet-btn {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #ffffff;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 400;
+}
+.reassign-timesheet-btn:hover {
+  background-color: #ffa000;
+  border-color: #ffa000;
+}

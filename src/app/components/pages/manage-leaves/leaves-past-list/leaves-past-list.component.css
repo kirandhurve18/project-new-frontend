@@ -1,0 +1,197 @@
+.btn-teal {
+  background-color: #009688;
+  border-color: #009688;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  outline: none;
+  box-shadow: none;
+}
+
+.btn-white {
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 18px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  outline: none;
+  box-shadow: none;
+}
+
+.btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: inherit !important;
+}
+
+.btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn-teal:hover {
+  background-color: #00796b;
+  border-color: #00796b;
+  transform: translateY(-1px);
+}
+
+.btn-white:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-1px);
+}
+
+tbody tr:nth-child(even) td {
+  background-color: #e5f4f3;
+}
+.table-header th {
+  font-weight: 400;
+  background-color: #009688 !important;
+  color: white !important;
+  border-color: #009688 !important;
+  font-size: 16px;
+  text-align: center;
+  vertical-align: middle;
+}
+tbody td {
+  font-size: 16px;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 400;
+  color: #000000;
+}
+
+.status-button {
+  border-radius: 10px;
+  border: none;
+  padding: 8px 12px;
+  min-height: 32px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: default;
+}
+
+/* Backdrop */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.close-btn {
+  background: red;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+  padding: 4px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Modal body */
+.modal-body {
+  padding: 16px;
+  overflow-y: auto;
+}
+/* ==================== POPUP STYLES ==================== */
+
+/* Modal Container */
+.modal-container {
+  background: #ffffff;
+  border-radius: 8px;
+  width: 420px; /* fixed width for popup */
+  max-width: 80%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  animation: fadeInDown 0.3s ease-out;
+}
+
+/* Modal Header */
+.modal-header {
+  background-color: #009688;
+  color: #fff;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Modal Body (already exists, just ensuring spacing is good) */
+.modal-body {
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* Animation */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1050;
+}
+
+.modal-container {
+  background: #fff;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px; /* Desktop width */
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}

@@ -1,0 +1,3 @@
+.placeholder-danger::placeholder {
+  color: red !important;
+}

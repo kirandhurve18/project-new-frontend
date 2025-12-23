@@ -1,0 +1,135 @@
+<div class="table-responsive">
+  <table class="table table-borderless table-striped align-middle text-center">
+<thead>
+  <tr>
+    <th scope="col" >Sr No</th>
+    <th scope="col">Apply Date</th>
+    <th scope="col">EL</th>
+    <th scope="col">Leave Type</th>
+    <th scope="col">Start Date</th>
+    <th scope="col">End Date</th>
+    <th scope="col">Paid</th>
+    <th scope="col">Unpaid</th>
+    <th scope="col" style="min-width: 90px; white-space: nowrap">Total Days</th>
+    <th scope="col" style="min-width: 150px">Reason</th>
+    <th scope="col">Status</th>
+    <th scope="col">Action</th>
+  </tr>
+</thead>
+
+    <tbody>
+      <tr *ngFor="let leave of leaveData; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ leave.applyDate }}</td>
+        <td>
+          <ng-container *ngIf="leave.el; else noEL">
+            <input type="checkbox" class="form-check-input" checked disabled />
+          </ng-container>
+          <ng-template #noEL>-</ng-template>
+        </td>
+        <td>{{ leave.leaveType }}</td>
+        <td>{{ leave.startDate }}</td>
+        <td>{{ leave.endDate }}</td>
+        <td>{{ leave.paid || "-" }}</td>
+        <td>{{ leave.unpaid || "-" }}</td>
+        <td>{{ leave.totalDays || "-" }}</td>
+        <td
+          class="text-truncate"
+          style="max-width: 150px"
+          title="{{ leave.reason }}"
+        >
+          {{ leave.reason }}
+        </td>
+        <td>
+  <span
+  class="badge rounded-pill px-2 py-1"
+  [ngClass]="{
+    'bg-success': leave.status === 'Approved',
+    'bg-danger': leave.status === 'Rejected',
+    'bg-warning text-dark': leave.status === 'Pending' || leave.status === 'Cancelled'
+  }"
+>
+  {{ leave.status }}
+</span>
+        </td>
+        <td class="d-flex justify-content-center gap-2">
+          <img
+            [src]="view_solid_icon"
+            width="20"
+            height="20"
+            alt="View"
+            class="cursor-pointer"            
+            (click)="openCardFromParent(leave.leave_id)"
+          />
+          <img
+            [src]="delete_solid_icon"
+            width="20"
+            height="20"
+            alt="Delete"
+            class="cursor-pointer"
+            (click)="openDeletePopup(leave)"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div
+  *ngIf="popupVisible"
+  class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+  style="background-color: rgba(0, 0, 0, 0.5); z-index: 1050"
+>
+  <div class="bg-white rounded" style="width: 90%; max-width: 480px">
+    <div
+      class="d-flex justify-content-between align-items-center"
+      style="background-color: #009688; padding: 1.2rem"
+    >
+      <h4 class="text-white mb-0 fw-bold" style="font-size: 24px">
+        Leave Cancellation
+      </h4>
+      <img
+        [src]="delete_solid_icon"
+        alt="Close"
+        (click)="closePopup()"
+        style="width: 20px; height: 20px; cursor: pointer"
+      />
+    </div>
+
+    <div class="p-4 pt-3 pb-4">
+      <p class="fw-semibold" style="font-size: 16px">
+        Are you sure you want to cancel your leave request from
+        <strong>{{ leaveToDelete?.startDate }}</strong> to
+        <strong>{{ leaveToDelete?.endDate }}</strong
+        >?
+      </p>
+      <p class="text-muted mb-4" style="font-size: 14px">
+        This action cannot be undone once the leave is cancelled.
+      </p>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button
+          class="btn px-4 py-2 text-white"
+          style="background-color: #6c757d"
+          (click)="closePopup()"
+        >
+          No, Go Back
+        </button>
+        <button
+          class="btn px-4 py-2 text-white"
+          style="background-color: #009688"
+          (click)="confirmDeleteLeave()"
+        >
+          Yes, Cancel Leave
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- No Leave Data -->
+<ng-template #noLeaves>
+  <div class="text-muted text-center py-3">No leave applications found.</div>
+</ng-template>
+
+<app-leave-card [isOpen]="cardOpen"></app-leave-card>

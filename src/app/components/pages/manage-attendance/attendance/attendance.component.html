@@ -1,0 +1,208 @@
+<div class="container-fluid px-3">
+  <div class="row">
+    <div class="col-12 mt-3">
+      <div class="bg-white rounded shadow-sm p-3">
+        <h5 class="fw-bold mb-0">Attendance Module</h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    <div class="col-12 col-md-4 mb-4 d-flex">
+      <div class="card shadow-sm w-100" style="max-width: 720px; height: 526px">
+        <div class="container my-4">
+          <div class="row justify-content-center">
+            <div class="col-12 col-md-11 col-lg-11">
+              <div class="card shadow rounded">
+                <div class="card-body d-flex flex-column align-items-center">
+                  <h5 class="card-title mb-4">Mark Attendance</h5>
+                  <button
+                    class="btn"
+                    style="background-color: #009688; color: white"
+                    [ngClass]="{
+                      'btn-d-d-sm-block': !checkedIn,
+                      'btn-d-lg-block': checkedIn && !checkedOut
+                    }"
+                    (click)="handleClick()"
+                  >
+                    {{ getButtonLabel() }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table
+            class="table table-bordered text-center align-middle"
+            style="width: 90%; max-width: 460px; background-color: aliceblue"
+          >
+            <tbody>
+              <tr>
+                <td>Check In Date</td>
+                <td>{{ checkInDate }}</td>
+              </tr>
+              <tr>
+                <td>Check In Time</td>
+                <td>{{ checkInTime }}</td>
+              </tr>
+              <tr>
+                <td>Check Out Date</td>
+                <td>{{ checkOutDate }}</td>
+              </tr>
+              <tr>
+                <td>Check Out Time</td>
+                <td>{{ checkedOutTime }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-8 mb-4 d-flex">
+      <div class="card shadow-sm w-100" style="max-width: 854px; height: 800px">
+        <div class="card-body">
+          <h5 class="card-title">Monthly Attendance</h5>
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <button class="btn" (click)="previousMonth()">
+              <img
+                [src]="arrow_left_icon"
+                alt="Previous"
+                width="30"
+                height="30"
+              />
+            </button>
+            <h5 class="mb-0">{{ viewDate | date : "MMMM yyyy" }}</h5>
+            <button class="btn" (click)="nextMonth()">
+              <img [src]="arrow_right_icon" alt="Next" width="30" height="30" />
+            </button>
+          </div>
+
+          <mwl-calendar-month-view
+            [viewDate]="viewDate"
+            [events]="events"
+            [refresh]="refresh"
+            [cellTemplate]="customCellTemplate"
+          ></mwl-calendar-month-view>
+          <ng-template #customCellTemplate let-day="day">
+            <div
+              class="cal-cell d-flex flex-column justify-content-start align-items-center p-1"
+              [ngClass]="{ faded: !day.inMonth }"
+              style="height: 100%; width: 100%"
+            >
+              <div class="day-number mb-1 fw-bold">
+                {{ day.date.getDate() }}
+              </div>
+
+              <ng-container *ngIf="isWeekend(day.date)">
+                <span
+                  class="badge bg-secondary text-white px-3 py-1 rounded-pill mt-1"
+                >
+                  Week Off
+                </span>
+              </ng-container>
+
+              <ng-container *ngIf="!isWeekend(day.date) && day.inMonth">
+                <ng-container
+                  *ngIf="attendanceMap[getDateKey(day.date)] as att"
+                >
+                  <div
+                    *ngIf="att.checkin_time && att.checkout_time"
+                    class="text-center"
+                    style="font-size: 10px; white-space: nowrap"
+                  >
+                    <span class="fw-bold text-success">
+                      {{ att.checkin_time }}
+                    </span>
+                    <span class="fw-bold text-dark">
+                      | {{ att.checkout_time }}
+                    </span>
+                  </div>
+
+                  <span
+                    *ngIf="att.attendance_status === 7"
+                    class="badge bg-info text-white px-3 py-1 rounded-pill mt-2"
+                  >
+                    On Leave
+                  </span>
+                  <span
+                    *ngIf="att.attendance_status === 1"
+                    class="badge bg-success text-white px-3 py-1 rounded-pill mt-2"
+                  >
+                    Present
+                  </span>
+
+                  <!-- Timesheet -->
+                  <span
+                    *ngIf="att.submitStatus === 1"
+                    class="badge bg-purple text-white rounded-pill mt-2"
+                    style="
+                      font-size: 10px;
+                      padding: 2px 8px;
+                      white-space: nowrap;
+                    "
+                  >
+                    Save
+                  </span>
+                  <span
+                    *ngIf="att.submitStatus === 2"
+                    class="badge bg-purple text-white rounded-pill mt-2"
+                    style="
+                      font-size: 10px;
+                      padding: 2px 8px;
+                      white-space: nowrap;
+                    "
+                  >
+                    Submitted
+                  </span>
+                  <span
+                    *ngIf="att.submitStatus === 3"
+                    class="badge bg-purple text-white rounded-pill mt-2"
+                    style="
+                      font-size: 10px;
+                      padding: 2px 8px;
+                      white-space: nowrap;
+                    "
+                  >
+                    Approved
+                  </span>
+                  <span
+                    *ngIf="att.submitStatus === 4"
+                    class="badge bg-purple text-white rounded-pill mt-2"
+                    style="
+                      font-size: 10px;
+                      padding: 2px 8px;
+                      white-space: nowrap;
+                    "
+                  >
+                    Rejected
+                  </span>
+                  <span
+                    *ngIf="att.submitStatus === 4"
+                    class="badge bg-purple text-white rounded-pill mt-2"
+                    style="
+                      font-size: 10px;
+                      padding: 2px 8px;
+                      white-space: nowrap;
+                    "
+                  >
+                    Reassign
+                  </span>
+                  <span
+                    *ngIf="att.submitStatus === 0"
+                    class="badge bg-light text-muted px-3 py-1 rounded-pill mt-2"
+                  >
+                    Not Submitted
+                  </span>
+                </ng-container>
+              </ng-container>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

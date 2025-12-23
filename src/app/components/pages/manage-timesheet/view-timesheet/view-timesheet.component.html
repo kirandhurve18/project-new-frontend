@@ -1,0 +1,213 @@
+<div class="container-fluid my-3">
+  <!-- Header -->
+  <div class="bg-white rounded shadow-sm px-3 py-2">
+    <h5 class="fw-bold mb-0">View Past Timesheet</h5>
+  </div>
+</div>
+
+<!-- Date Selection -->
+<div class="container-fluid my-3">
+  <div
+    class="bg-white rounded shadow-sm px-3 py-2 d-flex flex-wrap justify-content-between align-items-center gap-2"
+  >
+    <h6 class="fw-bold mb-0 me-3">Check Work Report</h6>
+    <div class="d-flex align-items-center gap-2 ms-auto flex-wrap">
+      <input
+        type="date"
+        id="selectedDate"
+        [(ngModel)]="selectedDate"
+        class="form-control form-control-sm"
+        style="width: auto; min-width: 150px"
+      />
+      <label for="selectedDate" class="btn" style="border: 0.5px solid #d9d9d9"
+        >Select Date</label
+      >
+
+      <button
+        class="btn btn-sm text-white"
+        style="background-color: #009688"
+        (click)="getWorkHistory(selectedDate)"
+      >
+        Get Work Report Status
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Work Report -->
+<div
+  *ngIf="workReport"
+  class="container-fluid my-3 bg-white rounded shadow-sm px-3 py-2"
+>
+  <div
+    class="d-flex flex-wrap align-items-center justify-content-between border-bottom pb-2"
+  >
+    <h6 class="fw-bold mb-0">My Work Report</h6>
+  </div>
+
+  <div class="bg-light p-3"></div>
+
+  <!-- Summary Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-sm text-center align-middle">
+      <thead>
+        <tr>
+          <th style="background-color: #009688; color: white">Year</th>
+          <th style="background-color: #009688; color: white">Month</th>
+          <th style="background-color: #009688; color: white">Date</th>
+          <th style="background-color: #009688; color: white">Day</th>
+          <th style="background-color: #009688; color: white">Weekend</th>
+          <th style="background-color: #009688; color: white">Start Time</th>
+          <th style="background-color: #009688; color: white">Regular Hours</th>
+          <th style="background-color: #009688; color: white">Break Hours</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ workReport.year }}</td>
+          <td>{{ workReport.month }}</td>
+          <td>{{ workReport.date }}</td>
+          <td>{{ workReport.day }}</td>
+          <td>{{ workReport.weekend }}</td>
+          <td>{{ workReport.startTime }}</td>
+          <td>{{ workReport.regularHours }}</td>
+          <td>{{ workReport.breakHours }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Employee Info -->
+  <div class="mt-2 text-center">
+    <div class="d-inline-block align-middle text-wrap">
+      <strong style="color: #009688">Employee Name:</strong>
+      {{ workReport.employeeName }} |
+      <strong style="color: #009688">Department:</strong>
+      {{ workReport.department }} |
+      <strong style="color: #009688">Team Lead:</strong>
+      {{ workReport.teamLead }}
+    </div>
+  </div>
+
+  <div class="bg-light p-3"></div>
+
+  <!-- Time Slots -->
+  <div class="mb-3">
+    <div class="border rounded overflow-auto">
+      <div class="table-responsive">
+        <table class="table table-bordered m-0 text-center align-middle">
+          <thead class="text-white fw-bold" style="background-color: #009688">
+            <tr>
+              <th style="width: 12.5%">Start Time</th>
+              <th style="width: 12.5%">End Time</th>
+              <th style="width: 75%">Activities</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of workReport.workLogs">
+              <td>{{ log.startTime }}</td>
+              <td>{{ log.endTime }}</td>
+              <td>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  [value]="log.task"
+                  readonly
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid my-3">
+  <div class="row">
+    <!-- Left column: Status Badges (6 columns on md and up) -->
+    <div class="col-12 col-md-6">
+      <div class="row mt-4">
+        <div *ngIf="['0'].includes(submitStatus)" class="col-12 mb-2">
+          <div class="card shadow-sm text-center h-100">
+            <div class="card-header text-white fw-bold" style="background: #009688">Status</div>
+            <div class="card-body p-2">Not Submitted</div>
+          </div>
+        </div>
+        <div *ngIf="['1'].includes(submitStatus)" class="col-12 mb-2">
+          <div class="card shadow-sm text-center h-100">
+            <div class="card-header text-white fw-bold" style="background: #009688">Status</div>
+            <div class="card-body p-2">Saved</div>
+          </div>
+        </div>
+        <div *ngIf="['2'].includes(submitStatus)" class="col-12 mb-2">
+          <div class="card shadow-sm text-center h-100">
+            <div class="card-header text-white fw-bold" style="background: #009688">Status</div>
+            <div class="card-body p-2">Submitted</div>
+          </div>
+        </div>
+        <div *ngIf="['3'].includes(submitStatus)" class="col-12 mb-2">
+          <div class="card shadow-sm text-center h-100">
+            <div class="card-header text-white fw-bold" style="background: #009688">Status</div>
+            <div class="card-body p-2">Approved</div>
+          </div>
+        </div>
+        <div *ngIf="['4'].includes(submitStatus)" class="col-12 mb-2">
+          <div class="card shadow-sm text-center h-100">
+            <div class="card-header text-white fw-bold" style="background: #009688">Status</div>
+            <div class="card-body p-2">Rejected</div>
+          </div>
+        </div>
+        <div *ngIf="['5'].includes(submitStatus)" class="col-12 mb-2">
+          <div class="card shadow-sm text-center h-100">
+            <div class="card-header text-white fw-bold" style="background: #009688">Status</div>
+            <div class="card-body p-2">Reassign</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column: Approve/Reject Section (6 columns on md and up) -->
+    <div class="col-12 col-md-6" *ngIf="(userRole == '1' || userRole == '2' || userRole == '3') && update_status">
+      <div class="bg-white rounded shadow-sm px-3 py-3">
+        <h6 class="fw-bold mb-3">Submit Report Status</h6>
+
+        <!-- Status/Remarks Table -->
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle mb-3">
+            <tbody>
+              <tr>
+                <td class="fw-bold text-center bg-light">Status</td>
+                <td>
+                  <select class="form-select form-select" [(ngModel)]="reportStatus">
+                    <option value="">Select Status</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </td>
+              </tr>
+              <tr *ngIf="reportStatus === 'Rejected'">
+                <td class="fw-bold text-center bg-light">Remarks</td>
+                <td>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [(ngModel)]="remarks"
+                    placeholder="Enter remarks (optional)"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-end">
+          <button class="btn btn-sm text-white" style="background-color: #009688" (click)="submitReportStatus()">
+            Submit Report Status
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

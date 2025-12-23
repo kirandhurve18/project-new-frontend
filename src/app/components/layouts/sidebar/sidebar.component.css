@@ -1,0 +1,135 @@
+/* Sidebar wrapper base */
+.sidebar-wrapper {
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 100px); /* adjust for header */
+
+  transition: width 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap; /* prevents items wrapping when width shrinks */
+}
+
+/* Open state */
+.sidebar-wrapper.open {
+  width: 250px;
+}
+
+/* Collapsed state */
+.sidebar-wrapper.collapsed {
+  width: 0;
+  padding: 0;
+  border: none;
+}
+
+/* Active Link */
+.active-link {
+  color: white !important;
+  font-weight: 600;
+  background-color: transparent;
+}
+
+.active-link img {
+  filter: brightness(0) invert(1);
+}
+
+/* Highlight Bar */
+.highlight-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-color: #009688;
+  z-index: -1;
+  border-radius: 0;
+}
+
+/* Mobile: overlay drawer */
+@media (max-width: 767px) {
+  .sidebar-wrapper {
+    position: absolute;
+    top: 100px; /* header height */
+    left: 0;
+    height: calc(100vh - 100px);
+    z-index: 1050;
+  }
+}
+
+/* Theme Colors */
+.bg-teal {
+  background-color: #009688;
+}
+
+.bg-light-teal {
+  background-color: #e5f4f3;
+}
+
+/* Navbar */
+.navbar-brand {
+  margin-right: auto;
+}
+
+/* Main Layout */
+.main-wrapper {
+  display: flex;
+  min-height: calc(100vh - 100px - 50px);
+}
+
+.sidebar {
+  width: 0px;
+  min-width: 250px;
+  min-height: calc(100vh - 100px - 50px);
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}
+
+/* Center content in sidebar items */
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding-left: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.main-content {
+  flex-grow: 1;
+  width: calc(100% - 250px);
+  min-height: calc(100vh - 100px - 50px);
+  overflow-x: hidden;
+}
+
+.content-area {
+  background-color: #ecf0f5;
+  padding: 1rem;
+}
+
+/* Sidebar Items */
+.nav-item {
+  width: 100%;
+  height: 50px;
+  position: relative;
+}
+
+.sidebar-icon {
+  margin-right: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .sidebar {
+    width: 0px;
+    position: absolute;
+    z-index: 1040;
+    background-color: #e0f7fa;
+  }
+
+  .main-content {
+    width: 100% !important;
+  }
+
+  .highlight-bar {
+    width: 100%;
+  }
+}

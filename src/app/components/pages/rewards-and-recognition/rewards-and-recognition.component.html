@@ -1,0 +1,346 @@
+<div class="container-fluid px-3">
+  <!-- Rewards & Recognition Header -->
+  <div class="row">
+    <div class="col-12 mt-3">
+      <div
+        class="bg-white rounded shadow-sm px-3 py-3 d-flex justify-content-between align-items-center flex-wrap"
+      >
+        <!-- Left Title -->
+        <h5 class="fw-bold mb-0">Rewards & Recognition</h5>
+
+        <!-- Right Controls -->
+        <div class="d-flex gap-2">
+          <!-- Dropdown -->
+          <div class="dropdown">
+            <button
+              class="btn btn-light dropdown-toggle"
+              type="button"
+              id="winnersDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Monthly Winners
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="winnersDropdown">
+              <li><a class="dropdown-item" href="#">Monthly Winners</a></li>
+              <li><a class="dropdown-item" href="#">Quarterly Winners</a></li>
+              <li><a class="dropdown-item" href="#">Yearly Winners</a></li>
+              <li><a class="dropdown-item" href="#">Iconic Winners</a></li>
+            </ul>
+          </div>
+
+          <!-- Add Winners Button -->
+          <button *ngIf="userRole == '1'"
+            class="btn btn-teal text-white"
+            data-bs-toggle="modal"
+            data-bs-target="#addWinnerModal"
+          >
+            Add Winners
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Winner Modal -->
+  <div
+    class="modal fade"
+    id="addWinnerModal"
+    tabindex="-1"
+    aria-labelledby="addWinnerModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div
+          class="modal-header"
+          style="background-color: #009688; color: white"
+        >
+          <h5 class="modal-title" id="addWinnerModalLabel">Add Winner</h5>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body">
+          <form>
+            <div class="mb-3 row">
+              <label class="col-sm-4 col-form-label">Employee Name :</label>
+              <div class="col-sm-8">
+                <select class="form-select">
+                  <option selected>Select Employee Name</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label class="col-sm-4 col-form-label"
+                >Employee Designation :</label
+              >
+              <div class="col-sm-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Employee Designation"
+                  readonly
+                  style="background-color: #e8f5f5"
+                />
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label class="col-sm-4 col-form-label"
+                >Employee Department :</label
+              >
+              <div class="col-sm-8">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Employee Department"
+                  readonly
+                  style="background-color: #e8f5f5"
+                />
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label class="col-sm-4 col-form-label">RNR Category :</label>
+              <div class="col-sm-8">
+                <select class="form-select">
+                  <option selected>Select Reward Category</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label class="col-sm-4 col-form-label"
+                >Upload Employee Image :</label
+              >
+              <div class="col-sm-8">
+                <input type="file" class="form-control" />
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-success">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4 gx-4">
+    <div class="col-12 col-lg-8 mb-4">
+      <div
+        class="card shadow-sm rounded p-4 mb-4 w-100"
+        style="min-height: 310px; max-width: 1046px"
+      >
+        <div class="card-body d-flex flex-column justify-content-center h-100">
+          <!-- Header with title and View All button -->
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold mb-0">Leader of the Month</h5>
+            <!-- <a href="#" class="btn btn-sm btn-outline-primary">View All</a> -->
+          </div>
+
+          <!-- Cards section -->
+          <div
+            class="d-flex flex-wrap gap-4 justify-content-start align-items-start"
+          >
+            <!-- Who's Next -->
+            <div class="text-center">
+              <div
+                class="border border-2 rounded-3 p-2"
+                style="width: 120px; height: 120px"
+              >
+                <img
+                  src="next.svg"
+                  alt="Who's Next"
+                  class="img-fluid rounded"
+                  style="height: 100%; object-fit: cover"
+                />
+              </div>
+              <div class="mt-2 fw-bold">Who’s Next ?</div>
+              <div class="text-muted small">Jul 2025</div>
+            </div>
+
+            <!-- Om Gaikwad -->
+            <div class="text-center">
+              <div
+                class="border border-2 border-teal rounded-3 p-2"
+                style="width: 120px; height: 120px"
+              >
+                <img
+                  src="om.svg"
+                  alt="Om Gaikwad"
+                  class="img-fluid rounded"
+                  style="height: 100%; object-fit: cover"
+                />
+              </div>
+              <div class="mt-2 fw-bold">Om Gaikwad</div>
+              <div class="small text-muted">
+                Business Analyst/<br />Founder's Office
+              </div>
+              <div class="text-muted small">Apr 2025</div>
+            </div>
+
+            <!-- Alish Verma -->
+            <div class="text-center">
+              <div
+                class="border border-2 border-teal rounded-3 p-2"
+                style="width: 120px; height: 120px"
+              >
+                <img
+                  src="alish.svg"
+                  alt="Alish Verma"
+                  class="img-fluid rounded"
+                  style="height: 100%; object-fit: cover"
+                />
+              </div>
+              <div class="mt-2 fw-bold">Alish Verma</div>
+              <div class="small text-muted">
+                Associate Manager -<br />Customer Support
+              </div>
+              <div class="text-muted small">Mar 2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="card shadow-sm rounded p-4 w-100"
+        style="min-height: 310px; max-width: 1046px"
+      >
+        <div class="card-body d-flex flex-column justify-content-center h-100">
+          <h5 class="fw-bold mb-4">Performer of the Month</h5>
+
+          <div
+            class="d-flex flex-wrap gap-4 justify-content-start align-items-start"
+          >
+            <div class="text-center">
+              <div
+                class="border border-2 rounded-3 p-2"
+                style="width: 120px; height: 120px"
+              >
+                <img
+                  src="next.svg"
+                  alt="Who's Next"
+                  class="img-fluid rounded"
+                  style="height: 100%; object-fit: cover"
+                />
+              </div>
+              <div class="mt-2 fw-bold">Who’s Next ?</div>
+              <div class="text-muted small">Jun 2025</div>
+            </div>
+
+            <div class="text-center">
+              <div
+                class="border border-2 border-teal rounded-3 p-2"
+                style="width: 120px; height: 120px"
+              >
+                <img
+                  src="ruchi.svg"
+                  alt="Om Gaikwad"
+                  class="img-fluid rounded"
+                  style="height: 100%; object-fit: cover"
+                />
+              </div>
+              <div class="mt-2 fw-bold">ruchi</div>
+              <div class="small text-muted">Executive</div>
+              <div class="text-muted small">Feb 2025</div>
+            </div>
+
+            <div class="text-center">
+              <div
+                class="border border-2 border-teal rounded-3 p-2"
+                style="width: 120px; height: 120px"
+              >
+                <img
+                  src="shrikant.svg"
+                  alt="shrikant"
+                  class="img-fluid rounded"
+                  style="height: 100%; object-fit: cover"
+                />
+              </div>
+              <div class="mt-2 fw-bold">Shrikant Jawade</div>
+              <div class="small text-muted">
+                Associate Manager -<br />Buisness Development
+              </div>
+              <div class="text-muted small">Mar 2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4 mb-4">
+      <div
+        class="card shadow-sm rounded p-4 w-100"
+        style="min-height: 662px; max-width: 540px"
+      >
+        <div class="card-body d-flex flex-column justify-content-between h-100">
+          <div>
+            <div class="text-center mb-4">
+              <h5 class="fw-bold">🏆 Winners for May 2025 🏆</h5>
+            </div>
+
+            <div
+              class="text-center mb-4 p-3 rounded"
+              style="background-image: url('back.png'); background-size: cover"
+            >
+              <h6 class="fw-bold text-danger mb-3">Leader of the Month</h6>
+              <div class="d-flex justify-content-center mb-2">
+                <div
+                  class="rounded-circle overflow-hidden border border-warning border-3"
+                  style="width: 100px; height: 100px"
+                >
+                  <img
+                    src="Group 5.png"
+                    alt="tejas Manjarkar"
+                    class="img-fluid"
+                    style="object-fit: cover; width: 100%; height: 100%"
+                  />
+                </div>
+              </div>
+
+              <p class="text-muted small mb-0">Software Tester /</p>
+              <p class="text-muted small">Tech Team</p>
+            </div>
+            <hr />
+            <div
+              class="text-center p-3 rounded"
+              style="background-image: url('back.png'); background-size: cover"
+            >
+              <h6 class="fw-bold text-danger mb-3">Performer of the Month</h6>
+              <div class="d-flex justify-content-center mb-2">
+                <div
+                  class="rounded-circle overflow-hidden border border-warning border-3"
+                  style="width: 100px; height: 100px"
+                >
+                  <img
+                    src="vibha.svg"
+                    alt="Vibha Shinde"
+                    class="img-fluid"
+                    style="object-fit: cover; width: 100%; height: 100%"
+                  />
+                </div>
+              </div>
+
+              <p class="text-muted small mb-0">
+                Executive (EIII) – Human Resources
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

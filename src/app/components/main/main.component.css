@@ -1,0 +1,24 @@
+.main-wrapper {
+  min-height: calc(100vh - 100px); /* 100px is header height */
+}
+
+.sidebar-wrapper {
+  width: 250px; /* fixed width sidebar */
+  transition: all 0.3s ease;
+}
+
+/* When sidebar is hidden */
+.sidebar-wrapper.open {
+  /* display: none !important; */
+}
+/* When sidebar is hidden */
+.sidebar-wrapper.collapsed {
+  display: none !important;
+}
+
+/* Main content */
+.content-wrapper {
+  padding: 20px;
+  background-color: #ecf0f5;
+  min-height: calc(100vh - 100px);
+}

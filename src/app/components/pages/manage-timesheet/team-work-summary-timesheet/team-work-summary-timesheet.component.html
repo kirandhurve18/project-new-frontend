@@ -1,0 +1,137 @@
+<div class="container-fluid my-3">
+  <!-- Header -->
+  <div class="bg-white rounded shadow-sm px-3 py-3 mb-3">
+    <h5 class="fw-bold mb-0">Team Member Timesheet History</h5>
+  </div>
+
+  <!-- Filters -->
+  <div
+    class="bg-white rounded shadow-sm px-3 py-3 mb-3 d-flex flex-wrap align-items-end gap-3"
+  >
+    <!-- Employee Select -->
+    <div>
+      <label class="form-label fw-semibold">Select Employee</label>
+      <select class="form-select" [(ngModel)]="selectedEmployeeId">
+        <option *ngFor="let emp of employees" [value]="emp._id">
+          {{ emp.name }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Date Range -->
+    <div>
+      <label class="form-label fw-semibold">From</label>
+      <input type="date" class="form-control" [(ngModel)]="fromDate" />
+    </div>
+    <div>
+      <label class="form-label fw-semibold">To</label>
+      <input type="date" class="form-control" [(ngModel)]="toDate" />
+    </div>
+
+    <!-- Button -->
+    <div>
+      <button class="btn btn-success" (click)="getReportStatus()">
+        Get Work Report Status
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-responsive bg-white rounded shadow-sm p-3">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div>
+        <label>
+          Show
+          <select
+            class="form-select d-inline w-auto mx-1"
+            [(ngModel)]="entriesToShow"
+          >
+            <option *ngFor="let opt of entriesOptions" [value]="opt">
+              {{ opt }}
+            </option>
+          </select>
+          entries
+        </label>
+      </div>
+      <div>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search"
+          [(ngModel)]="searchTerm"
+        />
+      </div>
+    </div>
+
+    <table class="table table-bordered table-hover align-middle text-center">
+      <thead class="table-success">
+        <tr>
+          <th>Sr. No.</th>
+          <th>Team Member Name</th>
+          <th>Report Date</th>
+          <th>Report Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let row of filteredData | slice : 0 : entriesToShow;
+            let i = index
+          "
+        >
+          <td>{{ i + 1 }}</td>
+          <td>{{ row.employeeName }}</td>
+          <td>{{ row.reportDate | date : "dd-MMM-yyyy" }}</td>
+          <td>
+            <span
+              class="badge px-3 py-2 rounded-pill"
+              [ngClass]="{
+                'text-success': row.status === 'Approved',
+                'text-warning': row.status === 'Not Submitted',
+                'text-primary':
+                  row.status === 'Save' || row.status === 'Final Submitted',
+                'text-danger': row.status === 'Rejected',
+                'text-info': row.status === 'Reassigned',
+                'text-secondary': row.status === 'N/A'
+              }"
+            >
+              {{ row.status }}
+            </span>
+          </td>
+
+          <td>
+            <button
+              class="btn btn-sm btn-primary me-2"
+              (click)="viewReport(row)"
+            >
+              View Report
+            </button>
+            <button
+              class="btn btn-sm btn-warning text-white"
+              (click)="reassignTimesheet(row)"
+            >
+              Reassign Timesheet
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredData.length === 0">
+          <td colspan="5" class="text-center text-muted">No records found</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination Info -->
+    <div class="d-flex justify-content-between mt-2">
+      <small>
+        Showing 1 to
+        {{
+          filteredData.length < entriesToShow
+            ? filteredData.length
+            : entriesToShow
+        }}
+        of {{ filteredData.length }} entries
+      </small>
+    </div>
+  </div>
+</div>

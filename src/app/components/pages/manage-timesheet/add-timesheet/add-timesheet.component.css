@@ -1,0 +1,42 @@
+.time-log-table {
+  position: relative;
+}
+
+.header-row {
+  background-color: #009688;
+}
+
+.col {
+  /* Using fixed width percentages matching your original layout */
+  /* col-1 = 12.5% (approx) and col-10 = 75% */
+  /* You can adjust if needed */
+  text-align: center;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
+.col-1 {
+  width: 12.5%;
+}
+
+.col-10 {
+  width: 75%;
+}
+
+/* Vertical lines */
+.vertical-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #ccc;
+  z-index: 10;
+}
+
+.line-1 {
+  left: 12.5%; /* after first column */
+}
+
+.line-2 {
+  left: 25%; /* after second column (12.5% + 12.5%) */
+}

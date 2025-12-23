@@ -1,0 +1,208 @@
+<div class="container-fluid">
+  <!-- Header -->
+  <div class="container-fluid my-3">
+    <div
+      class="bg-white rounded shadow-sm px-3 py-3 d-flex justify-content-between align-items-center flex-wrap"
+    >
+      <h5 class="fw-bold mb-0">Remote Work Agreement</h5>
+    </div>
+  </div>
+
+  <!-- Effective Date -->
+  <div class="container-fluid mb-3">
+    <div class="bg-white rounded shadow-sm px-3 py-2">
+      <p class="mb-0 fw-semibold">Effective Date: 01/01/2026</p>
+    </div>
+  </div>
+
+  <!-- Agreement Content -->
+  <div class="container-fluid">
+    <div class="bg-white rounded shadow-sm p-4">
+      <!-- Background -->
+      <h6 class="fw-bold">BACKGROUND</h6>
+      <ol type="a">
+        <li>
+          The purpose of this Policy is to outline the policy guidelines and
+          eligibility requirements regarding Remote Work applicable for all the
+          Employees of the Destek Infosolutions Pvt. Ltd.
+        </li>
+        <li>
+          Remote Work allows Employees to work in their own home or in a
+          satellite location for all their work assigned by the Company.
+        </li>
+        <li>
+          This Policy is applicable for both the temporary and permanent Remote
+          Work assigned to any Employees of the Company.
+        </li>
+        <li>
+          All Employees are responsible for understanding and adhering to this
+          Policy.
+        </li>
+      </ol>
+
+      <!-- Eligibility -->
+      <h6 class="fw-bold mt-4">ELIGIBILITY</h6>
+      <ol type="a">
+        <li>
+          Before entering into any Remote Work Agreement, the Employee and
+          manager/supervisor will evaluate the suitability.
+        </li>
+        <li>
+          The Employee and the Company will discuss the job responsibilities and
+          determine if the job is appropriate.
+        </li>
+        <li>
+          The Company will approve the Remote Work on an ad hoc or regular basis
+          as suitable.
+        </li>
+        <li>
+          Such approval will be reviewed in terms of cost, security, safety,
+          communication, and reporting.
+        </li>
+        <li>
+          Remote Work will be subject to continuing approval of the Company.
+        </li>
+      </ol>
+
+      <!-- Compensation -->
+      <h6 class="fw-bold mt-4">COMPENSATION AND BENEFITS</h6>
+      <ol type="a">
+        <li>
+          The compensation of the Employee while working remotely will be as per
+          the terms of the Employment Agreement.
+        </li>
+      </ol>
+
+      <!-- Schedule -->
+      <h6 class="fw-bold mt-4">SCHEDULE</h6>
+      <ol type="a">
+        <li>
+          Employees must ensure availability over telephone, email and other
+          messenger applications during working hours.
+        </li>
+        <li>
+          Employees are required to record all hours worked in the Timesheets on
+          the Employee Portal by 11:00 pm daily.
+        </li>
+      </ol>
+
+      <!-- Employee Obligations -->
+      <h6 class="fw-bold mt-4">EMPLOYEE OBLIGATIONS</h6>
+      <ol type="a">
+        <li>
+          Employees shall adhere to the following rules while working remotely.
+        </li>
+        <li>
+          Employee must establish an appropriate work environment. Company is
+          not responsible for setup costs.
+        </li>
+        <li>Employees must maintain productivity and performance.</li>
+        <li>
+          Employees must not use Company confidential information outside unless
+          authorized.
+        </li>
+        <li>
+          Employees must maintain proper internet connection and safe workspace.
+        </li>
+        <li>Company may require Employee to return to office at any time.</li>
+      </ol>
+
+      <!-- Equipment -->
+      <h6 class="fw-bold mt-4">EQUIPMENT MANAGEMENT</h6>
+      <ol type="a">
+        <li>
+          Company will determine the equipment required (hardware, software,
+          modems, phone, office equipment).
+        </li>
+        <li>
+          Equipment provided remains property of the Company. Employee must
+          maintain and return it.
+        </li>
+        <li>
+          Employee must protect Company equipment and data from theft or damage.
+        </li>
+      </ol>
+
+      <!-- Performance Reviews -->
+      <h6 class="fw-bold mt-4">PERFORMANCE REVIEWS AND REPORTING</h6>
+      <ol type="a">
+        <li>
+          Employees will report to Managers daily by submitting a daily report
+          via the Company Portal.
+        </li>
+        <li>
+          Employees may also be asked to report directly to the CEO via
+          Video/Audio conference.
+        </li>
+      </ol>
+
+      <!-- Confidentiality -->
+      <h6 class="fw-bold mt-4">CONFIDENTIAL INFORMATION AND DATA SECURITY</h6>
+      <ol type="a">
+        <li>
+          Remote workers must protect Company information as per existing
+          confidentiality agreements.
+        </li>
+        <li>
+          Employees must comply with all agreements and policies including the
+          confidentiality agreement signed upon employment.
+        </li>
+        <li>Employees must use secure VPN and avoid public/unsecured Wi-Fi.</li>
+      </ol>
+
+      <!-- Acknowledgement -->
+      <h6 class="fw-bold mt-4">ACKNOWLEDGEMENT</h6>
+      <ol type="a">
+        <li>
+          I acknowledge I have reviewed the above policies and understand my
+          responsibilities.
+        </li>
+        <li>
+          I agree to report any actual or potential violations immediately.
+        </li>
+        <li>
+          I agree to abide by these policies and understand failure may result
+          in disciplinary action up to dismissal.
+        </li>
+      </ol>
+
+      <!-- Employee Info -->
+      <div class="mt-4">
+        <p><strong>Employee Name:</strong> {{ full_name }}</p>
+        <p><strong>Designation:</strong> {{ designation_name }}</p>
+        <p>
+          <strong>Date:</strong>
+          {{
+            is_submitted
+              ? (is_aggrement_accepted_date | date : "dd MMM yyyy")
+              : (currentDate | date : "dd MMM yyyy")
+          }}
+        </p>
+
+        <!-- Checkbox -->
+        <div class="form-check mb-3">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="agreeCheck"
+            [disabled]="is_submitted"
+            [(ngModel)]="is_aggrement_accepted"
+          />
+          <label class="form-check-label" for="agreeCheck">
+            I have read and agree to the "REMOTE WORK AGREEMENT"
+          </label>
+        </div>
+
+        <!-- Submit -->
+        <button
+          *ngIf="!is_submitted"
+          class="btn text-white fw-semibold px-4 py-2"
+          style="background-color: #009688; color: white"
+          (click)="onAcceptAgrement()"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

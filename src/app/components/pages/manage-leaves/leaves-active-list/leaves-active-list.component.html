@@ -1,0 +1,376 @@
+<!-- Active Leaves Table -->
+<div
+  class="d-flex flex-column rounded bg-white p-3 box-shadow"
+  *ngIf="activeTab === 'active'"
+>
+  <div class="row w-100 align-items-center mb-3">
+    <div class="col-12 col-md-6">
+      <h5 class="fw-bold mb-3 mb-md-0">Employee's Currently On Leave</h5>
+    </div>
+    <div class="col-12 col-md-6">
+      <div class="d-flex flex-column flex-md-row justify-content-md-end gap-3">
+        <div
+          class="flex-fill flex-md-grow-0 position-relative"
+          style="min-width: 200px"
+        >
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search Employee"
+            [(ngModel)]="searchEmployee"
+            (ngModelChange)="searchEmployeeChange()"
+          />
+          <i
+            class="fa-solid fa-magnifying-glass position-absolute top-50 translate-middle-y"
+            style="right: 10px; color: #00000080; font-size: 18px"
+          ></i>
+        </div>
+        <!-- <div class="flex-fill flex-md-grow-0">
+          <button class="btn btn-success w-100 w-md-auto">
+            Download Report
+            <i
+              class="fa-solid fa-file-download ms-2"
+              style="font-size: 18px"
+            ></i>
+          </button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table">
+      <thead class="table-header">
+        <tr>
+          <th>S.No</th>
+          <th>Employee Name</th>
+          <th>Department</th>
+          <th>Apply Date</th>
+          <th>El</th>
+          <th>Leave Type</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Paid</th>
+          <th>Unpaid</th>
+          <th>No. of Days</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of activeLeavesData">
+          <td>{{ item.sno }}</td>
+          <td>{{ item.employeeName }}</td>
+          <td>{{ item.department_name }}</td>
+          <td>{{ item.applyDate | date : "dd-MMM-yyyy" }}</td>
+          <td>
+            <ng-container *ngIf="item.is_el; else noEL">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                checked
+                disabled
+              />
+            </ng-container>
+            <ng-template #noEL>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                style="border: '2px solid black'"
+                disabled
+              />
+            </ng-template>
+          </td>
+          <td>{{ item.leaveType }}</td>
+          <td>{{ item.startDate | date : "dd-MMM-yyyy" }}</td>
+          <td>{{ item.endDate | date : "dd-MMM-yyyy" }}</td>
+          <td>{{ item.paid }}</td>
+          <td>{{ item.unpaid }}</td>
+          <td>{{ item.noOfDays }}</td>
+          <td>{{ item.reason }}</td>
+          <td>
+            <button
+              class="status-button"
+              [ngStyle]="{
+                backgroundColor: getStatusBgColor(item.status),
+                color: item.status === 'Pending' ? '#000' : '#fff'
+              }"
+            >
+              {{ item.status }}
+            </button>
+          </td>
+          <td>
+            <div class="d-flex align-items-center justify-content-center">
+              <i
+                class="bi bi-eye"
+                style="color: #009688; cursor: pointer; font-size: 18px"
+                (click)="openReviewLeaveRequestModal(item)"
+              >
+              </i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Leave Request Modal -->
+    <div *ngIf="showReviewLeaveRequestModal" class="modal-backdrop">
+      <div class="modal-container">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h5 class="modal-title">View Leave Request</h5>
+          <button class="close-btn" (click)="closeReviewLeaveRequestModal()">
+            ×
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body" *ngIf="selectedReviewLeave">
+          <div class="mb-2">
+            <label class="fw-semibold">By</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="
+                selectedReviewLeave.employeeName || selectedReviewLeave.name
+              "
+              readonly
+            />
+          </div>
+
+          <div class="mb-2">
+            <label class="fw-semibold">Apply Date</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="selectedReviewLeave.applyDate"
+              readonly
+            />
+          </div>
+
+          <div class="mb-2">
+            <label class="fw-semibold">Leave Type</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="selectedReviewLeave.leaveType"
+              readonly
+            />
+          </div>
+
+          <div class="mb-2">
+            <label class="fw-semibold">Start Date</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="selectedReviewLeave.startDate"
+              readonly
+            />
+          </div>
+
+          <div class="mb-2">
+            <label class="fw-semibold">End Date</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="selectedReviewLeave.endDate"
+              readonly
+            />
+          </div>
+
+          <div class="mb-2">
+            <label class="fw-semibold">No. of Days</label>
+            <input
+              type="text"
+              class="form-control"
+              [value]="selectedReviewLeave.noOfDays"
+              readonly
+            />
+          </div>
+
+          <div class="mb-2">
+            <label class="fw-semibold">Reason</label>
+            <textarea class="form-control" rows="2" readonly>{{
+              selectedReviewLeave.reason
+            }}</textarea>
+          </div>
+
+          <div class="mb-2">
+            <label class="fw-semibold">Status</label><br />
+            <span
+              class="badge px-3 py-2"
+              [ngStyle]="{
+                backgroundColor: getStatusBgColor(selectedReviewLeave.status),
+                color: selectedReviewLeave.status?.includes('Pending')
+                  ? '#000'
+                  : '#fff'
+              }"
+            >
+              {{ selectedReviewLeave.status }}
+            </span>
+          </div>
+
+          <div class="mb-2">
+            <label class="fw-semibold">Manager Comments</label>
+            <textarea
+              class="form-control"
+              [(ngModel)]="managerComments"
+              placeholder="Enter manager comments"
+            ></textarea>
+          </div>
+
+          <div class="mb-2">
+            <label class="fw-semibold">Reviewer Comments</label>
+            <textarea
+              class="form-control"
+              [(ngModel)]="reviewerComments"
+              placeholder="Enter reviewer comments"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Leave Request Modal -->
+<div
+  *ngIf="showReviewLeaveRequestModal"
+  class="modal-backdrop d-flex justify-content-center align-items-center"
+>
+  <div class="modal-container">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h5 class="modal-title">View Leave</h5>
+      <button class="close-btn" (click)="closeReviewLeaveRequestModal()">
+        ×
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body" *ngIf="selectedReviewLeave">
+      <div class="mb-2">
+        <label class="fw-semibold">By</label>
+        <input
+          type="text"
+          class="form-control"
+          [value]="selectedReviewLeave.employeeName || selectedReviewLeave.name"
+          readonly
+        />
+      </div>
+
+      <div class="mb-2">
+        <label class="fw-semibold">Apply Date</label>
+        <input
+          type="text"
+          class="form-control"
+          [value]="selectedReviewLeave.applyDate"
+          readonly
+        />
+      </div>
+
+      <div class="mb-2">
+        <label class="fw-semibold">Leave Type</label>
+        <input
+          type="text"
+          class="form-control"
+          [value]="selectedReviewLeave.leaveType"
+          readonly
+        />
+      </div>
+
+      <div class="row">
+        <div class="col-6 mb-2">
+          <label class="fw-semibold">Start Date</label>
+          <input
+            type="text"
+            class="form-control"
+            [value]="selectedReviewLeave.startDate"
+            readonly
+          />
+        </div>
+        <div class="col-6 mb-2">
+          <label class="fw-semibold">End Date</label>
+          <input
+            type="text"
+            class="form-control"
+            [value]="selectedReviewLeave.endDate"
+            readonly
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6 mb-2">
+          <label class="fw-semibold">No. of Days</label>
+          <input
+            type="text"
+            class="form-control"
+            [value]="selectedReviewLeave.noOfDays"
+            readonly
+          />
+        </div>
+        <div class="col-6 mb-2">
+          <label class="fw-semibold">Leave Summary (This Year)</label>
+          <input
+            type="text"
+            class="form-control"
+            [value]="selectedReviewLeave.leaveSummary || '-'"
+            readonly
+          />
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label class="fw-semibold">Reason</label>
+        <textarea class="form-control" rows="2" readonly>{{
+          selectedReviewLeave.reason
+        }}</textarea>
+      </div>
+
+      <div class="mb-2">
+        <label class="fw-semibold">Status</label><br />
+        <span
+          class="badge px-3 py-2"
+          [ngStyle]="{
+            backgroundColor: getStatusBgColor(selectedReviewLeave.status),
+            color: selectedReviewLeave.status?.includes('Pending')
+              ? '#000'
+              : '#fff'
+          }"
+        >
+          {{ selectedReviewLeave.status }}
+        </span>
+      </div>
+
+      <div class="mb-2">
+        <label class="fw-semibold">Manager Comments</label>
+        <textarea
+          class="form-control"
+          [(ngModel)]="managerComments"
+          placeholder="Enter manager comments"
+        ></textarea>
+      </div>
+
+      <div class="mb-2">
+        <label class="fw-semibold">Reviewer Comments</label>
+        <textarea
+          class="form-control"
+          [(ngModel)]="reviewerComments"
+          placeholder="Enter reviewer comments"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <!-- <div class="modal-footer d-flex justify-content-end gap-2">
+      <button class="btn btn-danger" (click)="updateLeaveStatus('Rejected')">
+        Reject
+      </button>
+      <button class="btn btn-success" (click)="updateLeaveStatus('Approved')">
+        Approve
+      </button>
+    </div> -->
+  </div>
+</div>

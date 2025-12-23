@@ -1,0 +1,58 @@
+.btn-teal {
+  background-color: #008080;
+  border-color: #008080;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+}
+.btn-teal:hover {
+  background-color: #006666;
+  border-color: #006666;
+}
+.btn-white {
+  background-color: white;
+  border-color: #000000;
+  color: #000000;
+  font-size: 18px;
+  font-weight: 700;
+}
+.table-header th {
+  font-weight: 400;
+  background-color: #009688 !important;
+  color: white !important;
+  border-color: #009688 !important;
+  font-size: 16px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+tbody td {
+  font-size: 16px;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 400;
+  color: #000000;
+}
+
+/* Striped table rows */
+tbody tr:nth-child(odd) td {
+  background-color: #ffffff;
+}
+
+tbody tr:nth-child(even) td {
+  background-color: #e5f4f3;
+}
+.change-status-btn {
+  background-color: #009688;
+  color: white;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 400;
+  border: none;
+  height: auto;
+  padding: 0 10px;
+}
+.change-status-btn:hover {
+  background-color: #006666;
+  border-color: #006666;
+}
