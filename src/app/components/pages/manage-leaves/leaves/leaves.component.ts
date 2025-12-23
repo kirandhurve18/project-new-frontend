@@ -9,7 +9,6 @@ import {
   RouterOutlet,
   Router
 } from '@angular/router';
-import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-leaves',
@@ -31,7 +30,10 @@ export class LeavesComponent implements OnInit {
   employee_id: string | null = '';
   currentYear = new Date().getFullYear();
 
-  constructor(private superadmin: Superadmin, private router: Router) { }
+  teamLeaves: any[] = [];
+  teamCurrentLeaves: any[] = []; // 🔹 for current/upcoming leaves (superadmin only)
+
+  constructor(private superadmin: Superadmin, private router: Router) {}
 
   ngOnInit(): void {
     let user: any = localStorage.getItem('user');
@@ -44,6 +46,16 @@ export class LeavesComponent implements OnInit {
 
     if (this.employee_id) {
       this.loadEmployeeLeaveSummary();
+
+      // 🔹 Team summary for 1, 2, 3
+      if (['1', '2', '3'].includes(this.userRole)) {
+        this.loadTeamLeaves();
+      }
+
+      // 🔹 Current/Upcoming only for Superadmin (role = 1)
+      if (this.userRole === '1') {
+        this.loadCurrentUpcomingLeaves();
+      }
     }
   }
 
@@ -92,5 +104,48 @@ export class LeavesComponent implements OnInit {
           this.employeeleave = [];
         }
       });
+  }
+
+  /** 🔹 Load Team Leaves (Summary) */
+  loadTeamLeaves() {
+    const payload = { employee_id: this.employee_id! }; // current logged-in lead/superadmin
+    this.superadmin.getTeamLeavesTaken(payload).subscribe({
+      next: (res: any) => {
+        if (res.success && res.data) {
+          // merge duplicates by employee_id
+          const map = new Map();
+          res.data.forEach((item: any) => {
+            if (map.has(item.employee_id)) {
+              map.get(item.employee_id).total_used_leaves +=
+                item.total_used_leaves;
+            } else {
+              map.set(item.employee_id, { ...item });
+            }
+          });
+          this.teamLeaves = Array.from(map.values());
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching team leaves:', err);
+      }
+    });
+  }
+
+  /** 🔹 Load Current / Upcoming Leaves (Superadmin Only) */
+  loadCurrentUpcomingLeaves() {
+    const payload = { _id: this.employee_id! };
+    this.superadmin.getCurrentUpcomingLeaves(payload).subscribe({
+      next: (res: any) => {
+        if (res.success && res.data) {
+          this.teamCurrentLeaves = res.data;
+        } else {
+          this.teamCurrentLeaves = [];
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching current/upcoming leaves:', err);
+        this.teamCurrentLeaves = [];
+      }
+    });
   }
 }

@@ -966,6 +966,24 @@ export class Superadmin {
     );
   }
 
+  // 📌 Get team leaves taken by team lead/superadmin
+getTeamLeavesTaken(payload: { employee_id: string }): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}/hrms/leave/get_leave_taken_by_team`,
+    payload,
+    { headers: this.getHeaders('json') }
+  );
+}
+getCurrentUpcomingLeaves(payload: { _id: string }): Observable<any> {
+  return this.http.post<any>(
+    `${this.baseUrl}/hrms/leave/get_leave_list_by_team`,
+    payload,
+    { headers: this.getHeaders('json') }
+  );
+}
+
+
+
 
 
 }

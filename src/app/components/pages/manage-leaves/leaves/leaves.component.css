@@ -1,3 +1,4 @@
+/* Buttons */
 .btn-custom {
   background: #f8f9fa;
   color: #333;
@@ -12,9 +13,31 @@
 }
 
 .active-tab {
-  background: #009688; /* Bootstrap primary */
+  background: #009688; 
   color: #fff !important;
   border-color: #0d6efd;
 }
 
-          /* style="background-color: #009688; color: #ffffff" */
+/* ========== TABLE STYLING ========== */
+
+/* Reset bootstrap striping effect */
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+  --bs-table-accent-bg: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Apply custom alternate row colors to all tables */
+.table tbody tr:nth-child(odd) {
+  background-color: #E5F4F3 !important; /* light teal */
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #ffffff !important; /* white */
+}
+
+/* Header styling */
+.table thead tr {
+  background-color: #009688 !important;
+  color: white !important;
+  font-weight: 600;
+}
