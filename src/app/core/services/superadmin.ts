@@ -1052,4 +1052,12 @@ export class Superadmin {
     );
   }
 
+  
+getAllEmployeesList(): Observable<any> {
+  return this.http.get<any>(
+    `${this.baseUrl}/hrms/employee/get_all_employees_list`,
+    { headers: this.getHeaders() }
+  );
+}
+
 }
