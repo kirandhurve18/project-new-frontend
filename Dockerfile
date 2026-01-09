@@ -1,4 +1,4 @@
-# Stage 1 - build Angular app
+]# Stage 1 - build Angular app
 FROM node:22-alpine AS build
 
 WORKDIR /app
@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install -g npm@11.7.0
 
 COPY . .
-RUN npm run build
+RUN ng build --configuration development
 
 # Stage 2 - Nginx
 FROM nginx:alpine
