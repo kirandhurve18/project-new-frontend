@@ -1,6 +1,10 @@
 pipeline{
   agent any 
 
+   triggers {
+        pollSCM('* * * * *')  // checks every minute
+    }
+
   stages{
     stage("pull"){
       steps{
