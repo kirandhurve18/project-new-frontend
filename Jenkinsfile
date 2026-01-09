@@ -7,5 +7,34 @@ pipeline{
         git branch: 'main', credentialsId: 'git-id', url: 'https://github.com/kirandhurve18/project-new-frontend.git'
       }
     }
+
+    stage('Build') {
+            steps { 
+               withCredentials([string(credentialsId: 'DOCKERHUB_TOKEN', variable: 'DOCKERHUB_TOKEN')]) {
+                sh '''
+                echo "$DOCKERHUB_TOKEN" | docker login -u "kirand18" --password-stdin
+                docker build -t frontend:latest .
+                docker tag frontend:latest kirand18/project-repository
+                docker push kirand18/project-repository
+                '''
+                }                
+            }
+         }
+
+    
+  stage('Deploy') {
+            steps {           
+                withCredentials([file(credentialsId: 'gcp-key', variable: 'gcpkey')]) {
+                sh '''
+                gcloud auth activate-service-account --key-file=$gcpkey
+                gcloud config set project sigma-icon-480904-m9
+                gcloud container clusters get-credentials cluster-1 --zone us-central1-a --project sigma-icon-480904-m9
+                kubectl apply -f K8/deployment.yaml
+                kubectl apply -f K8/service.yaml
+                '''
+        }
+    }
+}
+    
   }
 }
