@@ -1,4 +1,4 @@
-]# Stage 1 - build Angular app
+# Stage 1 - build Angular app
 FROM node:22-alpine AS build
 
 WORKDIR /app
