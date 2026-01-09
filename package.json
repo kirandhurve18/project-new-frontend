@@ -6,7 +6,7 @@
     "start:preprod": "ng serve --configuration preprod",
     "start:local": "ng serve --configuration local",
     "start:prod": "ng serve --configuration production",
-    "build": "ng build --configuration development",
+    "build": "npx ng build --configuration development",
     "build:preprod": "ng build --configuration preprod",
     "build:prod": "ng build --configuration production",
     "test": "ng test"
