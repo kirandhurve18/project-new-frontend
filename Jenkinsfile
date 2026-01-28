@@ -10,7 +10,7 @@ pipeline{
 
     stage('Build') {
             steps { 
-               withCredentials([string(credentialsId: 'DOCKERHUB_TOKEN', variable: 'DOCKERHUB_TOKEN')]) {
+               withCredentials([string(credentialsId: 'dockerhub', variable: 'docker_id')]) {
                 sh '''
                 echo "$DOCKERHUB_TOKEN" | docker login -u "kirand18" --password-stdin
                 docker build -t frontend:v2-latest .
