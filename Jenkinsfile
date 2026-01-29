@@ -13,8 +13,8 @@ pipeline{
                 withCredentials([string(credentialsId: 'dockerhub-token', variable: 'docker_hub')]) {
                 sh '''
                 echo "$docker_hub" | docker login -u "kirand18" --password-stdin
-                docker build -t frontend:v2-latest .
-                docker tag frontend:v2-latest kirand18/frontend
+                docker build -t frontend:latest .
+                docker tag frontend:latest kirand18/frontend
                 docker push kirand18/frontend
                 '''
                 }                
