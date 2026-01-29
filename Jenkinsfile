@@ -14,8 +14,8 @@ pipeline{
                 sh '''
                 echo "$docker_hub" | docker login -u "kirand18" --password-stdin
                 docker build -t frontend:v2-latest .
-                docker tag frontend:v2-latest kirand18/project-repository
-                docker push kirand18/project-repository
+                docker tag frontend:v2-latest kirand18/frontend:latest
+                docker push kirand18/frontend:latest
                 '''
                 }                
             }
