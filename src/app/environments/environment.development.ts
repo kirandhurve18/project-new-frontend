@@ -1,10 +1,10 @@
 export const environment = {
   production: false,
-  baseUrl: 'http://app.kirandhurve.shop/api',
-  apiPrefix: 'http://app.kirandhurve.shop/api',
-  BASE_URL_IMAGE: 'http://app.kirandhurve.shop/api',
-  BASE_URL_DOCUMENTS: 'http://app.kirandhurve.shop/api/uploads/documents',
-  BASE_URL_PUBLIC: 'http://app.kirandhurve.shop/public',
+  baseUrl: 'http://api.kirandhurve.shop/api',
+  apiPrefix: 'http://api.kirandhurve.shop/api',
+  BASE_URL_IMAGE: 'http://api.kirandhurve.shop/api',
+  BASE_URL_DOCUMENTS: 'http://api.kirandhurve.shop/api/uploads/documents',
+  BASE_URL_PUBLIC: 'http://api.kirandhurve.shop/public',
   BASE_PATH_ASSETS: '/assets',
 };
 
