@@ -13,7 +13,8 @@ RUN npx ng build --configuration development
 FROM nginx:alpine
 
 # remove default nginx config
-RUN rm /etc/nginx/conf.d/default.conf
+# RUN rm /etc/nginx/conf.d/default.conf
+RUN rm -rf /usr/share/nginx/html/*
 
 # copy custom nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
