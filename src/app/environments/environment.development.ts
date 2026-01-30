@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
-  baseUrl: 'http://backend.kirandhurve.shop/api',
+  baseUrl: 'http://backend.kirandhurve.shop:3005/api/hrms/auth/login',
+  // baseUrl: 'http://backend.kirandhurve.shop/api',
   apiPrefix: 'http://backend.kirandhurve.shop/api',
   BASE_URL_IMAGE: 'http://backend.kirandhurve.shop/api',
   BASE_URL_DOCUMENTS: 'http://backend.kirandhurve.shop/api/uploads/documents',
