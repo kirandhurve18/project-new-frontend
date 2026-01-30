@@ -14,6 +14,7 @@ pipeline{
                 sh '''
                 echo "$docker_hub" | docker login -u "kirand18" --password-stdin
                 docker build --no-cache  -t frontend:${BUILD_NUMBER} .
+                docker tag frontend:${BUILD_NUMBER} kirand18/frontend:${BUILD_NUMBER}
                 docker push kirand18/frontend:${BUILD_NUMBER}
                 '''
                 }                
