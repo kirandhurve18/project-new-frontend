@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install 
 
 COPY . .
-RUN npx ng build --configuration development
+RUN npx ng build --configuration production
 
 # Stage 2 - Nginx
 FROM nginx:alpine
