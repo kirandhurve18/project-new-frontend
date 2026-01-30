@@ -13,9 +13,8 @@ pipeline{
                 withCredentials([string(credentialsId: 'dockerhub-token', variable: 'docker_hub')]) {
                 sh '''
                 echo "$docker_hub" | docker login -u "kirand18" --password-stdin
-                docker build --no-cache  -t frontend:latest .
-                docker tag frontend:latest kirand18/frontend
-                docker push kirand18/frontend
+                docker build --no-cache  -t frontend:${BUILD_NUMBER} .
+                docker push kirand18/frontend:${BUILD_NUMBER}
                 '''
                 }                
             }
@@ -29,6 +28,8 @@ pipeline{
                 gcloud auth activate-service-account --key-file=$gcpkey
                 gcloud config set project sigma-icon-480904-m9
                 gcloud container clusters get-credentials cluster-1 --zone us-central1-a --project sigma-icon-480904-m9
+                kubectl set image deployment/frontend-deployment frontend=kirand18/frontend:${BUILD_NUMBER}
+                kubectl rollout status deployment/frontend-deployment
                 kubectl apply -f K8/frontend-deployment.yaml
                 kubectl apply -f K8/frontend-service.yaml
                 '''
