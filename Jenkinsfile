@@ -28,7 +28,7 @@ pipeline{
                 sh '''
                 gcloud auth activate-service-account --key-file=$gcpkey
                 gcloud config set project sigma-icon-480904-m9
-                gcloud container clusters get-credentials cluster-1 --zone us-central1-a --project sigma-icon-480904-m9
+                gcloud container clusters get-credentials autopilot-cluster-1 --region us-central1 --project sigma-icon-480904-m9 
                 sed -i "s/frontend:1/frontend:${BUILD_NUMBER}/g" K8/frontend-deployment.yaml
                 kubectl apply -f K8/frontend-deployment.yaml
                 kubectl apply -f K8/frontend-service.yaml
