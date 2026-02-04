@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  baseUrl: '/api-12',
+  baseUrl: '/',
   apiPrefix: '/api',
   BASE_URL_IMAGE: '/uploads/images',
   BASE_URL_DOCUMENTS: '/uploads/documents',
