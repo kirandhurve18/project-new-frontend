@@ -25,6 +25,19 @@ pipeline{
             }
          }
 
+    stage('SonarQube Analysis') {
+      steps {
+        def scannerHome = tool 'SonarScanner' 
+            withSonarQubeEnv('SonarQube-Server') { 
+            sh "${scannerHome}/bin/sonar-scanner \
+            -Dsonar.projectKey=my-app-frontend \
+            -Dsonar.projectName=Frontend-App \
+            -Dsonar.sources=src \
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info" 
+        }
+    }
+}
+
     
   stage('Deploy') {
             steps {           
